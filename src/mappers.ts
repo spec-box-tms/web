@@ -1,21 +1,23 @@
 import {
   SpecBoxWebApiModelCommonProjectModel,
+  SpecBoxWebApiModelCommonProjectVersionModel,
   SpecBoxWebApiModelProjectAssertionGroupModel,
   SpecBoxWebApiModelProjectAssertionModel,
   SpecBoxWebApiModelProjectFeatureModel,
   SpecBoxWebApiModelProjectStructureModel,
   SpecBoxWebApiModelProjectTreeNodeModel,
   StatResponse,
-} from "./api";
+} from './api';
 import {
   Assertion,
   AssertionGroup,
   Feature,
   Project,
+  ProjectDetails,
   ProjectStat,
   ProjectStructure,
   TreeNode,
-} from "./types";
+} from './types';
 
 export const mapFeature = (
   input: SpecBoxWebApiModelProjectFeatureModel
@@ -65,9 +67,17 @@ export const mapAssertion = (
 export const mapProject = (
   project: SpecBoxWebApiModelCommonProjectModel
 ): Project => {
-  const { code, title, description, repositoryUrl } = project;
+  const { code, title, description, repositoryUrl, versions } = project;
 
-  return { code, title, description, repositoryUrl };
+  return { code, title, description, repositoryUrl, versions };
+};
+
+export const mapProjectDetails = (
+  project: SpecBoxWebApiModelCommonProjectVersionModel
+): ProjectDetails => {
+  const { code, title, description, repositoryUrl, version } = project;
+
+  return { code, title, description, repositoryUrl, version };
 };
 
 export const mapStructure = ({
@@ -75,7 +85,7 @@ export const mapStructure = ({
   project,
 }: SpecBoxWebApiModelProjectStructureModel): ProjectStructure => {
   return {
-    project: mapProject(project),
+    project: mapProjectDetails(project),
     tree: tree.map(mapTreeNode),
   };
 };
@@ -93,7 +103,7 @@ function mapTreeNode(node: SpecBoxWebApiModelProjectTreeNodeModel): TreeNode {
 
   if (featureCode) {
     return {
-      type: "feature",
+      type: 'feature',
       totalCount,
       automatedCount,
       id,
@@ -105,7 +115,7 @@ function mapTreeNode(node: SpecBoxWebApiModelProjectTreeNodeModel): TreeNode {
   }
 
   return {
-    type: "group",
+    type: 'group',
     totalCount,
     automatedCount,
     id,
@@ -130,7 +140,7 @@ export function mapProjectStat(stat: StatResponse): ProjectStat {
   }));
 
   return {
-    project: mapProject(stat.project),
+    project: mapProjectDetails(stat.project),
     assertions,
     autotests,
   };

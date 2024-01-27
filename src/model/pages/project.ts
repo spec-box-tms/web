@@ -8,32 +8,47 @@ import { Feature, ProjectStructure, TreeNode } from '@/types';
 
 import { controls } from '../common';
 import { StoreDependencies, createSpecBoxEffect } from '../scope';
+import { SpecBoxWebApiModelProjectStructureModel } from '@/api';
 
 const STRUCTURE_STUB: ProjectStructure = {
   tree: [],
-  project: { code: '', title: '' },
+  project: { code: '', title: '', version: '' },
 };
 
-export const projectRoute = createRoute<{ project?: string }>();
+export const projectRoute = createRoute<{
+  project?: string;
+}>();
 
 export interface LoadStructureFxParams {
   project: string;
+  version: string | null;
+  treeCode?: string;
 }
 
 export const loadStructureFx = createSpecBoxEffect(
   async (
-    { project }: LoadStructureFxParams,
-    deps: StoreDependencies,
+    { project, version, treeCode }: LoadStructureFxParams,
+    deps: StoreDependencies
   ): Promise<ProjectStructure> => {
     try {
-      const response = await deps.api.projectsProjectStructure(project);
-
+      let response: SpecBoxWebApiModelProjectStructureModel;
+      if (treeCode === undefined) {
+        response = await deps.api.projectsProjectStructuresPlain(project, {
+          version: version ?? undefined,
+        });
+      } else {
+        response = await deps.api.projectsProjectStructuresTreeCode(
+          project,
+          treeCode,
+          { version: version ?? undefined }
+        );
+      }
       return mapStructure(response);
     } catch (e) {
       console.error(e);
       throw e;
     }
-  },
+  }
 );
 
 export const $structure = restore(loadStructureFx.doneData, STRUCTURE_STUB);
@@ -44,43 +59,61 @@ export const expand = createEvent<string[]>();
 
 export const $collapseState = createStore<Record<string, boolean>>({})
   .on(toggle, (state, id) => ({ ...state, [id]: !state[id] }))
-  .on(expand, (state, ids) => ids.reduce((s, id) => ((s[id] = true), s), { ...state }));
+  .on(expand, (state, ids) =>
+    ids.reduce((s, id) => ((s[id] = true), s), { ...state })
+  );
 
 export interface CopyToClipboardParams {
   text: string;
 }
 
-export const copyToClipboardFx = createSpecBoxEffect(async ({ text }: CopyToClipboardParams) => {
-  if (copy(text)) {
-    toast('Скопировано');
-  } else {
-    toast.error('Ошибка при копировании');
+export const copyToClipboardFx = createSpecBoxEffect(
+  async ({ text }: CopyToClipboardParams) => {
+    if (copy(text)) {
+      toast('Скопировано');
+    } else {
+      toast.error('Ошибка при копировании');
+    }
   }
-});
+);
 
 export interface LoadFeatureFxParams {
   project: string;
+  version?: string;
   feature: string;
 }
 
 export const loadFeatureFx = createSpecBoxEffect(
-  async ({ project, feature }: LoadFeatureFxParams, deps: StoreDependencies): Promise<Feature> => {
+  async (
+    { project, version, feature }: LoadFeatureFxParams,
+    deps: StoreDependencies
+  ): Promise<Feature> => {
     try {
-      const response = await deps.api.projectsProjectFeaturesFeature(project, feature);
+      const response = await deps.api.projectsProjectFeaturesFeature(
+        project,
+        feature,
+        { version }
+      );
 
       return mapFeature(response);
     } catch (e) {
       console.error(e);
       throw e;
     }
-  },
+  }
 );
 
-export const loadFeature = createEvent<LoadFeatureFxParams>();
+export interface LoadFeatureParams {
+  feature: string;
+}
+export const loadFeature = createEvent<LoadFeatureParams>();
 export const resetFeature = createEvent();
 
 // код выбранной фичи (появляется в момент выбора)
-export const $featureCode = createStore<string>('').on(loadFeatureFx, (_, { feature }) => feature);
+export const $featureCode = createStore<string>('').on(
+  loadFeatureFx,
+  (_, { feature }) => feature
+);
 
 // данные выбранной фичи (появляются после загрузки)
 export const $feature = createStore<Feature | null>(null).reset(resetFeature);
@@ -90,7 +123,7 @@ querySync({
   source: {
     feature: restore(
       loadFeature.map(({ feature }) => feature),
-      null,
+      null
     ),
   },
   route: projectRoute,
@@ -98,7 +131,10 @@ querySync({
 });
 
 // при выборе активной фичи раскрываем всех её родителей
-const getExpandedIds = (args: { feature: Feature | null; tree: ProjectStructure }): string[] => {
+const getExpandedIds = (args: {
+  feature: Feature | null;
+  tree: ProjectStructure;
+}): string[] => {
   const {
     feature,
     tree: { tree },
@@ -137,15 +173,16 @@ sample({
 
 sample({
   clock: [projectRoute.opened],
-  fn: ({ params: { project = '' } }) => ({ project }),
+  fn: ({ params: { project = '' }, query: { version = undefiend } }) => ({ project, version }),
   target: loadStructureFx,
 });
 
 sample({
   clock: [projectRoute.opened, projectRoute.updated],
   filter: ({ query: { feature } }) => Boolean(feature),
-  fn: ({ params: { project = '' }, query: { feature = '' } }) => ({
+  fn: ({ params: { project = '' }, query: { version = undefined, feature = '' } }) => ({
     project,
+    version,
     feature,
   }),
   target: loadFeatureFx,

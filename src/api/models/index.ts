@@ -1,4 +1,4 @@
-import * as coreClient from "@azure/core-client";
+import * as coreClient from '@azure/core-client';
 
 export interface SpecBoxWebApiModelDefaultConfigurationModel {
   metrikaCounterId?: string;
@@ -53,6 +53,7 @@ export interface SpecBoxWebApiModelCommonProjectModel {
   title: string;
   description?: string;
   repositoryUrl?: string;
+  versions: string[];
 }
 
 export interface SpecBoxWebApiModelProjectFeatureModel {
@@ -76,9 +77,27 @@ export interface SpecBoxWebApiModelProjectAssertionModel {
   isAutomated: boolean;
 }
 
+export interface MicrosoftAspNetCoreMvcProblemDetails {
+  /** Describes unknown properties. The value of an unknown property can be of "any" type. */
+  [property: string]: any;
+  type?: string;
+  title?: string;
+  status?: number;
+  detail?: string;
+  instance?: string;
+}
+
 export interface SpecBoxWebApiModelProjectStructureModel {
-  project: SpecBoxWebApiModelCommonProjectModel;
+  project: SpecBoxWebApiModelCommonProjectVersionModel;
   tree: SpecBoxWebApiModelProjectTreeNodeModel[];
+}
+
+export interface SpecBoxWebApiModelCommonProjectVersionModel {
+  code: string;
+  title: string;
+  description?: string;
+  repositoryUrl?: string;
+  version?: string;
 }
 
 export interface SpecBoxWebApiModelProjectTreeNodeModel {
@@ -91,6 +110,11 @@ export interface SpecBoxWebApiModelProjectTreeNodeModel {
   sortOrder?: number;
 }
 
+export interface SpecBoxWebApiModelProjectTreeModel {
+  code: string;
+  title: string;
+}
+
 export interface SpecBoxWebApiModelStatAutotestsStatUploadData {
   timestamp: Date;
   duration: number;
@@ -98,7 +122,7 @@ export interface SpecBoxWebApiModelStatAutotestsStatUploadData {
 }
 
 export interface SpecBoxWebApiModelStatModel {
-  project: SpecBoxWebApiModelCommonProjectModel;
+  project: SpecBoxWebApiModelCommonProjectVersionModel;
   assertions: SpecBoxWebApiModelStatAssertionsStatModel[];
   autotests: SpecBoxWebApiModelStatAutotestsStatModel[];
 }
@@ -122,42 +146,69 @@ export interface ConfigOptionalParams extends coreClient.OperationOptions {}
 export type ConfigResponse = SpecBoxWebApiModelDefaultConfigurationModel;
 
 /** Optional parameters. */
-export interface ExportUploadOptionalParams
+export interface ExportUploadProjectOptionalParams
   extends coreClient.OperationOptions {
   body?: SpecBoxWebApiModelUploadData;
-  project?: string;
+  version?: string;
 }
 
 /** Optional parameters. */
-export interface ProjectsListOptionalParams
-  extends coreClient.OperationOptions {}
+export interface ProjectsOptionalParams extends coreClient.OperationOptions {}
 
-/** Contains response data for the projectsList operation. */
-export type ProjectsListResponse = SpecBoxWebApiModelCommonProjectModel[];
+/** Contains response data for the projects operation. */
+export type ProjectsResponse = SpecBoxWebApiModelCommonProjectModel[];
 
 /** Optional parameters. */
 export interface ProjectsProjectFeaturesFeatureOptionalParams
-  extends coreClient.OperationOptions {}
+  extends coreClient.OperationOptions {
+  version?: string;
+}
 
 /** Contains response data for the projectsProjectFeaturesFeature operation. */
-export type ProjectsProjectFeaturesFeatureResponse = SpecBoxWebApiModelProjectFeatureModel;
+export type ProjectsProjectFeaturesFeatureResponse =
+  SpecBoxWebApiModelProjectFeatureModel;
 
 /** Optional parameters. */
-export interface ProjectsProjectStructureOptionalParams
-  extends coreClient.OperationOptions {}
+export interface ProjectsProjectStructuresPlainOptionalParams
+  extends coreClient.OperationOptions {
+  version?: string;
+}
 
-/** Contains response data for the projectsProjectStructure operation. */
-export type ProjectsProjectStructureResponse = SpecBoxWebApiModelProjectStructureModel;
+/** Contains response data for the projectsProjectStructuresPlain operation. */
+export type ProjectsProjectStructuresPlainResponse =
+  SpecBoxWebApiModelProjectStructureModel;
+
+/** Optional parameters. */
+export interface ProjectsProjectStructuresOptionalParams
+  extends coreClient.OperationOptions {
+  version?: string;
+}
+
+/** Contains response data for the projectsProjectStructures operation. */
+export type ProjectsProjectStructuresResponse =
+  SpecBoxWebApiModelProjectTreeModel[];
+
+/** Optional parameters. */
+export interface ProjectsProjectStructuresTreeCodeOptionalParams
+  extends coreClient.OperationOptions {
+  version?: string;
+}
+
+/** Contains response data for the projectsProjectStructuresTreeCode operation. */
+export type ProjectsProjectStructuresTreeCodeResponse =
+  SpecBoxWebApiModelProjectStructureModel;
 
 /** Optional parameters. */
 export interface StatUploadAutotestsOptionalParams
   extends coreClient.OperationOptions {
-  project?: string;
+  version?: string;
   body?: SpecBoxWebApiModelStatAutotestsStatUploadData;
+  project?: string;
 }
 
 /** Optional parameters. */
 export interface StatOptionalParams extends coreClient.OperationOptions {
+  version?: string;
   project?: string;
   from?: Date;
   to?: Date;

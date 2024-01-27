@@ -8,10 +8,9 @@
 
 .Home-Content {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: var(--g-spacing-4);
-
-    max-width: 360px;
+    max-width: 640px;
 }
 
 .Home-Header {
@@ -21,4 +20,18 @@
 .Home-Hint {
     font: var(--sb-font-body-s);
     color: var(--g-color-text-secondary);
+}
+
+.Home-Projects {
+    display: flex;
+    flex: 1 0;    
+    flex-direction: column;
+    gap: var(--g-spacing-4);
+}
+
+.Home-Versions {
+    display: flex;
+    flex: 1 0;
+    flex-direction: column;
+    gap: var(--g-spacing-4);
 }

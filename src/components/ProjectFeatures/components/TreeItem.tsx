@@ -1,10 +1,10 @@
-import { FC, useMemo } from "react";
+import { FC, useMemo } from 'react';
 
-import { TreeNode } from "@/types";
+import { TreeNode } from '@/types';
 
-import { compareTreeNodes } from "../lib/compareTreeNodes";
+import { compareTreeNodes } from '../lib/compareTreeNodes';
 
-import { FeatureItem, FeatureGroupItem } from "./FeatureItem";
+import { FeatureItem, FeatureGroupItem } from './FeatureItem';
 
 interface TreeItemProps {
   level: number;
@@ -34,7 +34,7 @@ export const TreeItem: FC<TreeItemProps> = (props) => {
   ));
 
   switch (node.type) {
-    case "feature":
+    case 'feature':
       return (
         <FeatureItem
           level={level}
@@ -43,7 +43,7 @@ export const TreeItem: FC<TreeItemProps> = (props) => {
           selectedCode={selectedFeatureCode}
         />
       );
-    case "group":
+    case 'group':
       return (
         <FeatureGroupItem level={level} key={node.id} node={node}>
           {children}

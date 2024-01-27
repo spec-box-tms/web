@@ -1,9 +1,10 @@
 import { createContext } from 'react';
 
-export type OpenFeatureLinkEventHandler = (project: string, feature: string) => void;
+export type OpenFeatureLinkEventHandler = (feature: string) => void;
 
 export interface ProjectContextValue {
   project: string;
+  version?: string;
   navigate?: OpenFeatureLinkEventHandler;
 }
 

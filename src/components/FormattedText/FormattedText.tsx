@@ -1,18 +1,18 @@
-import { FC, MouseEvent, ReactNode, useCallback, useContext } from "react";
-import reactStringReplace from "react-string-replace";
+import { FC, MouseEvent, ReactNode, useCallback, useContext } from 'react';
+import reactStringReplace from 'react-string-replace';
 
 import {
   OpenFeatureLinkEventHandler,
   ProjectContext,
-} from "@/components/ProjectContext/ProjectContext";
-import { RouteLink } from "@/components/RouteLink/RouteLink";
-import { projectRoute } from "@/model";
-import { cn } from "@bem-react/classname";
-import { PressEvent } from "@/hooks/usePress";
+} from '@/components/ProjectContext/ProjectContext';
+import { RouteLink } from '@/components/RouteLink/RouteLink';
+import { projectRoute } from '@/model';
+import { cn } from '@bem-react/classname';
+import { PressEvent } from '@/hooks/usePress';
 
-import "./FormattedText.css";
+import './FormattedText.css';
 
-const bem = cn("FormattedText");
+const bem = cn('FormattedText');
 
 type FormattedTextProps = {
   className?: string;
@@ -29,6 +29,7 @@ const FormattedValue: FC<FormattedValueProps> = ({ children }) => (
 
 interface FeatureLinkProps {
   project: string;
+  version?: string;
   feature: string;
   navigate?: OpenFeatureLinkEventHandler;
 }
@@ -37,10 +38,10 @@ function isModifiedEvent(event: MouseEvent) {
   return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 }
 
-const FeatureLink: FC<FeatureLinkProps> = ({ project, feature, navigate }) => {
+const FeatureLink: FC<FeatureLinkProps> = ({ project, version, feature, navigate }) => {
   const onPress = useCallback(
     (e: PressEvent) => {
-      if (e.type === "mouse") {
+      if (e.type === 'mouse') {
         if (
           e.source.defaultPrevented || // onClick prevented default
           e.source.button !== 0 || // ignore everything but left clicks
@@ -52,17 +53,18 @@ const FeatureLink: FC<FeatureLinkProps> = ({ project, feature, navigate }) => {
 
       if (navigate) {
         e.source.preventDefault();
-        navigate(project, feature);
+        navigate(feature);
       }
     },
-    [project, feature, navigate]
+    [feature, navigate]
   );
-
+  // format query params for feature and optional version
+  const query = version ? { feature, version } : { feature };
   return (
     <RouteLink
       to={projectRoute}
       params={{ project }}
-      query={{ feature }}
+      query={query}
       onPress={onPress}
     >
       {feature}
@@ -73,7 +75,7 @@ const FeatureLink: FC<FeatureLinkProps> = ({ project, feature, navigate }) => {
 export const FormattedText: FC<FormattedTextProps> = (props) => {
   const { className, text } = props;
 
-  const { project, navigate } = useContext(ProjectContext) || {};
+  const { project, version, navigate } = useContext(ProjectContext) || {};
 
   // Match URLs
   // для корректной замены в регулярном выражении должна быть ровно одна группа
@@ -97,6 +99,7 @@ export const FormattedText: FC<FormattedTextProps> = (props) => {
         <FeatureLink
           key={feature + i}
           project={project}
+          version={version}
           feature={feature}
           navigate={navigate}
         />

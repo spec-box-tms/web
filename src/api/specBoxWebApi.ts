@@ -1,21 +1,25 @@
-import * as coreClient from "@azure/core-client";
-import * as Parameters from "./models/parameters";
-import * as Mappers from "./models/mappers";
+import * as coreClient from '@azure/core-client';
+import * as Parameters from './models/parameters';
+import * as Mappers from './models/mappers';
 import {
   SpecBoxWebApiOptionalParams,
   ConfigOptionalParams,
   ConfigResponse,
-  ExportUploadOptionalParams,
-  ProjectsListOptionalParams,
-  ProjectsListResponse,
+  ExportUploadProjectOptionalParams,
+  ProjectsOptionalParams,
+  ProjectsResponse,
   ProjectsProjectFeaturesFeatureOptionalParams,
   ProjectsProjectFeaturesFeatureResponse,
-  ProjectsProjectStructureOptionalParams,
-  ProjectsProjectStructureResponse,
+  ProjectsProjectStructuresPlainOptionalParams,
+  ProjectsProjectStructuresPlainResponse,
+  ProjectsProjectStructuresOptionalParams,
+  ProjectsProjectStructuresResponse,
+  ProjectsProjectStructuresTreeCodeOptionalParams,
+  ProjectsProjectStructuresTreeCodeResponse,
   StatUploadAutotestsOptionalParams,
   StatOptionalParams,
-  StatResponse
-} from "./models";
+  StatResponse,
+} from './models';
 
 export class SpecBoxWebApi extends coreClient.ServiceClient {
   $host: string;
@@ -27,7 +31,7 @@ export class SpecBoxWebApi extends coreClient.ServiceClient {
    */
   constructor($host: string, options?: SpecBoxWebApiOptionalParams) {
     if ($host === undefined) {
-      throw new Error("'$host' cannot be null");
+      throw new Error('\'$host\' cannot be null');
     }
 
     // Initializing default values for options
@@ -35,10 +39,10 @@ export class SpecBoxWebApi extends coreClient.ServiceClient {
       options = {};
     }
     const defaults: SpecBoxWebApiOptionalParams = {
-      requestContentType: "application/json; charset=utf-8"
+      requestContentType: 'application/json; charset=utf-8',
     };
 
-    const packageDetails = `azsdk-js-specBoxWebApi/1.0.0-beta.1`;
+    const packageDetails = 'azsdk-js-specBoxWebApi/1.0.0-beta.1';
     const userAgentPrefix =
       options.userAgentOptions && options.userAgentOptions.userAgentPrefix
         ? `${options.userAgentOptions.userAgentPrefix} ${packageDetails}`
@@ -48,9 +52,9 @@ export class SpecBoxWebApi extends coreClient.ServiceClient {
       ...defaults,
       ...options,
       userAgentOptions: {
-        userAgentPrefix
+        userAgentPrefix,
       },
-      endpoint: options.endpoint ?? options.baseUri ?? "{$host}"
+      endpoint: options.endpoint ?? options.baseUri ?? '{$host}',
     };
     super(optionsWithDefaults);
     // Parameter assignments
@@ -62,16 +66,23 @@ export class SpecBoxWebApi extends coreClient.ServiceClient {
     return this.sendOperationRequest({ options }, configOperationSpec);
   }
 
-  /** @param options The options parameters. */
-  exportUpload(options?: ExportUploadOptionalParams): Promise<void> {
-    return this.sendOperationRequest({ options }, exportUploadOperationSpec);
+  /**
+   * @param project
+   * @param options The options parameters.
+   */
+  exportUploadProject(
+    project: string,
+    options?: ExportUploadProjectOptionalParams,
+  ): Promise<void> {
+    return this.sendOperationRequest(
+      { project, options },
+      exportUploadProjectOperationSpec,
+    );
   }
 
   /** @param options The options parameters. */
-  projectsList(
-    options?: ProjectsListOptionalParams
-  ): Promise<ProjectsListResponse> {
-    return this.sendOperationRequest({ options }, projectsListOperationSpec);
+  projects(options?: ProjectsOptionalParams): Promise<ProjectsResponse> {
+    return this.sendOperationRequest({ options }, projectsOperationSpec);
   }
 
   /**
@@ -82,11 +93,11 @@ export class SpecBoxWebApi extends coreClient.ServiceClient {
   projectsProjectFeaturesFeature(
     project: string,
     feature: string,
-    options?: ProjectsProjectFeaturesFeatureOptionalParams
+    options?: ProjectsProjectFeaturesFeatureOptionalParams,
   ): Promise<ProjectsProjectFeaturesFeatureResponse> {
     return this.sendOperationRequest(
       { project, feature, options },
-      projectsProjectFeaturesFeatureOperationSpec
+      projectsProjectFeaturesFeatureOperationSpec,
     );
   }
 
@@ -94,23 +105,53 @@ export class SpecBoxWebApi extends coreClient.ServiceClient {
    * @param project
    * @param options The options parameters.
    */
-  projectsProjectStructure(
+  projectsProjectStructuresPlain(
     project: string,
-    options?: ProjectsProjectStructureOptionalParams
-  ): Promise<ProjectsProjectStructureResponse> {
+    options?: ProjectsProjectStructuresPlainOptionalParams,
+  ): Promise<ProjectsProjectStructuresPlainResponse> {
     return this.sendOperationRequest(
       { project, options },
-      projectsProjectStructureOperationSpec
+      projectsProjectStructuresPlainOperationSpec,
+    );
+  }
+
+  /**
+   * @param project
+   * @param options The options parameters.
+   */
+  projectsProjectStructures(
+    project: string,
+    options?: ProjectsProjectStructuresOptionalParams,
+  ): Promise<ProjectsProjectStructuresResponse> {
+    return this.sendOperationRequest(
+      { project, options },
+      projectsProjectStructuresOperationSpec,
+    );
+  }
+
+  /**
+   * @param project
+   * @param treeCode
+   * @param options The options parameters.
+   */
+  projectsProjectStructuresTreeCode(
+    project: string,
+    treeCode: string,
+    options?: ProjectsProjectStructuresTreeCodeOptionalParams,
+  ): Promise<ProjectsProjectStructuresTreeCodeResponse> {
+    return this.sendOperationRequest(
+      { project, treeCode, options },
+      projectsProjectStructuresTreeCodeOperationSpec,
     );
   }
 
   /** @param options The options parameters. */
   statUploadAutotests(
-    options?: StatUploadAutotestsOptionalParams
+    options?: StatUploadAutotestsOptionalParams,
   ): Promise<void> {
     return this.sendOperationRequest(
       { options },
-      statUploadAutotestsOperationSpec
+      statUploadAutotestsOperationSpec,
     );
   }
 
@@ -123,95 +164,151 @@ export class SpecBoxWebApi extends coreClient.ServiceClient {
 const serializer = coreClient.createSerializer(Mappers, /* isXml */ false);
 
 const configOperationSpec: coreClient.OperationSpec = {
-  path: "/config",
-  httpMethod: "GET",
+  path: '/config',
+  httpMethod: 'GET',
   responses: {
     200: {
-      bodyMapper: Mappers.SpecBoxWebApiModelDefaultConfigurationModel
-    }
+      bodyMapper: Mappers.SpecBoxWebApiModelDefaultConfigurationModel,
+    },
   },
   urlParameters: [Parameters.$host],
   headerParameters: [Parameters.accept],
-  serializer
+  serializer,
 };
-const exportUploadOperationSpec: coreClient.OperationSpec = {
-  path: "/export/upload",
-  httpMethod: "POST",
+const exportUploadProjectOperationSpec: coreClient.OperationSpec = {
+  path: '/export/upload/{project}',
+  httpMethod: 'POST',
   responses: { 200: {} },
   requestBody: Parameters.body,
-  queryParameters: [Parameters.project],
-  urlParameters: [Parameters.$host],
+  queryParameters: [Parameters.version],
+  urlParameters: [Parameters.$host, Parameters.project],
   headerParameters: [Parameters.contentType],
-  mediaType: "json",
-  serializer
+  mediaType: 'json',
+  serializer,
 };
-const projectsListOperationSpec: coreClient.OperationSpec = {
-  path: "/projects/list",
-  httpMethod: "GET",
+const projectsOperationSpec: coreClient.OperationSpec = {
+  path: '/projects',
+  httpMethod: 'GET',
   responses: {
     200: {
       bodyMapper: {
         type: {
-          name: "Sequence",
+          name: 'Sequence',
           element: {
             type: {
-              name: "Composite",
-              className: "SpecBoxWebApiModelCommonProjectModel"
-            }
-          }
-        }
-      }
-    }
+              name: 'Composite',
+              className: 'SpecBoxWebApiModelCommonProjectModel',
+            },
+          },
+        },
+      },
+    },
   },
   urlParameters: [Parameters.$host],
   headerParameters: [Parameters.accept],
-  serializer
+  serializer,
 };
 const projectsProjectFeaturesFeatureOperationSpec: coreClient.OperationSpec = {
-  path: "/projects/{project}/features/{feature}",
-  httpMethod: "GET",
+  path: '/projects/{project}/features/{feature}',
+  httpMethod: 'GET',
   responses: {
     200: {
-      bodyMapper: Mappers.SpecBoxWebApiModelProjectFeatureModel
-    }
+      bodyMapper: Mappers.SpecBoxWebApiModelProjectFeatureModel,
+    },
+    404: {
+      bodyMapper: Mappers.MicrosoftAspNetCoreMvcProblemDetails,
+    },
   },
-  urlParameters: [Parameters.$host, Parameters.project1, Parameters.feature],
+  queryParameters: [Parameters.version],
+  urlParameters: [Parameters.$host, Parameters.project, Parameters.feature],
   headerParameters: [Parameters.accept],
-  serializer
+  serializer,
 };
-const projectsProjectStructureOperationSpec: coreClient.OperationSpec = {
-  path: "/projects/{project}/structure",
-  httpMethod: "GET",
+const projectsProjectStructuresPlainOperationSpec: coreClient.OperationSpec = {
+  path: '/projects/{project}/structures:plain',
+  httpMethod: 'GET',
   responses: {
     200: {
-      bodyMapper: Mappers.SpecBoxWebApiModelProjectStructureModel
-    }
+      bodyMapper: Mappers.SpecBoxWebApiModelProjectStructureModel,
+    },
+    404: {
+      bodyMapper: Mappers.MicrosoftAspNetCoreMvcProblemDetails,
+    },
   },
-  urlParameters: [Parameters.$host, Parameters.project1],
+  queryParameters: [Parameters.version],
+  urlParameters: [Parameters.$host, Parameters.project],
   headerParameters: [Parameters.accept],
-  serializer
+  serializer,
 };
+const projectsProjectStructuresOperationSpec: coreClient.OperationSpec = {
+  path: '/projects/{project}/structures',
+  httpMethod: 'GET',
+  responses: {
+    200: {
+      bodyMapper: {
+        type: {
+          name: 'Sequence',
+          element: {
+            type: {
+              name: 'Composite',
+              className: 'SpecBoxWebApiModelProjectTreeModel',
+            },
+          },
+        },
+      },
+    },
+    404: {
+      bodyMapper: Mappers.MicrosoftAspNetCoreMvcProblemDetails,
+    },
+  },
+  queryParameters: [Parameters.version],
+  urlParameters: [Parameters.$host, Parameters.project],
+  headerParameters: [Parameters.accept],
+  serializer,
+};
+const projectsProjectStructuresTreeCodeOperationSpec: coreClient.OperationSpec =
+  {
+    path: '/projects/{project}/structures/{treeCode}',
+    httpMethod: 'GET',
+    responses: {
+      200: {
+        bodyMapper: Mappers.SpecBoxWebApiModelProjectStructureModel,
+      },
+      404: {
+        bodyMapper: Mappers.MicrosoftAspNetCoreMvcProblemDetails,
+      },
+    },
+    queryParameters: [Parameters.version],
+    urlParameters: [Parameters.$host, Parameters.project, Parameters.treeCode],
+    headerParameters: [Parameters.accept],
+    serializer,
+  };
 const statUploadAutotestsOperationSpec: coreClient.OperationSpec = {
-  path: "/stat/upload-autotests",
-  httpMethod: "POST",
+  path: '/stat/upload-autotests',
+  httpMethod: 'POST',
   responses: { 200: {} },
   requestBody: Parameters.body1,
-  queryParameters: [Parameters.project],
+  queryParameters: [Parameters.version, Parameters.project1],
   urlParameters: [Parameters.$host],
   headerParameters: [Parameters.contentType],
-  mediaType: "json",
-  serializer
+  mediaType: 'json',
+  serializer,
 };
 const statOperationSpec: coreClient.OperationSpec = {
-  path: "/stat",
-  httpMethod: "GET",
+  path: '/stat',
+  httpMethod: 'GET',
   responses: {
     200: {
-      bodyMapper: Mappers.SpecBoxWebApiModelStatModel
-    }
+      bodyMapper: Mappers.SpecBoxWebApiModelStatModel,
+    },
   },
-  queryParameters: [Parameters.project, Parameters.from, Parameters.to],
+  queryParameters: [
+    Parameters.version,
+    Parameters.project1,
+    Parameters.from,
+    Parameters.to,
+  ],
   urlParameters: [Parameters.$host],
   headerParameters: [Parameters.accept],
-  serializer
+  serializer,
 };

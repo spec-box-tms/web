@@ -20,4 +20,6 @@
 .Project-DetailsPanel {
     border-radius: var(--sb-border-radius-3-xl);
     background-color: var(--g-color-base-generic);
+    
+    padding: var(--g-spacing-6);
 }

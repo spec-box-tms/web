@@ -1,17 +1,17 @@
-import { useEvent, useStore } from "effector-react/scope";
-import { FC, useCallback } from "react";
+import { useEvent, useStore } from 'effector-react/scope';
+import { FC, useCallback } from 'react';
 
-import { FeatureCard } from "@/components/FeatureCard/FeatureCard";
-import { ProjectFeatures } from "@/components/ProjectFeatures/ProjectFeatures";
-import { useTitle } from "@/hooks/useTitle";
-import * as model from "@/model/pages/project";
-import { Feature, TreeNode } from "@/types";
-import { cn } from "@bem-react/classname";
+import { FeatureCard } from '@/components/FeatureCard/FeatureCard';
+import { ProjectFeatures } from '@/components/ProjectFeatures/ProjectFeatures';
+import { useTitle } from '@/hooks/useTitle';
+import * as model from '@/model/pages/project';
+import { Feature, TreeNode } from '@/types';
+import { cn } from '@bem-react/classname';
 
-import "./Project.css";
-import { ProjectLayout } from "@/components/ProjectLayout/ProjectLayout";
+import './Project.css';
+import { ProjectLayout } from '@/components/ProjectLayout/ProjectLayout';
 
-const bem = cn("Project");
+const bem = cn('Project');
 
 interface ProjectTreeProps {
   isPending: boolean;
@@ -52,7 +52,6 @@ const Details: FC<DetailsProps> = ({ isPending, feature, repositoryUrl }) => {
   } else {
     return (
       <FeatureCard
-        className={bem("FeatureCard")}
         feature={feature}
         repositoryUrl={repositoryUrl}
       />
@@ -63,7 +62,7 @@ const Details: FC<DetailsProps> = ({ isPending, feature, repositoryUrl }) => {
 export const Project: FC = () => {
   const structureIsPending = useStore(model.$structureIsLoading);
   const {
-    project: { code: projectCode, title: projectTitle, repositoryUrl },
+    project: { code: projectCode, title: projectTitle, repositoryUrl, version },
     tree,
   } = useStore(model.$structure);
 
@@ -73,24 +72,25 @@ export const Project: FC = () => {
   const featureIsPending = useStore(model.$featureIsPending);
 
   const onFeatureSelected = useCallback(
-    (feature: string) => loadFeature({ project: projectCode, feature }),
-    [projectCode, loadFeature]
-  );
-
-  const navigate = useCallback(
-    (project: string, feature: string) => loadFeature({ project, feature }),
+    (feature: string) => loadFeature({ feature }),
     [loadFeature]
   );
 
-  useTitle(structureIsPending ? "Структура проекта" : projectTitle);
+  const navigate = useCallback(
+    (feature: string) => loadFeature({ feature }),
+    [loadFeature]
+  );
+
+  useTitle(structureIsPending ? 'Структура проекта' : projectTitle);
 
   return (
     <ProjectLayout
       contentClassName={bem()}
       project={projectCode}
+      version={version}
       navigate={navigate}
     >
-      <div className={bem("ListPanel")}>
+      <div className={bem('ListPanel')}>
         <ProjectTree
           isPending={structureIsPending}
           tree={tree}
@@ -98,7 +98,7 @@ export const Project: FC = () => {
           selectedFeatureCode={featureCode}
         />
       </div>
-      <div className={bem("DetailsPanel")}>
+      <div className={bem('DetailsPanel')}>
         <Details
           repositoryUrl={repositoryUrl}
           feature={feature}

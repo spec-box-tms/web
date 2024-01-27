@@ -1,15 +1,16 @@
 import { createRoute } from 'atomic-router';
-import { restore, sample } from 'effector';
+import { createEvent, createStore, restore, sample } from 'effector';
 
 import { mapProject } from '@/mappers';
 
+import { Project } from '@/types';
 import { createSpecBoxEffect } from '..';
 
 export const homeRoute = createRoute();
 
 const loadProjectListFx = createSpecBoxEffect(async (_, { api }) => {
   try {
-    const response = await api.projectsList();
+    const response = await api.projects();
 
     return response.map(mapProject);
   } catch (e) {
@@ -18,8 +19,13 @@ const loadProjectListFx = createSpecBoxEffect(async (_, { api }) => {
   }
 });
 
+
 export const $projects = restore(loadProjectListFx.doneData, []);
 export const $projectsIsLoading = loadProjectListFx.pending;
+
+export const selectProject = createEvent<Project>();
+export const $selectedProject = createStore<Project | null>(null)
+  .on(selectProject, (_, project) => ({...project}));
 
 sample({
   clock: [homeRoute.opened],

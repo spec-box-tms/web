@@ -1,18 +1,18 @@
-import { FC, ReactNode, useCallback } from "react";
-import { ListUl } from "@gravity-ui/icons";
-import { ArrowToggle, Icon } from "@gravity-ui/uikit";
-import { useEvent, useStoreMap } from "effector-react/scope";
+import { FC, ReactNode, useCallback } from 'react';
+import { ListUl } from '@gravity-ui/icons';
+import { ArrowToggle, Icon } from '@gravity-ui/uikit';
+import { useEvent, useStoreMap } from 'effector-react/scope';
 
-import { ListItem } from "@/components/ListItem/ListItem";
-import { FeatureTreeNode, GroupTreeNode } from "@/types";
-import { $collapseState, toggle } from "@/model/pages/project";
+import { ListItem } from '@/components/ListItem/ListItem';
+import { FeatureTreeNode, GroupTreeNode } from '@/types';
+import { $collapseState, toggle } from '@/model/pages/project';
 
-import { bem } from "../ProjectFeatures.cn";
+import { bem } from '../ProjectFeatures.cn';
 
-import { ItemStat } from "./ItemStat";
-import { Indent } from "./Indent";
+import { ItemStat } from './ItemStat';
+import { Indent } from './Indent';
 
-import "./FeatureItem.css";
+import './FeatureItem.css';
 
 interface FeatureGroupItemProps {
   level: number;
@@ -37,8 +37,8 @@ export const FeatureGroupItem: FC<FeatureGroupItemProps> = (props) => {
 
   const arrow = (
     <ArrowToggle
-      className={bem("CollapseIcon")}
-      direction={isOpen ? "bottom" : "right"}
+      className={bem('CollapseIcon')}
+      direction={isOpen ? 'bottom' : 'right'}
     />
   );
 
@@ -48,11 +48,11 @@ export const FeatureGroupItem: FC<FeatureGroupItemProps> = (props) => {
 
   return (
     <>
-      <div className={bem("Item", { isOpen })}>
+      <div className={bem('Item', { isOpen })}>
         <Indent level={level} />
         <ListItem
           view="flat"
-          className={bem("ItemContent")}
+          className={bem('ItemContent')}
           onPress={onSelect}
           before={arrow}
           after={stat}
@@ -73,7 +73,7 @@ interface FeatureItemProps {
 }
 
 const featureIcon = (
-  <Icon className={bem("FeatureIcon")} size={16} data={ListUl} />
+  <Icon className={bem('FeatureIcon')} size={16} data={ListUl} />
 );
 
 export const FeatureItem: FC<FeatureItemProps> = (props) => {
@@ -94,11 +94,11 @@ export const FeatureItem: FC<FeatureItemProps> = (props) => {
   );
 
   return (
-    <div className={bem("Item")}>
+    <div className={bem('Item')}>
       <Indent level={level} />
       <ListItem
         view="flat"
-        className={bem("ItemContent")}
+        className={bem('ItemContent')}
         isActive={featureCode === selectedCode}
         onPress={onSelect}
         before={featureIcon}

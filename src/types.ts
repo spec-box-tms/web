@@ -42,15 +42,20 @@ export interface GroupTreeNode extends BaseTreeNode {
 export type TreeNode = GroupTreeNode | FeatureTreeNode;
 
 export interface ProjectStructure {
-  project: Project;
+  project: ProjectDetails;
   tree: TreeNode[];
 }
 
-export interface Project {
+export interface ProjectDetails {
   code: string;
   title: string;
   description?: string;
   repositoryUrl?: string;
+  version?: string;
+}
+
+export interface Project extends Omit<ProjectDetails, 'version'> {
+  versions: string[];
 }
 
 export interface StatAssertion {
@@ -65,7 +70,7 @@ export interface StatAutotestsItem {
 }
 
 export interface ProjectStat {
-  project: Project;
+  project: ProjectDetails;
   assertions: StatAssertion[];
   autotests: StatAutotestsItem[];
 }
