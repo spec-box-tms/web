@@ -8,6 +8,7 @@ export interface SpecBoxWebApiModelUploadData {
   features: SpecBoxWebApiModelUploadFeatureModel[];
   attributes: SpecBoxWebApiModelUploadAttributeModel[];
   trees: SpecBoxWebApiModelUploadTreeModel[];
+  project: SpecBoxWebApiModelUploadProjectModel;
 }
 
 export interface SpecBoxWebApiModelUploadFeatureModel {
@@ -48,12 +49,23 @@ export interface SpecBoxWebApiModelUploadTreeModel {
   attributes: string[];
 }
 
+export interface SpecBoxWebApiModelUploadProjectModel {
+  title?: string;
+  description?: string;
+  repositoryUrl?: string;
+}
+
 export interface SpecBoxWebApiModelCommonProjectModel {
   code: string;
   title: string;
   description?: string;
   repositoryUrl?: string;
-  versions: string[];
+  versions: SpecBoxWebApiModelCommonVersionModel[];
+}
+
+export interface SpecBoxWebApiModelCommonVersionModel {
+  version?: string;
+  updatedAt?: Date;
 }
 
 export interface SpecBoxWebApiModelProjectFeatureModel {
@@ -98,6 +110,8 @@ export interface SpecBoxWebApiModelCommonProjectVersionModel {
   description?: string;
   repositoryUrl?: string;
   version?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface SpecBoxWebApiModelProjectTreeNodeModel {

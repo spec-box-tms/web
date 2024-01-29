@@ -61,6 +61,13 @@ export const SpecBoxWebApiModelUploadData: coreClient.CompositeMapper = {
           },
         },
       },
+      project: {
+        serializedName: 'project',
+        type: {
+          name: 'Composite',
+          className: 'SpecBoxWebApiModelUploadProjectModel',
+        },
+      },
     },
   },
 };
@@ -313,6 +320,37 @@ export const SpecBoxWebApiModelUploadTreeModel: coreClient.CompositeMapper = {
   },
 };
 
+export const SpecBoxWebApiModelUploadProjectModel: coreClient.CompositeMapper =
+  {
+    type: {
+      name: 'Composite',
+      className: 'SpecBoxWebApiModelUploadProjectModel',
+      modelProperties: {
+        title: {
+          serializedName: 'title',
+          nullable: true,
+          type: {
+            name: 'String',
+          },
+        },
+        description: {
+          serializedName: 'description',
+          nullable: true,
+          type: {
+            name: 'String',
+          },
+        },
+        repositoryUrl: {
+          serializedName: 'repositoryUrl',
+          nullable: true,
+          type: {
+            name: 'String',
+          },
+        },
+      },
+    },
+  };
+
 export const SpecBoxWebApiModelCommonProjectModel: coreClient.CompositeMapper =
   {
     type: {
@@ -360,9 +398,34 @@ export const SpecBoxWebApiModelCommonProjectModel: coreClient.CompositeMapper =
             name: 'Sequence',
             element: {
               type: {
-                name: 'String',
+                name: 'Composite',
+                className: 'SpecBoxWebApiModelCommonVersionModel',
               },
             },
+          },
+        },
+      },
+    },
+  };
+
+export const SpecBoxWebApiModelCommonVersionModel: coreClient.CompositeMapper =
+  {
+    type: {
+      name: 'Composite',
+      className: 'SpecBoxWebApiModelCommonVersionModel',
+      modelProperties: {
+        version: {
+          serializedName: 'version',
+          nullable: true,
+          type: {
+            name: 'String',
+          },
+        },
+        updatedAt: {
+          serializedName: 'updatedAt',
+          nullable: true,
+          type: {
+            name: 'DateTime',
           },
         },
       },
@@ -616,6 +679,20 @@ export const SpecBoxWebApiModelCommonProjectVersionModel: coreClient.CompositeMa
           nullable: true,
           type: {
             name: 'String',
+          },
+        },
+        createdAt: {
+          serializedName: 'createdAt',
+          nullable: true,
+          type: {
+            name: 'DateTime',
+          },
+        },
+        updatedAt: {
+          serializedName: 'updatedAt',
+          nullable: true,
+          type: {
+            name: 'DateTime',
           },
         },
       },

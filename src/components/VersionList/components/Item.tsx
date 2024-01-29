@@ -6,19 +6,28 @@ import '../VersionList.css';
 import { ListItem } from '@/components/ListItem/ListItem';
 import { useRouteLink } from '@/hooks/useRouteLink';
 import { projectRoute } from '@/model';
+import { Version } from '@/types';
 
 export interface VersionListItemProps {
   projectCode: string;
-  version: string | null;
+  version: Version;
 }
 
 export const Item: FC<VersionListItemProps> = (props) => {
-  const { version, projectCode } = props;
+  const { version: { version, updatedAt }, projectCode } = props;
 
   const { href, handler } = useRouteLink({
     to: projectRoute,
-    params: { project: projectCode},
-    query: version ? { version } : undefined,
+    params: { project: projectCode },
+    query: { ...(version && { version }) },
+  });
+
+  const updatedAtString = updatedAt?.toLocaleDateString('ru-RU', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric'
   });
 
   return (
@@ -29,6 +38,7 @@ export const Item: FC<VersionListItemProps> = (props) => {
       onPress={handler}
     >
       <div className={bem('Version')}>{version ? version : 'default'}</div>
+      {updatedAtString}
     </ListItem>
   );
 };

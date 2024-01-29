@@ -54,8 +54,13 @@ export interface ProjectDetails {
   version?: string;
 }
 
+export interface Version {
+  version?: string;
+  updatedAt?: Date;
+}
+
 export interface Project extends Omit<ProjectDetails, 'version'> {
-  versions: string[];
+  versions: Version[];
 }
 
 export interface StatAssertion {
