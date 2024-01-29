@@ -74,3 +74,8 @@ export interface ProjectStat {
   assertions: StatAssertion[];
   autotests: StatAutotestsItem[];
 }
+
+export interface Tree {
+  code: string;
+  title: string;
+}

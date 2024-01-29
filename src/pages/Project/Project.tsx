@@ -60,7 +60,7 @@ const Details: FC<DetailsProps> = ({ isPending, feature, repositoryUrl }) => {
 };
 
 export const Project: FC = () => {
-  const structureIsPending = useStore(model.$structureIsLoading);
+  const structureIsPending = useStore(model.$structureIsPending);
   const {
     project: { code: projectCode, title: projectTitle, repositoryUrl, version },
     tree,

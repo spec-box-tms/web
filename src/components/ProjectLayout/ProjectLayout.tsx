@@ -1,19 +1,21 @@
-import { RouteInstance } from 'atomic-router';
-import { FC, ReactNode } from 'react';
+import * as model from '@/model/pages/project';
 import { cn } from '@bem-react/classname';
-import { Icon, Skeleton } from '@gravity-ui/uikit';
-import { useStore } from 'effector-react/scope';
 import { Box } from '@gravity-ui/icons';
+import { Icon, Skeleton } from '@gravity-ui/uikit';
+import { RouteInstance } from 'atomic-router';
+import { useStore } from 'effector-react/scope';
+import { FC, ReactNode } from 'react';
 
 import {
-  ProjectContext,
   OpenFeatureLinkEventHandler,
+  ProjectContext,
 } from '@/components/ProjectContext/ProjectContext';
 import { RouteLinkButton } from '@/components/RouteLinkButton/RouteLinkButton';
 
 import { homeRoute, projectRoute, statRoute } from '@/model';
 
 import './ProjectLayout.css';
+import { Tree } from '@/types';
 
 const bem = cn('ProjectLayout');
 
@@ -23,6 +25,19 @@ type ProjectLayoutProps = {
   navigate?: OpenFeatureLinkEventHandler;
   contentClassName?: string;
   children?: ReactNode;
+};
+
+const mapQuery = (version?: string, tree?: string) => {
+  const query = {
+    ...(version && { version }),
+    ...(tree && { tree }),
+  };
+
+  return query;
+};
+
+const mapView = (isActive: boolean) => {
+  return isActive ? 'normal' : 'flat';
 };
 
 interface NavItemProps {
@@ -39,14 +54,12 @@ const NavItem: FC<NavItemProps> = ({ to, text, project, version }) => {
     return <Skeleton />;
   }
 
-  const view = isOpened ? 'normal' : 'flat';
-
   return (
     <RouteLinkButton
       to={to}
       params={{ project }}
-      query={version ? { version } : undefined}
-      view={view}
+      query={mapQuery(version)}
+      view={mapView(isOpened)}
       size="l"
       pin="circle-circle"
     >
@@ -55,8 +68,59 @@ const NavItem: FC<NavItemProps> = ({ to, text, project, version }) => {
   );
 };
 
+export interface TreeListProps {
+  isPending: boolean;
+  project: string;
+  version?: string;
+  trees: Tree[];
+}
+
+const TreeList: FC<TreeListProps> = ({ isPending, project, version, trees }) => {
+  const selectedTree = useStore(model.$tree);
+  const isOpened = useStore(projectRoute.$isOpened);
+
+  if (!project || isPending) {
+    return <Skeleton />;
+  } else {
+    trees = [...trees].sort((a, b) => a.title.localeCompare(b.title));
+
+    return (
+      <>
+        <RouteLinkButton
+          to={projectRoute}
+          params={{ project }}
+          query={mapQuery(version)}
+          view={mapView(isOpened && selectedTree === null)}
+          size="l"
+          pin="circle-circle"
+        >
+          Все
+        </RouteLinkButton>
+        {trees.map((tree) => (
+          <RouteLinkButton
+            key={tree.code}
+            to={projectRoute}
+            params={{ project }}
+            query={mapQuery(version, tree.code)}
+            view={mapView(isOpened && selectedTree === tree.code)}
+            size="l"
+            pin="circle-circle"
+          >
+            {tree.title}
+          </RouteLinkButton>
+        ))}
+      </>
+    );
+  }
+};
+
 export const ProjectLayout: FC<ProjectLayoutProps> = (props) => {
   const { children, contentClassName, navigate, project, version } = props;
+  const { project: { title: projectTitle } } = useStore(model.$structure);
+
+  const trees = useStore(model.$trees);
+  const treesIsPending = useStore(model.$treesIsPending);
+
   return (
     <ProjectContext.Provider value={{ project, version, navigate }}>
       <div className={bem()}>
@@ -72,8 +136,11 @@ export const ProjectLayout: FC<ProjectLayoutProps> = (props) => {
               <Icon size={24} data={Box} />
             </RouteLinkButton>
           </div>
+          <div className={bem('Title')}>
+            <h2>{projectTitle} {version && `(${version})`}</h2>
+          </div>
           <div className={bem('Navigation')}>
-            <NavItem to={projectRoute} project={project} version={version} text="Структура" />
+            <TreeList project={project} version={version} isPending={treesIsPending} trees={trees} />
             <NavItem to={statRoute} project={project} version={version} text="Статистика" />
           </div>
         </div>

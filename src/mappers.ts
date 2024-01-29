@@ -5,6 +5,7 @@ import {
   SpecBoxWebApiModelProjectAssertionModel,
   SpecBoxWebApiModelProjectFeatureModel,
   SpecBoxWebApiModelProjectStructureModel,
+  SpecBoxWebApiModelProjectTreeModel,
   SpecBoxWebApiModelProjectTreeNodeModel,
   StatResponse,
 } from './api';
@@ -16,6 +17,7 @@ import {
   ProjectDetails,
   ProjectStat,
   ProjectStructure,
+  Tree,
   TreeNode,
 } from './types';
 
@@ -144,4 +146,10 @@ export function mapProjectStat(stat: StatResponse): ProjectStat {
     assertions,
     autotests,
   };
+}
+
+export function mapTree(tree: SpecBoxWebApiModelProjectTreeModel): Tree {
+  const { code, title } = tree;
+
+  return { code, title };
 }
