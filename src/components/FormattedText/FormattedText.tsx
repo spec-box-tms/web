@@ -1,113 +1,110 @@
-import { FC, MouseEvent, ReactNode, useCallback, useContext } from 'react';
-import reactStringReplace from 'react-string-replace';
+import { FC, ReactNode, useCallback, useContext } from 'react';
 
 import {
-  OpenFeatureLinkEventHandler,
-  ProjectContext,
+  ProjectContext
 } from '@/components/ProjectContext/ProjectContext';
-import { RouteLink } from '@/components/RouteLink/RouteLink';
-import { projectRoute } from '@/model';
-import { cn } from '@bem-react/classname';
-import { PressEvent } from '@/hooks/usePress';
-
+import { Link } from '@gravity-ui/uikit';
+import Markdown from 'react-markdown';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { Node } from 'unist';
+import { visit } from 'unist-util-visit';
 import './FormattedText.css';
+import { bem } from './FormattedText.cn';
+import { useEvent } from 'effector-react/scope';
+import * as model from '@/model/pages/project';
 
-const bem = cn('FormattedText');
+function featureLinks(project?: string, version?: string, treeCode?: string) {
+  const transform = (tree: Node) => {
+    visit(tree, ['text'], (node: any) => {
+      const { value } = node;
+      const match = value.match(/\$([A-Za-z][A-Za-z0-9-_]*)/);
+      if (match) {
+        const [fullMatch, feature] = match;
+        const start = value.indexOf(fullMatch);
+        const end = start + fullMatch.length;
+        const before = value.slice(0, start);
+        const after = value.slice(end);
+        const beforeNode = { type: 'text', value: before };
+        const linkNode = {
+          type: 'link',
+          url: `/project/${project}?feature=${feature}${
+            version ? `&version=${version}` : ''
+          }${
+            treeCode ? `&tree=${treeCode}` : ''
+          }`,
+          title: feature,
+          children: [{ type: 'text', value: feature }]
+        };
+        const afterNode = { type: 'text', value: after };
+        node.type = 'root';
+        node.value = '';
+        node.children = [beforeNode, linkNode, afterNode];
+      }
+    });
+  };
+
+  return () => transform;
+}
+
+function MarkDownLink(props: { href?: string; children?: ReactNode }) {
+  const { href, children } = props;
+  const loadFeature = useEvent(model.loadFeature);
+  const handleClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (href
+      && href.startsWith('/project')
+      && href.includes('feature')
+      && e.button === 0
+      && !e.ctrlKey
+      && !e.metaKey
+      && !e.shiftKey
+      && !e.altKey) {
+      e.preventDefault();
+      loadFeature({ feature: href.split('feature=')[1].split('&')[0] });
+    }
+  },
+    [href, loadFeature]);
+  if (href && href.startsWith('/project') && href.includes('feature')) {
+    return <Link href={href} onClick={handleClick}> {children}</Link >;
+  }
+  return <Link href={href}>{children}</Link>;
+}
+
+function MarkDownCode(props: { children?: ReactNode; className?: string }) {
+  const { children, className, ...rest } = props
+  const match = /language-(\w+)/.exec(className || '')
+  return match ? (
+    <SyntaxHighlighter
+      {...rest}
+      PreTag="div"
+      language={match[1]}
+      children={String(children).replace(/\n$/, '')}
+    />
+  ) : (
+    <code {...rest} className={bem('Code', className)}>
+      {children}
+    </code>
+  )
+}
 
 type FormattedTextProps = {
   className?: string;
   text: string;
 };
 
-interface FormattedValueProps {
-  children: ReactNode;
-}
-
-const FormattedValue: FC<FormattedValueProps> = ({ children }) => (
-  <code>{children}</code>
-);
-
-interface FeatureLinkProps {
-  project: string;
-  version?: string;
-  feature: string;
-  navigate?: OpenFeatureLinkEventHandler;
-}
-
-function isModifiedEvent(event: MouseEvent) {
-  return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
-}
-
-const FeatureLink: FC<FeatureLinkProps> = ({ project, version, feature, navigate }) => {
-  const onPress = useCallback(
-    (e: PressEvent) => {
-      if (e.type === 'mouse') {
-        if (
-          e.source.defaultPrevented || // onClick prevented default
-          e.source.button !== 0 || // ignore everything but left clicks
-          isModifiedEvent(e.source) // ignore clicks with modifier keys)
-        ) {
-          return;
-        }
-      }
-
-      if (navigate) {
-        e.source.preventDefault();
-        navigate(feature);
-      }
-    },
-    [feature, navigate]
-  );
-  // format query params for feature and optional version
-  const query = version ? { feature, version } : { feature };
-  return (
-    <RouteLink
-      to={projectRoute}
-      params={{ project }}
-      query={query}
-      onPress={onPress}
-    >
-      {feature}
-    </RouteLink>
-  );
-};
-
 export const FormattedText: FC<FormattedTextProps> = (props) => {
   const { className, text } = props;
 
-  const { project, version, navigate } = useContext(ProjectContext) || {};
+  const { project, version, tree } = useContext(ProjectContext) || {};
 
-  // Match URLs
-  // для корректной замены в регулярном выражении должна быть ровно одна группа
-  let replacedText = reactStringReplace(
-    text,
-    /(https?:\/\/\S+)/gi,
-    (match, i) => <FormattedValue key={match + i}>{match}</FormattedValue>
-  );
+  const components = {
+    a: MarkDownLink,
+    code: MarkDownCode
+  }
 
-  // Match relative paths
-  replacedText = reactStringReplace(replacedText, /\s(\/\S+)/g, (match, i) => (
-    <FormattedValue key={match + i}>{match}</FormattedValue>
-  ));
-
-  // Match $-mentions
-  replacedText = reactStringReplace(
-    replacedText,
-    /\$([A-Za-z][A-Za-z0-9-_]*)/g,
-    (feature, i) => {
-      return project ? (
-        <FeatureLink
-          key={feature + i}
-          project={project}
-          version={version}
-          feature={feature}
-          navigate={navigate}
-        />
-      ) : (
-        <FormattedValue key={feature + i}>${feature}</FormattedValue>
-      );
-    }
-  );
-
-  return <span className={bem(null, [className])}>{replacedText}</span>;
+  return <Markdown
+    className={bem(null, className)}
+    remarkPlugins={[featureLinks(project, version, tree)]}
+    components={components}>
+    {text}
+  </Markdown>;
 };

@@ -35,12 +35,6 @@ export const Header: FC<HeaderProps> = (props) => {
     copyToClipboard({ text: feature.code });
   }, [feature.code, copyToClipboard]);
 
-  const description = feature.description ? (
-    <div className={bem('Description')}>
-      <FormattedText text={feature.description} />
-    </div>
-  ) : null;
-
   const link = useMemo(
     () => buildUrl(feature.filePath, repositoryUrl),
     [feature.filePath, repositoryUrl]
@@ -63,7 +57,6 @@ export const Header: FC<HeaderProps> = (props) => {
       <div className={bem('HeaderBody')}>
         <div className={bem('HeaderContent')}>
           <div className={bem('Title')}>{feature.title}</div>
-          {description}
         </div>
         <div className={bem('Actions')}>
           <Button

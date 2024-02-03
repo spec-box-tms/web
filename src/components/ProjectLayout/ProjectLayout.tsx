@@ -117,12 +117,13 @@ const TreeList: FC<TreeListProps> = ({ isPending, project, version, trees }) => 
 export const ProjectLayout: FC<ProjectLayoutProps> = (props) => {
   const { children, contentClassName, navigate, project, version } = props;
   const { project: { title: projectTitle } } = useStore(model.$structure);
+  const tree = useStore(model.$tree);
 
   const trees = useStore(model.$trees);
   const treesIsPending = useStore(model.$treesIsPending);
 
   return (
-    <ProjectContext.Provider value={{ project, version, navigate }}>
+    <ProjectContext.Provider value={{ project, version, tree: tree || undefined, navigate }}>
       <div className={bem()}>
         <div className={bem('Header')}>
           <div className={bem('Logo')}>

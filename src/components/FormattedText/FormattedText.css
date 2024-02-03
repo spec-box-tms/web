@@ -1,4 +1,4 @@
-.FormattedText code {
+.FormattedText-Code {
     font-family: var(--g-font-family-monospace);
     color: var(--g-color-text-misc-heavy);
 
@@ -8,4 +8,9 @@
     margin: 0 var(--g-spacing-half);
 
     word-break: break-word;
+}
+
+.FormattedText p {
+    margin: 0;
+    padding: 0;
 }
