@@ -2,41 +2,16 @@ import { useEvent, useStore } from 'effector-react/scope';
 import { FC, useCallback } from 'react';
 
 import { FeatureCard } from '@/components/FeatureCard/FeatureCard';
-import { ProjectFeatures } from '@/components/ProjectFeatures/ProjectFeatures';
 import { useTitle } from '@/hooks/useTitle';
 import * as model from '@/model/pages/project';
-import { Feature, TreeNode } from '@/types';
+import { Feature } from '@/types';
 import { cn } from '@bem-react/classname';
 
 import './Project.css';
 import { ProjectLayout } from '@/components/ProjectLayout/ProjectLayout';
+import { ProjectTree } from '@/components/ProjectTree/ProejctTree';
 
 const bem = cn('Project');
-
-interface ProjectTreeProps {
-  isPending: boolean;
-  tree: TreeNode[];
-  onFeatureSelected: (featureCode: string) => void;
-  selectedFeatureCode?: string;
-}
-
-const ProjectTree: FC<ProjectTreeProps> = (props) => {
-  const { isPending, tree, onFeatureSelected, selectedFeatureCode } = props;
-
-  // todo: сделать обработку пустого значения
-
-  if (isPending) {
-    return <div>загрузка</div>;
-  } else {
-    return (
-      <ProjectFeatures
-        tree={tree}
-        selectedFeatureCode={selectedFeatureCode}
-        onFeatureSelected={onFeatureSelected}
-      />
-    );
-  }
-};
 
 interface DetailsProps {
   feature: Feature | null;
