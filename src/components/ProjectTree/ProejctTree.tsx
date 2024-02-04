@@ -18,8 +18,9 @@ const searchTreeNodes = (tree: TreeNode[], search: string): TreeNode[] => {
     return tree;
   }
 
-  const words = search.split(' ').filter((word) => word.length > 0);  
+  const words = search.split(' ').filter((word) => word.length > 0);
   const found = tree.filter((node) => {
+    if (node.title === undefined) return false;
     const countMatchesInTitle = countMatches(node.title, words);
     let countMatchesInCode = 0;
     if (node.type === 'feature') {
@@ -27,7 +28,7 @@ const searchTreeNodes = (tree: TreeNode[], search: string): TreeNode[] => {
     }
     return countMatchesInTitle === words.length || countMatchesInCode === words.length;
   });
-  
+
   const distinctNodes = new Set<TreeNode>();
 
   // выбор всех потомков

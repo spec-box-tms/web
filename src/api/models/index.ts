@@ -118,7 +118,7 @@ export interface SpecBoxWebApiModelProjectTreeNodeModel {
   id: string;
   parentId?: string;
   featureCode?: string;
-  title: string;
+  title?: string;
   totalCount: number;
   automatedCount: number;
   sortOrder?: number;

@@ -727,11 +727,8 @@ export const SpecBoxWebApiModelProjectTreeNodeModel: coreClient.CompositeMapper 
           },
         },
         title: {
-          constraints: {
-            MinLength: 1,
-          },
           serializedName: 'title',
-          required: true,
+          nullable: true,
           type: {
             name: 'String',
           },

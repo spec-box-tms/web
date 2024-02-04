@@ -57,7 +57,7 @@ export const FeatureGroupItem: FC<FeatureGroupItemProps> = (props) => {
           before={arrow}
           after={stat}
         >
-          {title}
+          {title || '-нет данных-'}
         </ListItem>
       </div>
       {isOpen ? children : null}
