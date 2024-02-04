@@ -3,7 +3,7 @@ import { FC, ReactNode, useCallback, useContext } from 'react';
 import {
   ProjectContext
 } from '@/components/ProjectContext/ProjectContext';
-import { Link } from '@gravity-ui/uikit';
+import { Button, Icon, Link } from '@gravity-ui/uikit';
 import Markdown from 'react-markdown';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { Node } from 'unist';
@@ -12,6 +12,7 @@ import './FormattedText.css';
 import { bem } from './FormattedText.cn';
 import { useEvent } from 'effector-react/scope';
 import * as model from '@/model/pages/project';
+import { Copy } from '@gravity-ui/icons';
 
 function featureLinks(project?: string, version?: string, treeCode?: string) {
   const transform = (tree: Node) => {
@@ -27,11 +28,9 @@ function featureLinks(project?: string, version?: string, treeCode?: string) {
         const beforeNode = { type: 'text', value: before };
         const linkNode = {
           type: 'link',
-          url: `/project/${project}?feature=${feature}${
-            version ? `&version=${version}` : ''
-          }${
-            treeCode ? `&tree=${treeCode}` : ''
-          }`,
+          url: `/project/${project}?feature=${feature}${version ? `&version=${version}` : ''
+            }${treeCode ? `&tree=${treeCode}` : ''
+            }`,
           title: feature,
           children: [{ type: 'text', value: feature }]
         };
@@ -70,20 +69,39 @@ function MarkDownLink(props: { href?: string; children?: ReactNode }) {
 }
 
 function MarkDownCode(props: { children?: ReactNode; className?: string }) {
-  const { children, className, ...rest } = props
-  const match = /language-(\w+)/.exec(className || '')
-  return match ? (
-    <SyntaxHighlighter
-      {...rest}
-      PreTag="div"
-      language={match[1]}
-      children={String(children).replace(/\n$/, '')}
-    />
-  ) : (
+  const { children, className, ...rest } = props;
+
+  const copyToClipboard = useEvent(model.copyToClipboard);
+  const onClickCopyButton = useCallback(() => {
+    copyToClipboard({ text: String(children) });
+  }, [children, copyToClipboard]);
+
+
+  const match = /language-(\w+)/.exec(className || '');
+  if (match) {
+
+    return (<div className={bem('CodeBlock', className)}>
+      <Button
+        view="outlined"
+        size="m"
+        pin="circle-circle"
+        onClick={onClickCopyButton}
+      >
+        <Icon className={bem('CopyIcon')} size={16} data={Copy} />
+      </Button>
+      <SyntaxHighlighter
+        {...rest}
+        PreTag="div"
+        language={match[1]}
+        children={String(children).replace(/\n$/, '')}
+      />
+    </div>);
+  }
+  return (
     <code {...rest} className={bem('Code', className)}>
       {children}
     </code>
-  )
+  );
 }
 
 type FormattedTextProps = {

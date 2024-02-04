@@ -1,7 +1,6 @@
 import { useEvent } from 'effector-react/scope';
 import { FC, useCallback, useMemo } from 'react';
 
-import { FormattedText } from '@/components/FormattedText/FormattedText';
 import * as model from '@/model/pages/project';
 import { Feature } from '@/types';
 import { Copy } from '@gravity-ui/icons';

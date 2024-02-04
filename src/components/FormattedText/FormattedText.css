@@ -14,3 +14,13 @@
     margin: 0;
     padding: 0;
 }
+
+.FormattedText-CodeBlock {
+    display: flex;
+    flex-flow: column;
+}
+
+.FormattedText-CodeBlock > button {
+    align-self: flex-end;
+    margin-bottom: -30px;
+}
