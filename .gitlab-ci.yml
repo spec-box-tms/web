@@ -1,0 +1,28 @@
+stages:
+  - build
+
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+services:
+  - name: docker:dind
+    alias: docker
+
+build:
+  stage: build
+  tags:
+    - shell
+  before_script:
+    - mkdir -p $HOME/.docker
+    - echo $DOCHER_HUB_AUTH > $HOME/.docker/config.json
+    - | 
+      VERSION=$(sed -n 's/.*"version": *"\([^"]*\)".*/\1/p' package.json)
+    - TAG=$CI_REGISTRY_IMAGE:${VERSION}
+    - docker logout $CI_REGISTRY
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker build -t $TAG .
+    - docker push $TAG
+    - docker tag $TAG $CI_REGISTRY_IMAGE:latest
+    - docker push $CI_REGISTRY_IMAGE:latest
