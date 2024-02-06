@@ -15,7 +15,7 @@ export const Home: FC = () => {
   const projects = useStore(model.$projects);
   const projectsIsPending = useStore(model.$projectsIsLoading);
   useTitle('Проекты');
-  
+
   const selectedProject = useStore(model.$selectedProject);
 
   const projectsContent = projectsIsPending ? (
@@ -24,7 +24,7 @@ export const Home: FC = () => {
     <ProjectList projects={projects} />
   );
   const versionsContent = selectedProject ? (
-    <VersionList projectCode={selectedProject.code} versions={selectedProject.versions}/>
+    <VersionList projectCode={selectedProject.code} versions={selectedProject.versions} />
   ) : (
     <div>Выберите проект</div>
   );
@@ -32,6 +32,12 @@ export const Home: FC = () => {
 
   return (
     <div className={bem()}>
+      <div className={bem('Banner')}>
+        <span>УФТ<span style={{opacity: 0.2}}>ы</span>!</span>
+        <div className={bem('Hint')}>
+          Управление функциональными требованиями
+        </div>
+      </div>
       <div className={bem('Content')}>
         <div className={bem('Projects')}>
           <div className={bem('Header')}>Проекты</div>

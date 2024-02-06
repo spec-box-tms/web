@@ -1,13 +1,15 @@
 .Home {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-
     flex: 1;
 }
 
 .Home-Content {
     display: flex;
+    flex: 1 0;
+    align-items: center;
     flex-direction: row;
     gap: var(--g-spacing-4);
     max-width: 640px;
@@ -34,4 +36,17 @@
     flex: 1 0;
     flex-direction: column;
     gap: var(--g-spacing-4);
+}
+
+.Home-Banner {
+    display: flex;
+    flex: 0 0;
+    height: 100px;
+    min-height: 100px;
+    justify-content: center;
+    align-items: center;
+    gap: var(--g-spacing-4);
+    flex-direction: column;
+    font-size: 50px;
+    font-weight: 800;
 }
