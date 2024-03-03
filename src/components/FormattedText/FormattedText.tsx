@@ -117,7 +117,7 @@ export const FormattedText: FC<FormattedTextProps> = (props) => {
   const components = {
     a: MarkDownLink,
     code: MarkDownCode
-  }
+  };
 
   return <Markdown
     className={bem(null, className)}

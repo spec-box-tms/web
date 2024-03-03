@@ -1,7 +1,7 @@
 import * as model from '@/model/pages/project';
 import { cn } from '@bem-react/classname';
 import { Box } from '@gravity-ui/icons';
-import { Icon, Skeleton } from '@gravity-ui/uikit';
+import { Icon, Label, Skeleton } from '@gravity-ui/uikit';
 import { RouteInstance } from 'atomic-router';
 import { useStore } from 'effector-react/scope';
 import { FC, ReactNode } from 'react';
@@ -15,6 +15,7 @@ import { RouteLinkButton } from '@/components/RouteLinkButton/RouteLinkButton';
 import { homeRoute, projectRoute, statRoute, testRunsRoute } from '@/model';
 
 import './ProjectLayout.css';
+import { InfiniteLoader } from '../InfiniteLoader/InfiniteLoader';
 
 const bem = cn('ProjectLayout');
 
@@ -25,6 +26,7 @@ type ProjectLayoutProps = {
   contentClassName?: string;
   children?: ReactNode;
   projectTitle?: string;
+  isLoading?: boolean;
 };
 
 const mapQuery = (version?: string, tree?: string) => {
@@ -69,8 +71,11 @@ const NavItem: FC<NavItemProps> = ({ to, text, project, version }) => {
 };
 
 export const ProjectLayout: FC<ProjectLayoutProps> = (props) => {
-  const { children, contentClassName, navigate, project, version, projectTitle } = props;
+  const { children, contentClassName, navigate, project, version, projectTitle, isLoading } = props;
   const tree = useStore(model.$tree);
+  if(isLoading) {
+    return <InfiniteLoader />;
+  }
 
   return (
     <ProjectContext.Provider value={{ project, version, tree: tree || undefined, navigate }}>
@@ -88,7 +93,8 @@ export const ProjectLayout: FC<ProjectLayoutProps> = (props) => {
             </RouteLinkButton>
           </div>
           <div className={bem('Title')}>
-            <h2>{projectTitle} {version && `(${version})`}</h2>
+            <h2>{projectTitle}</h2>
+            <Label>v: {version ?? 'по-умолчанию'}</Label>
           </div>
           <div className={bem('Navigation')}>
             <NavItem to={projectRoute} project={project} version={version} text="Проект" />

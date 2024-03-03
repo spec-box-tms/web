@@ -23,6 +23,8 @@ import {
   CreateTestRunResponse,
   ListTestRunsOptionalParams,
   ListTestRunsResponse,
+  GetTestRunOptionalParams,
+  GetTestRunResponse,
   ListTestResultsOptionalParams,
   ListTestResultsResponse,
   GetTestResultOptionalParams,
@@ -212,6 +214,21 @@ export class SpecBoxWebApi extends coreClient.ServiceClient {
   }
 
   /**
+   * Retrieves a specific test run by ID.
+   * @param testRunId Test run ID
+   * @param options The options parameters.
+   */
+  getTestRun(
+    testRunId: string,
+    options?: GetTestRunOptionalParams,
+  ): Promise<GetTestRunResponse> {
+    return this.sendOperationRequest(
+      { testRunId, options },
+      getTestRunOperationSpec,
+    );
+  }
+
+  /**
    * Retrieves test results for a specific test run.
    * @param testRunId The ID of the test run.
    * @param options The options parameters.
@@ -246,6 +263,7 @@ export class SpecBoxWebApi extends coreClient.ServiceClient {
 
   /**
    * Updates test result with provided Status and Report.
+   * Supported Statuses: PASSED, SKIPPED, BLOCKED, INVALID, FAILED, NEW
    * @param testRunId The ID of the test run.
    * @param testResultId The ID of the test result.
    * @param options The options parameters.
@@ -441,6 +459,21 @@ const listTestRunsOperationSpec: coreClient.OperationSpec = {
   },
   queryParameters: [Parameters.version],
   urlParameters: [Parameters.$host, Parameters.project],
+  headerParameters: [Parameters.accept],
+  serializer,
+};
+const getTestRunOperationSpec: coreClient.OperationSpec = {
+  path: '/tests/testruns/{testRunId}',
+  httpMethod: 'GET',
+  responses: {
+    200: {
+      bodyMapper: Mappers.SpecBoxWebApiModelTestRunDetailsModel,
+    },
+    404: {
+      bodyMapper: Mappers.MicrosoftAspNetCoreMvcProblemDetails,
+    },
+  },
+  urlParameters: [Parameters.$host, Parameters.testRunId],
   headerParameters: [Parameters.accept],
   serializer,
 };

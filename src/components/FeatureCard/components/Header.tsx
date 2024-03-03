@@ -1,15 +1,13 @@
-import { useEvent } from 'effector-react/scope';
-import { FC, useCallback, useMemo } from 'react';
+import { FC } from 'react';
 
-import * as model from '@/model/pages/project';
 import { Feature } from '@/types';
-import { Copy } from '@gravity-ui/icons';
-import { Button, Icon } from '@gravity-ui/uikit';
 
 import { bem } from '../FeatureCard.cn';
 
 import { Stat } from './Stat';
 
+import { CopyFeatureCodeButton } from '@/components/CopyFeatureCodeButton/CopyFeatureCodeButton';
+import { GoToYamlButton } from '@/components/GoToYamlButton/GoToYamlButton';
 import './Header.css';
 
 type HeaderProps = {
@@ -17,39 +15,10 @@ type HeaderProps = {
   repositoryUrl?: string;
 };
 
-const buildUrl = (url?: string, baseUrl?: string): string | undefined => {
-  if (!url || !baseUrl) {
-    return undefined;
-  }
-
-  return new URL(url, (baseUrl + '/').replace(/\/+$/, '/')).href;
-};
-
 export const Header: FC<HeaderProps> = (props) => {
   const { feature, repositoryUrl } = props;
   const { total, automated } = feature.assertionsCount;
 
-  const copyToClipboard = useEvent(model.copyToClipboard);
-  const onClickCopyButton = useCallback(() => {
-    copyToClipboard({ text: feature.code });
-  }, [feature.code, copyToClipboard]);
-
-  const link = useMemo(
-    () => buildUrl(feature.filePath, repositoryUrl),
-    [feature.filePath, repositoryUrl]
-  );
-
-  const goToYmlButton = link ? (
-    <Button
-      href={link}
-      target="_blank"
-      size="m"
-      view="outlined"
-      pin="circle-circle"
-    >
-      Перейти к YML
-    </Button>
-  ) : null;
 
   return (
     <div className={bem('Header')}>
@@ -58,16 +27,8 @@ export const Header: FC<HeaderProps> = (props) => {
           <div className={bem('Title')}>{feature.title}</div>
         </div>
         <div className={bem('Actions')}>
-          <Button
-            view="outlined"
-            size="m"
-            pin="circle-circle"
-            onClick={onClickCopyButton}
-          >
-            {feature.code}
-            <Icon className={bem('CopyIcon')} size={16} data={Copy} />
-          </Button>
-          {goToYmlButton}
+          <CopyFeatureCodeButton code={feature.code} />
+          <GoToYamlButton filePath={feature.filePath} repositoryUrl={repositoryUrl} />
         </div>
       </div>
       <div className={bem('HeaderSidebar')}>

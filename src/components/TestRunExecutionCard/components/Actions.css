@@ -1,0 +1,29 @@
+.TestRunExecutionCard-ActionsContainer {
+  display: flex;
+  flex-direction: column;
+  margin: 1em 0;
+}
+
+.TestRunExecutionCard-Actions {
+  display: flex;
+  flex-direction: row;
+  margin: .5em 0;
+}
+
+.TestRunExecutionCard-ActionButton {
+  opacity: .5;
+  transition: opacity .2s;
+}
+
+.TestRunExecutionCard-ActionButton:hover {
+  opacity: 1;
+}
+
+.TestRunExecutionCard-ActionButton.Active {
+  opacity: 1;
+}
+
+.TestRunExecutionCard-ActionInfo {
+  font: var(--sb-font-body-s);
+  color: var(--g-color-text-secondary);
+}

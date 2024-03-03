@@ -1,0 +1,23 @@
+.TestRunExecutionCard-Assertion {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+}
+
+.TestRunExecutionCard-AssertionContent {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin-left: var(--g-spacing-1);
+}
+
+.TestRunExecutionCard-AssertionDescription {
+  font: var(--sb-font-body-s);
+  color: var(--g-color-text-secondary);
+}
+
+.TestRunExecutionCard-StatusIcon {
+  display: flex;
+  flex-direction: column;
+  gap: var(--g-spacing-1);
+}

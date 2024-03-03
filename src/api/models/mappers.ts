@@ -1050,6 +1050,30 @@ export const SpecBoxWebApiModelTestRunModel: coreClient.CompositeMapper = {
   },
 };
 
+export const SpecBoxWebApiModelTestRunDetailsModel: coreClient.CompositeMapper =
+  {
+    type: {
+      name: 'Composite',
+      className: 'SpecBoxWebApiModelTestRunDetailsModel',
+      modelProperties: {
+        project: {
+          serializedName: 'project',
+          type: {
+            name: 'Composite',
+            className: 'SpecBoxWebApiModelCommonProjectVersionModel',
+          },
+        },
+        testRun: {
+          serializedName: 'testRun',
+          type: {
+            name: 'Composite',
+            className: 'SpecBoxWebApiModelTestRunModel',
+          },
+        },
+      },
+    },
+  };
+
 export const SpecBoxWebApiModelTestRunTestResultModel: coreClient.CompositeMapper =
   {
     type: {

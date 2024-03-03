@@ -4,8 +4,8 @@ import { TestResult, TestResultStatus } from '@/types';
 import { ArrowToggle } from '@gravity-ui/uikit';
 import { FC, useCallback, useState } from 'react';
 import { bem } from '../TestRunDetail.cn';
-import { TestResultIcon } from './TestResultIcon';
 import './TestResultsByFeature.css';
+import { TestResultIcon } from '@/components/TestResultIcon/TestResultIcon';
 
 
 interface FeatureTestResults {

@@ -2,7 +2,6 @@ import { FC } from 'react';
 import { Item } from './components/Item';
 import { bem } from './TestRunsList.cn';
 import { TestRun } from '@/types';
-
 import './TestRunsList.css';
 
 interface TestRunsListProps {
@@ -21,4 +20,4 @@ export const TestRunsList: FC<TestRunsListProps> = (props) => {
   const items = testRunsSorted.map((testRun) => <Item key={testRun.id} testRun={testRun} />);
 
   return <div className={bem()}>{items}</div>;
-}
+};

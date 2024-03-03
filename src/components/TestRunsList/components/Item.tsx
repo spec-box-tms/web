@@ -1,42 +1,17 @@
-import { FC } from 'react';
-
-import { TestRun } from '@/types';
-
-import { bem } from '../TestRunsList.cn';
-
 import { ListItem } from '@/components/ListItem/ListItem';
+import { ProjectContext } from '@/components/ProjectContext/ProjectContext';
+import { RouteLink } from '@/components/RouteLink/RouteLink';
+import { TestRunStateIcon } from '@/components/TestRunStateIcon/TestRunStateIcon';
+import { formatDate } from '@/helpers/formatDate';
+import { testRunExecutionRoute } from '@/model/pages/testRunExecution';
 import * as model from '@/model/pages/testRuns';
+import { TestRun } from '@/types';
+import { ArrowRightToSquare } from '@gravity-ui/icons';
+import { Icon, Label } from '@gravity-ui/uikit';
 import { useStore, useUnit } from 'effector-react/scope';
+import { FC, useContext } from 'react';
+import { bem } from '../TestRunsList.cn';
 import './Item.css';
-import { Label } from '@gravity-ui/uikit';
-import { CircleCheckFill, CircleDashed, Clock } from '@gravity-ui/icons';
-
-function formatDate(date: Date) {
-  const dateFormatter = new Intl.DateTimeFormat('de-DE', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  });
-
-  const timeFormatter = new Intl.DateTimeFormat('de-DE', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false
-  });
-
-  return `${dateFormatter.format(date)} ${timeFormatter.format(date)}`;
-}
-
-function getIcon(testRun: TestRun) {
-  if (testRun.completedAt) {
-    return <CircleCheckFill color="rgb(50, 186, 118)" />;
-  }
-  if (testRun.startedAt) {
-    return <Clock color="rgb(48, 114, 179)" />;
-  }
-
-  return <CircleDashed color="gray" />;
-}
 
 interface ItemProps {
   testRun: TestRun;
@@ -44,7 +19,7 @@ interface ItemProps {
 
 export const Item: FC<ItemProps> = (props) => {
   const { testRun } = props;
-
+  const context = useContext(ProjectContext);
   const selectedTestRun = useStore(model.$selectedTestRun);
 
   const handleSelectTestRun = useUnit(model.selectTestRun);
@@ -58,8 +33,11 @@ export const Item: FC<ItemProps> = (props) => {
     >
       <div className={bem('Title')}>
         <div className={bem('TitleText')}>
-          {getIcon(testRun)}
+          <TestRunStateIcon testRun={testRun} />
           {testRun.title}
+          <RouteLink to={testRunExecutionRoute} params={{ project: context?.project || '', testrun: testRun.id }}>
+            <Icon data={ArrowRightToSquare} />
+          </RouteLink>
         </div>
         <Label>v: {testRun.version ?? 'по-умолчанию'}</Label>
       </div>

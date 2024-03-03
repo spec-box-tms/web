@@ -1,0 +1,5 @@
+.TestRunExecutionCard-Title {
+  font: var(--sb-font-header-m);
+  word-break: break-word;
+  margin-top: var(--g-spacing-4);
+}

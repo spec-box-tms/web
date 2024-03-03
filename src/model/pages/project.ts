@@ -3,12 +3,11 @@ import copy from 'copy-to-clipboard';
 import { combine, createEvent, createStore, restore, sample } from 'effector';
 import { toast } from 'react-toastify';
 
-import { mapFeature, mapStructure, mapTree } from '@/mappers';
-import { Feature, ProjectStructure, Tree, TreeNode } from '@/types';
+import { Feature, ProjectStructure, TreeNode } from '@/types';
 
 import { controls } from '../common';
-import { StoreDependencies, createSpecBoxEffect } from '../scope';
-import { SpecBoxWebApiModelProjectStructureModel } from '@/api';
+import { loadFeatureQuery, loadStructureQuery, loadTreesQuery } from '../queries';
+import { createSpecBoxEffect } from '../scope';
 
 const STRUCTURE_STUB: ProjectStructure = {
   tree: [],
@@ -34,64 +33,11 @@ export const $tree = createStore<string | null>(null).on(
   (_, { query: { tree } }) => tree ?? null
 );
 
-export interface LoadTreesFxParams {
-  project: string;
-  version: string | null;
-}
-
-export const loadTreesFx = createSpecBoxEffect(
-  async (
-    { project, version }: LoadTreesFxParams,
-    deps: StoreDependencies
-  ): Promise<Tree[]> => {
-    try {
-      const response = await deps.api.listStructures(project, {
-        version: version ?? undefined,
-      });
-
-      return response.map(mapTree);
-    } catch (e) {
-      console.error(e);
-      throw e;
-    }
-  }
-);
-
+export const loadTreesFx = createSpecBoxEffect(loadTreesQuery);
 export const $trees = restore(loadTreesFx.doneData, []);
 export const $treesIsPending = loadTreesFx.pending;
 
-export interface LoadStructureFxParams {
-  project: string;
-  version: string | null;
-  tree: string | null;
-}
-
-export const loadStructureFx = createSpecBoxEffect(
-  async (
-    { project, version, tree }: LoadStructureFxParams,
-    deps: StoreDependencies
-  ): Promise<ProjectStructure> => {
-    try {
-      let response: SpecBoxWebApiModelProjectStructureModel;
-      if (tree === null) {
-        response = await deps.api.getStructurePlain(project, {
-          version: version ?? undefined,
-        });
-      } else {
-        response = await deps.api.getStructure(
-          project,
-          tree,
-          { version: version ?? undefined }
-        );
-      }
-      return mapStructure(response);
-    } catch (e) {
-      console.error(e);
-      throw e;
-    }
-  }
-);
-
+export const loadStructureFx = createSpecBoxEffect(loadStructureQuery);
 export const $structure = restore(loadStructureFx.doneData, STRUCTURE_STUB);
 export const $structureIsPending = loadStructureFx.pending;
 
@@ -99,10 +45,11 @@ export interface LoadTreeParams {
   tree: string;
 }
 export const loadTree = createEvent<LoadTreeParams>();
+
 querySync({
   source: {
     tree: restore(
-      loadTree.map(({ tree }) => tree ),
+      loadTree.map(({ tree }) => tree),
       null
     ),
   },
@@ -133,31 +80,7 @@ export const copyToClipboardFx = createSpecBoxEffect(
   }
 );
 
-export interface LoadFeatureFxParams {
-  project: string;
-  version?: string;
-  feature: string;
-}
-
-export const loadFeatureFx = createSpecBoxEffect(
-  async (
-    { project, version, feature }: LoadFeatureFxParams,
-    deps: StoreDependencies
-  ): Promise<Feature> => {
-    try {
-      const response = await deps.api.getFeature(
-        project,
-        feature,
-        { version }
-      );
-
-      return mapFeature(response);
-    } catch (e) {
-      console.error(e);
-      throw e;
-    }
-  }
-);
+export const loadFeatureFx = createSpecBoxEffect(loadFeatureQuery);
 
 export interface LoadFeatureParams {
   feature: string;
@@ -240,10 +163,10 @@ sample({
 });
 
 sample({
-  clock: combine({ 
-    project: $project, 
-    version: $version, 
-    tree: $tree 
+  clock: combine({
+    project: $project,
+    version: $version,
+    tree: $tree,
   }),
   fn: ({ project, version, tree }) => ({ project, version, tree }),
   target: loadStructureFx,

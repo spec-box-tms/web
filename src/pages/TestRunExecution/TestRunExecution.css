@@ -1,0 +1,50 @@
+.TestRunExecution {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+
+  min-height: 0;
+  gap: var(--g-spacing-6);
+}
+
+.TestRunExecution-Header {
+  display: flex;
+  gap: var(--g-spacing-1);
+  align-items: center;
+}
+
+.TestRunExecution-Title {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.1rem;
+}
+
+.TestRunExecution-Subtitle {
+  font-size: 0.8rem;
+  color: var(--g-color-text-secondary);
+}
+
+.TestRunExecution-ListPanel,
+.TestRunExecution-DetailsPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--g-spacing-6);
+
+  padding: var(--g-spacing-1);
+  overflow-y: auto;
+}
+.TestRunExecution-ListPanel {
+  flex: 1;
+}
+.TestRunExecution-DetailsPanel {
+  flex: 2;
+  min-width: 1000px;
+}
+
+.TestRunExecution-DetailsPanel {
+  border-radius: var(--sb-border-radius-3-xl);
+  background-color: var(--g-color-base-generic);
+  
+  padding: var(--g-spacing-6);
+}

@@ -8,6 +8,8 @@ import { Home } from './pages/Home/Home';
 import { Project } from './pages/Project/Project';
 import { Stat } from './pages/Stat/Stat';
 import { TestRuns } from './pages/TestRuns/TestRuns';
+import { testRunExecutionRoute } from './model/pages/testRunExecution';
+import { TestRunExecution } from './pages/TestRunExecution/TestRunExecution';
 
 export const Application: FC = () => {
   return (
@@ -15,6 +17,7 @@ export const Application: FC = () => {
       <Route route={homeRoute} view={Home} />
       <Route route={projectRoute} view={Project} />
       <Route route={testRunsRoute} view={TestRuns} />
+      <Route route={testRunExecutionRoute} view={TestRunExecution} />
       <Route route={statRoute} view={Stat} />
       <ToastContainer />
     </ApplicationLayout>

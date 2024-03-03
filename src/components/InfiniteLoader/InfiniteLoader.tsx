@@ -8,4 +8,4 @@ export const InfiniteLoader = () => {
   return <div className={bem()}>
     <Loader size="m" />
   </div>;
-}
+};

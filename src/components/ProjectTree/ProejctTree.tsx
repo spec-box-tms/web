@@ -14,7 +14,7 @@ const countMatches = (text: string, words: string[]): number => {
   return words.reduce((acc, word) => {
     return acc + (text.toLowerCase().includes(word.toLowerCase()) ? 1 : 0);
   }, 0);
-}
+};
 
 const searchTreeNodes = (tree: TreeNode[], search: string): TreeNode[] => {
   if (search.length === 0) {
@@ -63,10 +63,12 @@ const searchTreeNodes = (tree: TreeNode[], search: string): TreeNode[] => {
   });
 
   return [...distinctNodes.values()];
-}
+};
 
 interface ProjectTreeProps {
   isPending: boolean;
+  isPendingStructure: boolean;
+  selectedTree: string | null;
   tree: TreeNode[];
   onTreeSelected: (treeCode: string) => void;
   onFeatureSelected: (featureCode: string) => void;
@@ -74,12 +76,19 @@ interface ProjectTreeProps {
 }
 
 export const ProjectTree: FC<ProjectTreeProps> = (props) => {
-  const { isPending, tree, onFeatureSelected, selectedFeatureCode, onTreeSelected } = props;
+  const { 
+    isPending, 
+    isPendingStructure, 
+    tree, 
+    selectedTree,
+    onFeatureSelected, 
+    selectedFeatureCode, 
+    onTreeSelected, 
+  } = props;
   const [search, setSearch] = useState('');
   const searchDebounce = useDebounce(search, 300);
   const [filtredTree, setFiltredTree] = useState<TreeNode[]>([]);
   const trees = useStore(model.$trees);
-  const selectedTree = useStore(model.$tree);
 
   const handleTreeSelected = useCallback((treeCodes: string[]) => {
     onTreeSelected(treeCodes[0]);
@@ -96,15 +105,15 @@ export const ProjectTree: FC<ProjectTreeProps> = (props) => {
   }, [searchDebounce, tree]);
 
   if (isPending) {
-    return <InfiniteLoader/>;
+    return <InfiniteLoader />;
   } else {
     return (
       <div className={bem('Container')}>
-        <Select 
-          size="m" 
-          placeholder="Структура" 
-          options={treesSelectOptions} 
-          onUpdate={handleTreeSelected} value={[selectedTree || '']} 
+        <Select
+          size="m"
+          placeholder="Структура"
+          options={treesSelectOptions}
+          onUpdate={handleTreeSelected} value={[selectedTree || '']}
           label="Структура:"
         />
         <TextInput
@@ -113,11 +122,11 @@ export const ProjectTree: FC<ProjectTreeProps> = (props) => {
           label="Поиск:"
           onChange={(e) => setSearch(e.target.value)}
         />
-        <ProjectFeatures
-          tree={filtredTree}
-          selectedFeatureCode={selectedFeatureCode}
-          onFeatureSelected={onFeatureSelected}
-        />
+        {
+          isPendingStructure ?
+            <InfiniteLoader /> :
+            <ProjectFeatures tree={filtredTree} onFeatureSelected={onFeatureSelected} selectedFeatureCode={selectedFeatureCode} />
+        }
       </div>
     );
   }

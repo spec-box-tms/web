@@ -15,6 +15,7 @@ module.exports = {
       { allowConstantExport: true },
     ],
     'quotes': ['warn', 'single'],
-    'eol-last': ['warn', 'always']
+    'eol-last': ['warn', 'always'],
+    'semi': ['error', 'always'],
   },
 }

@@ -1,16 +1,14 @@
-import { useEvent, useStore } from 'effector-react/scope';
-import { FC, useCallback } from 'react';
-
 import { FeatureCard } from '@/components/FeatureCard/FeatureCard';
+import { InfiniteLoader } from '@/components/InfiniteLoader/InfiniteLoader';
+import { ProjectLayout } from '@/components/ProjectLayout/ProjectLayout';
+import { ProjectTree } from '@/components/ProjectTree/ProejctTree';
 import { useTitle } from '@/hooks/useTitle';
 import * as model from '@/model/pages/project';
 import { Feature } from '@/types';
 import { cn } from '@bem-react/classname';
-
+import { useEvent, useStore } from 'effector-react/scope';
+import { FC, useCallback } from 'react';
 import './Project.css';
-import { ProjectLayout } from '@/components/ProjectLayout/ProjectLayout';
-import { ProjectTree } from '@/components/ProjectTree/ProejctTree';
-import { InfiniteLoader } from '@/components/InfiniteLoader/InfiniteLoader';
 
 const bem = cn('Project');
 
@@ -36,17 +34,20 @@ const Details: FC<DetailsProps> = ({ isPending, feature, repositoryUrl }) => {
 };
 
 export const Project: FC = () => {
-  const structureIsPending = useStore(model.$structureIsPending);
+  const isStructurePending = useStore(model.$structureIsPending);
   const {
     project: { code: projectCode, title: projectTitle, repositoryUrl, version },
     tree,
   } = useStore(model.$structure);
+
+  const isTreesLoading = useStore(model.$treesIsPending);
 
   const loadFeature = useEvent(model.loadFeature);
   const loadTree = useEvent(model.loadTree);
   const feature = useStore(model.$feature);
   const featureCode = useStore(model.$featureCode);
   const featureIsPending = useStore(model.$featureIsPending);
+  const selectedTree = useStore(model.$tree);
 
   const onFeatureSelected = useCallback(
     (feature: string) => loadFeature({ feature }),
@@ -63,7 +64,7 @@ export const Project: FC = () => {
     [loadFeature]
   );
 
-  useTitle(structureIsPending ? 'Структура проекта' : projectTitle);
+  useTitle(isStructurePending ? 'Структура проекта' : projectTitle);
 
   return (
     <ProjectLayout
@@ -75,7 +76,9 @@ export const Project: FC = () => {
     >
       <div className={bem('ListPanel')}>
         <ProjectTree
-          isPending={structureIsPending}
+          isPending={isTreesLoading}
+          isPendingStructure={isStructurePending}
+          selectedTree={selectedTree}
           tree={tree}
           onFeatureSelected={onFeatureSelected}
           onTreeSelected={onTreeSelected}

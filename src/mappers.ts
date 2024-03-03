@@ -1,5 +1,6 @@
 import {
   GetAutotestsStatResponse,
+  GetTestRunResponse,
   SpecBoxWebApiModelCommonProjectModel,
   SpecBoxWebApiModelCommonProjectVersionModel,
   SpecBoxWebApiModelProjectAssertionGroupModel,
@@ -24,6 +25,7 @@ import {
   TestResult,
   TestResultStatus,
   TestRun,
+  TestRunDetails,
   Tree,
   TreeNode,
 } from './types';
@@ -218,5 +220,12 @@ export function mapTestResult(
     assertionGroupTitle,
     featureCode,
     featureTitle,
+  };
+}
+
+export function mapTestRunDetails(testRun: GetTestRunResponse): TestRunDetails {
+  return {
+    project: mapProjectDetails(testRun.project),
+    testRun: mapTestRun(testRun.testRun),
   };
 }

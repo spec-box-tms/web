@@ -124,3 +124,14 @@ export interface TestResult {
   featureCode: string;
   featureTitle: string;
 }
+
+export interface UpdateTestResult {
+  id: string;
+  status: TestResultStatus;
+  report?: string;
+}
+
+export interface TestRunDetails {
+  project: ProjectDetails;
+  testRun: TestRun;
+}

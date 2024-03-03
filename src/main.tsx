@@ -16,6 +16,7 @@ import './index.css';
 import '@gravity-ui/uikit/styles/fonts.css';
 import '@gravity-ui/uikit/styles/styles.css';
 import { ThemeProvider } from '@gravity-ui/uikit';
+import { testRunExecutionRoute } from './model/pages/testRunExecution';
 
 // golbals
 declare global {
@@ -36,6 +37,7 @@ const routes = [
   { path: '/project/:project', route: projectRoute },
   { path: '/project/:project/testruns', route: testRunsRoute },
   { path: '/project/:project/stat', route: statRoute },
+  { path: '/project/:project/testruns/:testrun', route: testRunExecutionRoute },
 ];
 
 const router = createHistoryRouter({ routes, controls });

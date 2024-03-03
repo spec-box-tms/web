@@ -174,6 +174,11 @@ export interface SpecBoxWebApiModelTestRunModel {
   completedAt?: Date;
 }
 
+export interface SpecBoxWebApiModelTestRunDetailsModel {
+  project: SpecBoxWebApiModelCommonProjectVersionModel;
+  testRun: SpecBoxWebApiModelTestRunModel;
+}
+
 export interface SpecBoxWebApiModelTestRunTestResultModel {
   id: string;
   status: string;
@@ -290,6 +295,12 @@ export interface ListTestRunsOptionalParams
 /** Contains response data for the listTestRuns operation. */
 export type ListTestRunsResponse =
   SpecBoxWebApiModelTestRunProjectTestRunsModel;
+
+/** Optional parameters. */
+export interface GetTestRunOptionalParams extends coreClient.OperationOptions {}
+
+/** Contains response data for the getTestRun operation. */
+export type GetTestRunResponse = SpecBoxWebApiModelTestRunDetailsModel;
 
 /** Optional parameters. */
 export interface ListTestResultsOptionalParams

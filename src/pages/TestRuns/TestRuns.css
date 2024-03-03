@@ -8,13 +8,6 @@
   gap: var(--g-spacing-6);
 }
 
-.TestRuns-Loader {
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-}
-
 .TestRuns-ListPanel,
 .TestRuns-DetailsPanel {
   display: flex;

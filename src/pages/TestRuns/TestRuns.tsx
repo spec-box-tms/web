@@ -47,7 +47,7 @@ export const TestRunsPanel: FC<TestRunsPanelProps> = (props) => {
     <Modal open={open} onClose={() => setOpen(false)}>
       <CreateTestRunForm onCreateTestRun={handleCreateTestRun} />
     </Modal>
-  </>
+  </>;
 };
 
 export const TestRuns: FC = () => {
@@ -71,5 +71,5 @@ export const TestRuns: FC = () => {
     <div className={bem('DetailsPanel')}>
       {testRunDetails}
     </div>
-  </ProjectLayout>
+  </ProjectLayout>;
 };

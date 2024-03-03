@@ -25,3 +25,9 @@
     padding: var(--g-spacing-8);
     padding-top: var(--g-spacing-2);
 }
+
+.ProjectLayout-Title {
+    display: flex;
+    align-items: center;
+    gap: var(--g-spacing-4);
+}
