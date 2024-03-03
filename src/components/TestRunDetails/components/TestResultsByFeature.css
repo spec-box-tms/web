@@ -1,0 +1,48 @@
+.TestRunDetails-FeatureBlock {
+  margin-bottom: var(--g-spacing-4);
+}
+
+.TestRunDetails-FeatureHeader {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+}
+
+.TestRunDetails-FeatureTitle {
+  display: flex;
+  flex-flow: row;
+  font-weight: bold;
+  align-items: center;
+}
+
+.TestRunDetails-Expander {
+  cursor: pointer;
+}
+
+.TestRunDetails-FeatureProgress {
+  max-width: 300px;
+  min-width: 300px;
+}
+
+.TestRunDetails-Group {
+  display: flex;
+  flex-direction: column;
+  margin-left: var(--g-spacing-4);
+  margin-bottom: var(--g-spacing-4);
+  gap: var(--g-spacing-1);
+}
+
+.TestRunDetails-GroupTitle {
+  font-weight: bold;
+}
+
+.TestRunDetails-AssertList {
+  display: flex;
+  flex-direction: column;
+  margin-left: var(--g-spacing-4);
+  gap: var(--g-spacing-1);
+}
+
+.TestRunDetails-Assertion {
+  display: flex;
+}

@@ -1,4 +1,5 @@
 import {
+  GetAutotestsStatResponse,
   SpecBoxWebApiModelCommonProjectModel,
   SpecBoxWebApiModelCommonProjectVersionModel,
   SpecBoxWebApiModelProjectAssertionGroupModel,
@@ -7,7 +8,9 @@ import {
   SpecBoxWebApiModelProjectStructureModel,
   SpecBoxWebApiModelProjectTreeModel,
   SpecBoxWebApiModelProjectTreeNodeModel,
-  StatResponse,
+  SpecBoxWebApiModelTestRunModel,
+  SpecBoxWebApiModelTestRunProjectTestRunsModel,
+  SpecBoxWebApiModelTestRunTestResultModel,
 } from './api';
 import {
   Assertion,
@@ -17,6 +20,10 @@ import {
   ProjectDetails,
   ProjectStat,
   ProjectStructure,
+  ProjectTestRuns,
+  TestResult,
+  TestResultStatus,
+  TestRun,
   Tree,
   TreeNode,
 } from './types';
@@ -127,7 +134,7 @@ function mapTreeNode(node: SpecBoxWebApiModelProjectTreeNodeModel): TreeNode {
   };
 }
 
-export function mapProjectStat(stat: StatResponse): ProjectStat {
+export function mapProjectStat(stat: GetAutotestsStatResponse): ProjectStat {
   const assertions = stat.assertions.map(
     ({ automatedCount, totalCount, timestamp }) => ({
       automatedCount,
@@ -152,4 +159,64 @@ export function mapTree(tree: SpecBoxWebApiModelProjectTreeModel): Tree {
   const { code, title } = tree;
 
   return { code, title };
+}
+
+export function mapTestRun(testRun: SpecBoxWebApiModelTestRunModel): TestRun {
+  const {
+    id,
+    title,
+    projectCode,
+    createdAt,
+    startedAt,
+    completedAt,
+    description,
+    version,
+  } = testRun;
+
+  return {
+    id,
+    title,
+    projectCode,
+    createdAt,
+    startedAt,
+    completedAt,
+    description,
+    version,
+  };
+}
+
+export function mapProjectTestRuns(
+  projectTestRuns: SpecBoxWebApiModelTestRunProjectTestRunsModel
+): ProjectTestRuns {
+  const { project, testRuns } = projectTestRuns;
+  return {
+    project: mapProjectDetails(project),
+    testRuns: testRuns.map(mapTestRun),
+  };
+}
+
+export function mapTestResult(
+  testResult: SpecBoxWebApiModelTestRunTestResultModel
+): TestResult {
+  const {
+    id,
+    status,
+    report,
+    completedAt,
+    assertionTitle,
+    assertionGroupTitle,
+    featureCode,
+    featureTitle,
+  } = testResult;
+
+  return {
+    id,
+    status: status as TestResultStatus,
+    report,
+    completedAt,
+    assertionTitle,
+    assertionGroupTitle,
+    featureCode,
+    featureTitle,
+  };
 }

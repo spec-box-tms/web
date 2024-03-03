@@ -45,7 +45,7 @@ export const loadTreesFx = createSpecBoxEffect(
     deps: StoreDependencies
   ): Promise<Tree[]> => {
     try {
-      const response = await deps.api.projectsProjectStructures(project, {
+      const response = await deps.api.listStructures(project, {
         version: version ?? undefined,
       });
 
@@ -74,11 +74,11 @@ export const loadStructureFx = createSpecBoxEffect(
     try {
       let response: SpecBoxWebApiModelProjectStructureModel;
       if (tree === null) {
-        response = await deps.api.projectsProjectStructuresPlain(project, {
+        response = await deps.api.getStructurePlain(project, {
           version: version ?? undefined,
         });
       } else {
-        response = await deps.api.projectsProjectStructuresTreeCode(
+        response = await deps.api.getStructure(
           project,
           tree,
           { version: version ?? undefined }
@@ -94,6 +94,21 @@ export const loadStructureFx = createSpecBoxEffect(
 
 export const $structure = restore(loadStructureFx.doneData, STRUCTURE_STUB);
 export const $structureIsPending = loadStructureFx.pending;
+
+export interface LoadTreeParams {
+  tree: string;
+}
+export const loadTree = createEvent<LoadTreeParams>();
+querySync({
+  source: {
+    tree: restore(
+      loadTree.map(({ tree }) => tree ),
+      null
+    ),
+  },
+  route: projectRoute,
+  controls,
+});
 
 export const toggle = createEvent<string>();
 export const expand = createEvent<string[]>();
@@ -130,7 +145,7 @@ export const loadFeatureFx = createSpecBoxEffect(
     deps: StoreDependencies
   ): Promise<Feature> => {
     try {
-      const response = await deps.api.projectsProjectFeaturesFeature(
+      const response = await deps.api.getFeature(
         project,
         feature,
         { version }

@@ -18,7 +18,12 @@ export const Stat: FC = () => {
   useTitle(isLoading ? 'Статистика' : `${project.title}. Статистика`);
 
   return (
-    <ProjectLayout contentClassName={bem()} project={project.code} version={project.version}>
+    <ProjectLayout 
+      contentClassName={bem()} 
+      project={project.code} 
+      version={project.version} 
+      projectTitle={project.title}
+    >
       <div className={bem('Row', ['row', 'gy-3'])}>
         <div className={bem('Col', ['col-xs-12', 'col-lg-6'])}>
           <AssertionsChart isPending={isLoading} stat={assertions} />

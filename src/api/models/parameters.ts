@@ -6,6 +6,8 @@ import {
 import {
   SpecBoxWebApiModelUploadData as SpecBoxWebApiModelUploadDataMapper,
   SpecBoxWebApiModelStatAutotestsStatUploadData as SpecBoxWebApiModelStatAutotestsStatUploadDataMapper,
+  SpecBoxWebApiModelTestRunCreateTestRun as SpecBoxWebApiModelTestRunCreateTestRunMapper,
+  SpecBoxWebApiModelTestRunUpdateTestResult as SpecBoxWebApiModelTestRunUpdateTestResultMapper,
 } from '../models/mappers';
 
 export const accept: OperationParameter = {
@@ -107,7 +109,7 @@ export const project1: OperationQueryParameter = {
   },
 };
 
-export const from: OperationQueryParameter = {
+export const fromParam: OperationQueryParameter = {
   parameterPath: ['options', 'from'],
   mapper: {
     serializedName: 'from',
@@ -125,4 +127,36 @@ export const to: OperationQueryParameter = {
       name: 'DateTime',
     },
   },
+};
+
+export const body2: OperationParameter = {
+  parameterPath: ['options', 'body'],
+  mapper: SpecBoxWebApiModelTestRunCreateTestRunMapper,
+};
+
+export const testRunId: OperationURLParameter = {
+  parameterPath: 'testRunId',
+  mapper: {
+    serializedName: 'testRunId',
+    required: true,
+    type: {
+      name: 'Uuid',
+    },
+  },
+};
+
+export const testResultId: OperationURLParameter = {
+  parameterPath: 'testResultId',
+  mapper: {
+    serializedName: 'testResultId',
+    required: true,
+    type: {
+      name: 'Uuid',
+    },
+  },
+};
+
+export const body3: OperationParameter = {
+  parameterPath: ['options', 'body'],
+  mapper: SpecBoxWebApiModelTestRunUpdateTestResultMapper,
 };

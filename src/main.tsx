@@ -7,12 +7,15 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import { SpecBoxWebApi, SpecBoxWebApiModelDefaultConfigurationModel } from '@/api';
-import { AnalyticsApi, controls, createScope, homeRoute, projectRoute, statRoute } from '@/model';
+import { AnalyticsApi, controls, createScope, homeRoute, projectRoute, statRoute, testRunsRoute } from '@/model';
 
 import { Application } from './Application';
 
 import 'bootstrap/dist/css/bootstrap-grid.css';
 import './index.css';
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
+import { ThemeProvider } from '@gravity-ui/uikit';
 
 // golbals
 declare global {
@@ -31,6 +34,7 @@ const scope = createScope({ api, analytics });
 const routes = [
   { path: '/', route: homeRoute },
   { path: '/project/:project', route: projectRoute },
+  { path: '/project/:project/testruns', route: testRunsRoute },
   { path: '/project/:project/stat', route: statRoute },
 ];
 
@@ -47,9 +51,11 @@ allSettled(router.setHistory, { scope, params: history });
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ScopeProvider value={scope}>
-      <RouterProvider router={router}>
-        <Application />
-      </RouterProvider>
+      <ThemeProvider theme="light">
+        <RouterProvider router={router}>
+          <Application />
+        </RouterProvider>
+      </ThemeProvider>
     </ScopeProvider>
   </React.StrictMode>,
 );

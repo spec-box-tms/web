@@ -1,0 +1,7 @@
+.TestRunDetails-Statuses {
+  display: flex;
+  flex-direction: row;
+}
+.TestRunDetails-Progress {
+  display: block;
+}

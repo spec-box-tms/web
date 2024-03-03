@@ -10,7 +10,7 @@ export const homeRoute = createRoute();
 
 const loadProjectListFx = createSpecBoxEffect(async (_, { api }) => {
   try {
-    const response = await api.projects();
+    const response = await api.listProjects();
 
     return response.map(mapProject);
   } catch (e) {

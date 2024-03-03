@@ -153,67 +153,103 @@ export interface SpecBoxWebApiModelStatAutotestsStatModel {
   assertionsCount: number;
 }
 
-/** Optional parameters. */
-export interface ConfigOptionalParams extends coreClient.OperationOptions {}
+export interface SpecBoxWebApiModelTestRunCreateTestRun {
+  title: string;
+  description?: string;
+}
 
-/** Contains response data for the config operation. */
-export type ConfigResponse = SpecBoxWebApiModelDefaultConfigurationModel;
+export interface SpecBoxWebApiModelTestRunProjectTestRunsModel {
+  project: SpecBoxWebApiModelCommonProjectVersionModel;
+  testRuns: SpecBoxWebApiModelTestRunModel[];
+}
+
+export interface SpecBoxWebApiModelTestRunModel {
+  id: string;
+  title: string;
+  description?: string;
+  projectCode: string;
+  version?: string;
+  createdAt: Date;
+  startedAt?: Date;
+  completedAt?: Date;
+}
+
+export interface SpecBoxWebApiModelTestRunTestResultModel {
+  id: string;
+  status: string;
+  report?: string;
+  completedAt?: Date;
+  assertionTitle: string;
+  assertionGroupTitle: string;
+  featureCode: string;
+  featureTitle: string;
+}
+
+export interface SpecBoxWebApiModelTestRunUpdateTestResult {
+  status: string;
+  report?: string;
+}
 
 /** Optional parameters. */
-export interface ExportUploadProjectOptionalParams
-  extends coreClient.OperationOptions {
+export interface DefaultOptionalParams extends coreClient.OperationOptions {}
+
+/** Contains response data for the default operation. */
+export type DefaultResponse = SpecBoxWebApiModelDefaultConfigurationModel;
+
+/** Optional parameters. */
+export interface ExportOptionalParams extends coreClient.OperationOptions {
   body?: SpecBoxWebApiModelUploadData;
   version?: string;
 }
 
 /** Optional parameters. */
-export interface ProjectsOptionalParams extends coreClient.OperationOptions {}
+export interface ListProjectsOptionalParams
+  extends coreClient.OperationOptions {}
 
-/** Contains response data for the projects operation. */
-export type ProjectsResponse = SpecBoxWebApiModelCommonProjectModel[];
+/** Contains response data for the listProjects operation. */
+export type ListProjectsResponse = SpecBoxWebApiModelCommonProjectModel[];
 
 /** Optional parameters. */
-export interface ProjectsProjectFeaturesFeatureOptionalParams
-  extends coreClient.OperationOptions {
+export interface GetFeatureOptionalParams extends coreClient.OperationOptions {
+  /** The project version. Default version if not provided. */
   version?: string;
 }
 
-/** Contains response data for the projectsProjectFeaturesFeature operation. */
-export type ProjectsProjectFeaturesFeatureResponse =
-  SpecBoxWebApiModelProjectFeatureModel;
+/** Contains response data for the getFeature operation. */
+export type GetFeatureResponse = SpecBoxWebApiModelProjectFeatureModel;
 
 /** Optional parameters. */
-export interface ProjectsProjectStructuresPlainOptionalParams
+export interface GetStructurePlainOptionalParams
   extends coreClient.OperationOptions {
+  /** The project version. Default version if not provided. */
   version?: string;
 }
 
-/** Contains response data for the projectsProjectStructuresPlain operation. */
-export type ProjectsProjectStructuresPlainResponse =
-  SpecBoxWebApiModelProjectStructureModel;
+/** Contains response data for the getStructurePlain operation. */
+export type GetStructurePlainResponse = SpecBoxWebApiModelProjectStructureModel;
 
 /** Optional parameters. */
-export interface ProjectsProjectStructuresOptionalParams
+export interface ListStructuresOptionalParams
   extends coreClient.OperationOptions {
+  /** The project version. Default version if not provided. */
   version?: string;
 }
 
-/** Contains response data for the projectsProjectStructures operation. */
-export type ProjectsProjectStructuresResponse =
-  SpecBoxWebApiModelProjectTreeModel[];
+/** Contains response data for the listStructures operation. */
+export type ListStructuresResponse = SpecBoxWebApiModelProjectTreeModel[];
 
 /** Optional parameters. */
-export interface ProjectsProjectStructuresTreeCodeOptionalParams
+export interface GetStructureOptionalParams
   extends coreClient.OperationOptions {
+  /** The project version. Default version if not provided. */
   version?: string;
 }
 
-/** Contains response data for the projectsProjectStructuresTreeCode operation. */
-export type ProjectsProjectStructuresTreeCodeResponse =
-  SpecBoxWebApiModelProjectStructureModel;
+/** Contains response data for the getStructure operation. */
+export type GetStructureResponse = SpecBoxWebApiModelProjectStructureModel;
 
 /** Optional parameters. */
-export interface StatUploadAutotestsOptionalParams
+export interface AutotestsStatUploadOptionalParams
   extends coreClient.OperationOptions {
   version?: string;
   body?: SpecBoxWebApiModelStatAutotestsStatUploadData;
@@ -221,15 +257,64 @@ export interface StatUploadAutotestsOptionalParams
 }
 
 /** Optional parameters. */
-export interface StatOptionalParams extends coreClient.OperationOptions {
+export interface GetAutotestsStatOptionalParams
+  extends coreClient.OperationOptions {
   version?: string;
   project?: string;
   from?: Date;
   to?: Date;
 }
 
-/** Contains response data for the stat operation. */
-export type StatResponse = SpecBoxWebApiModelStatModel;
+/** Contains response data for the getAutotestsStat operation. */
+export type GetAutotestsStatResponse = SpecBoxWebApiModelStatModel;
+
+/** Optional parameters. */
+export interface CreateTestRunOptionalParams
+  extends coreClient.OperationOptions {
+  /** The project version. Default version if not provided. */
+  version?: string;
+  /** The object containing the test run data. */
+  body?: SpecBoxWebApiModelTestRunCreateTestRun;
+}
+
+/** Contains response data for the createTestRun operation. */
+export type CreateTestRunResponse = MicrosoftAspNetCoreMvcProblemDetails;
+
+/** Optional parameters. */
+export interface ListTestRunsOptionalParams
+  extends coreClient.OperationOptions {
+  /** The project version. Default version if not provided. */
+  version?: string;
+}
+
+/** Contains response data for the listTestRuns operation. */
+export type ListTestRunsResponse =
+  SpecBoxWebApiModelTestRunProjectTestRunsModel;
+
+/** Optional parameters. */
+export interface ListTestResultsOptionalParams
+  extends coreClient.OperationOptions {}
+
+/** Contains response data for the listTestResults operation. */
+export type ListTestResultsResponse =
+  SpecBoxWebApiModelTestRunTestResultModel[];
+
+/** Optional parameters. */
+export interface GetTestResultOptionalParams
+  extends coreClient.OperationOptions {}
+
+/** Contains response data for the getTestResult operation. */
+export type GetTestResultResponse = SpecBoxWebApiModelTestRunTestResultModel;
+
+/** Optional parameters. */
+export interface UpdateTestResultOptionalParams
+  extends coreClient.OperationOptions {
+  /** The data to update the test result with. */
+  body?: SpecBoxWebApiModelTestRunUpdateTestResult;
+}
+
+/** Contains response data for the updateTestResult operation. */
+export type UpdateTestResultResponse = SpecBoxWebApiModelTestRunTestResultModel;
 
 /** Optional parameters. */
 export interface SpecBoxWebApiOptionalParams

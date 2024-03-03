@@ -84,3 +84,43 @@ export interface Tree {
   code: string;
   title: string;
 }
+
+export interface TestRun {
+  id: string;
+  title: string;
+  description?: string;
+  projectCode: string;
+  version?: string;
+  createdAt: Date;
+  startedAt?: Date;
+  completedAt?: Date;
+}
+
+export interface ProjectTestRuns {
+  project: ProjectDetails;
+  testRuns: TestRun[];
+}
+
+export interface CreateTestRun {
+  title: string;
+  description?: string;
+}
+
+export type TestResultStatus =
+  | 'NEW'
+  | 'PASSED'
+  | 'SKIPPED'
+  | 'FAILED'
+  | 'BLOCKED'
+  | 'INVALID';
+
+export interface TestResult {
+  id: string;
+  status: TestResultStatus;
+  report?: string;
+  completedAt?: Date;
+  assertionTitle: string;
+  assertionGroupTitle: string;
+  featureCode: string;
+  featureTitle: string;
+}

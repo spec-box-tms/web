@@ -30,7 +30,7 @@ export const loadStatFx = createSpecBoxEffect(
     deps: StoreDependencies
   ): Promise<ProjectStat> => {
     try {
-      const response = await deps.api.stat({
+      const response = await deps.api.getAutotestsStat({
         project,
         version,
         from: getDate(from),

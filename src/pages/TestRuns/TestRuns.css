@@ -1,0 +1,40 @@
+.TestRuns {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+
+  min-height: 0;
+  gap: var(--g-spacing-6);
+}
+
+.TestRuns-Loader {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+.TestRuns-ListPanel,
+.TestRuns-DetailsPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--g-spacing-6);
+
+  padding: var(--g-spacing-1);
+  overflow-y: auto;
+}
+.TestRuns-ListPanel {
+  flex: 1;
+}
+.TestRuns-DetailsPanel {
+  flex: 2;
+  min-width: 1000px;
+}
+
+.TestRuns-DetailsPanel {
+  border-radius: var(--sb-border-radius-3-xl);
+  background-color: var(--g-color-base-generic);
+  
+  padding: var(--g-spacing-6);
+}

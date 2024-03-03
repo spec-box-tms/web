@@ -1,11 +1,14 @@
 import { TreeNode } from '@/types';
-import { FC, useEffect, useState } from 'react';
+import { Select, SelectOption, TextInput } from '@gravity-ui/uikit';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { ProjectFeatures } from '../ProjectFeatures/ProjectFeatures';
-import { Label, TextInput } from '@gravity-ui/uikit';
 
-import './ProjectTree.css';
-import { bem } from './ProjectTree.cn';
 import { useDebounce } from '@/hooks/useDebounce';
+import * as model from '@/model/pages/project';
+import { useStore } from 'effector-react/scope';
+import { bem } from './ProjectTree.cn';
+import './ProjectTree.css';
+import { InfiniteLoader } from '../InfiniteLoader/InfiniteLoader';
 
 const countMatches = (text: string, words: string[]): number => {
   return words.reduce((acc, word) => {
@@ -62,33 +65,52 @@ const searchTreeNodes = (tree: TreeNode[], search: string): TreeNode[] => {
   return [...distinctNodes.values()];
 }
 
-
 interface ProjectTreeProps {
   isPending: boolean;
   tree: TreeNode[];
+  onTreeSelected: (treeCode: string) => void;
   onFeatureSelected: (featureCode: string) => void;
   selectedFeatureCode?: string;
 }
 
 export const ProjectTree: FC<ProjectTreeProps> = (props) => {
-  const { isPending, tree, onFeatureSelected, selectedFeatureCode } = props;
+  const { isPending, tree, onFeatureSelected, selectedFeatureCode, onTreeSelected } = props;
   const [search, setSearch] = useState('');
   const searchDebounce = useDebounce(search, 300);
   const [filtredTree, setFiltredTree] = useState<TreeNode[]>([]);
+  const trees = useStore(model.$trees);
+  const selectedTree = useStore(model.$tree);
+
+  const handleTreeSelected = useCallback((treeCodes: string[]) => {
+    onTreeSelected(treeCodes[0]);
+  }, [onTreeSelected]);
+
+
+  const treesSelectOptions: SelectOption[] = [
+    { value: '', content: 'Все' },
+    ...trees.map(({ code, title }) => ({ value: code, content: title }))
+  ];
 
   useEffect(() => {
     setFiltredTree(searchTreeNodes(tree, searchDebounce));
   }, [searchDebounce, tree]);
 
   if (isPending) {
-    return <div>загрузка</div>;
+    return <InfiniteLoader/>;
   } else {
     return (
       <div className={bem('Container')}>
+        <Select 
+          size="m" 
+          placeholder="Структура" 
+          options={treesSelectOptions} 
+          onUpdate={handleTreeSelected} value={[selectedTree || '']} 
+          label="Структура:"
+        />
         <TextInput
           value={search}
           hasClear={true}
-          leftContent={<Label size="s">Поиск:</Label>}
+          label="Поиск:"
           onChange={(e) => setSearch(e.target.value)}
         />
         <ProjectFeatures

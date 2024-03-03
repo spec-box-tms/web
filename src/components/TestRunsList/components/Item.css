@@ -1,0 +1,17 @@
+.TestRunsList-Title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.TestRunsList-TitleText {
+  display: flex;
+  align-items: center;
+  font: var(--sb-font-body-m);
+  justify-content: space-between;
+  gap: var(--g-spacing-1);
+}
+
+
+.TestRunsList-Description {
+  color: var(--g-color-text-secondary);
+}

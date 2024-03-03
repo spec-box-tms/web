@@ -12,10 +12,9 @@ import {
 } from '@/components/ProjectContext/ProjectContext';
 import { RouteLinkButton } from '@/components/RouteLinkButton/RouteLinkButton';
 
-import { homeRoute, projectRoute, statRoute } from '@/model';
+import { homeRoute, projectRoute, statRoute, testRunsRoute } from '@/model';
 
 import './ProjectLayout.css';
-import { Tree } from '@/types';
 
 const bem = cn('ProjectLayout');
 
@@ -25,6 +24,7 @@ type ProjectLayoutProps = {
   navigate?: OpenFeatureLinkEventHandler;
   contentClassName?: string;
   children?: ReactNode;
+  projectTitle?: string;
 };
 
 const mapQuery = (version?: string, tree?: string) => {
@@ -68,59 +68,9 @@ const NavItem: FC<NavItemProps> = ({ to, text, project, version }) => {
   );
 };
 
-export interface TreeListProps {
-  isPending: boolean;
-  project: string;
-  version?: string;
-  trees: Tree[];
-}
-
-const TreeList: FC<TreeListProps> = ({ isPending, project, version, trees }) => {
-  const selectedTree = useStore(model.$tree);
-  const isOpened = useStore(projectRoute.$isOpened);
-
-  if (!project || isPending) {
-    return <Skeleton />;
-  } else {
-    trees = [...trees].sort((a, b) => a.title.localeCompare(b.title));
-
-    return (
-      <>
-        <RouteLinkButton
-          to={projectRoute}
-          params={{ project }}
-          query={mapQuery(version)}
-          view={mapView(isOpened && selectedTree === null)}
-          size="l"
-          pin="circle-circle"
-        >
-          Все
-        </RouteLinkButton>
-        {trees.map((tree) => (
-          <RouteLinkButton
-            key={tree.code}
-            to={projectRoute}
-            params={{ project }}
-            query={mapQuery(version, tree.code)}
-            view={mapView(isOpened && selectedTree === tree.code)}
-            size="l"
-            pin="circle-circle"
-          >
-            {tree.title}
-          </RouteLinkButton>
-        ))}
-      </>
-    );
-  }
-};
-
 export const ProjectLayout: FC<ProjectLayoutProps> = (props) => {
-  const { children, contentClassName, navigate, project, version } = props;
-  const { project: { title: projectTitle } } = useStore(model.$structure);
+  const { children, contentClassName, navigate, project, version, projectTitle } = props;
   const tree = useStore(model.$tree);
-
-  const trees = useStore(model.$trees);
-  const treesIsPending = useStore(model.$treesIsPending);
 
   return (
     <ProjectContext.Provider value={{ project, version, tree: tree || undefined, navigate }}>
@@ -141,7 +91,8 @@ export const ProjectLayout: FC<ProjectLayoutProps> = (props) => {
             <h2>{projectTitle} {version && `(${version})`}</h2>
           </div>
           <div className={bem('Navigation')}>
-            <TreeList project={project} version={version} isPending={treesIsPending} trees={trees} />
+            <NavItem to={projectRoute} project={project} version={version} text="Проект" />
+            <NavItem to={testRunsRoute} project={project} version={version} text="Тестовые прогоны" />
             <NavItem to={statRoute} project={project} version={version} text="Статистика" />
           </div>
         </div>

@@ -921,3 +921,239 @@ export const SpecBoxWebApiModelStatAutotestsStatModel: coreClient.CompositeMappe
       },
     },
   };
+
+export const SpecBoxWebApiModelTestRunCreateTestRun: coreClient.CompositeMapper =
+  {
+    type: {
+      name: 'Composite',
+      className: 'SpecBoxWebApiModelTestRunCreateTestRun',
+      modelProperties: {
+        title: {
+          constraints: {
+            MinLength: 1,
+          },
+          serializedName: 'title',
+          required: true,
+          type: {
+            name: 'String',
+          },
+        },
+        description: {
+          serializedName: 'description',
+          nullable: true,
+          type: {
+            name: 'String',
+          },
+        },
+      },
+    },
+  };
+
+export const SpecBoxWebApiModelTestRunProjectTestRunsModel: coreClient.CompositeMapper =
+  {
+    type: {
+      name: 'Composite',
+      className: 'SpecBoxWebApiModelTestRunProjectTestRunsModel',
+      modelProperties: {
+        project: {
+          serializedName: 'project',
+          type: {
+            name: 'Composite',
+            className: 'SpecBoxWebApiModelCommonProjectVersionModel',
+          },
+        },
+        testRuns: {
+          serializedName: 'testRuns',
+          required: true,
+          type: {
+            name: 'Sequence',
+            element: {
+              type: {
+                name: 'Composite',
+                className: 'SpecBoxWebApiModelTestRunModel',
+              },
+            },
+          },
+        },
+      },
+    },
+  };
+
+export const SpecBoxWebApiModelTestRunModel: coreClient.CompositeMapper = {
+  type: {
+    name: 'Composite',
+    className: 'SpecBoxWebApiModelTestRunModel',
+    modelProperties: {
+      id: {
+        serializedName: 'id',
+        required: true,
+        type: {
+          name: 'Uuid',
+        },
+      },
+      title: {
+        constraints: {
+          MinLength: 1,
+        },
+        serializedName: 'title',
+        required: true,
+        type: {
+          name: 'String',
+        },
+      },
+      description: {
+        serializedName: 'description',
+        nullable: true,
+        type: {
+          name: 'String',
+        },
+      },
+      projectCode: {
+        constraints: {
+          MinLength: 1,
+        },
+        serializedName: 'projectCode',
+        required: true,
+        type: {
+          name: 'String',
+        },
+      },
+      version: {
+        serializedName: 'version',
+        nullable: true,
+        type: {
+          name: 'String',
+        },
+      },
+      createdAt: {
+        serializedName: 'createdAt',
+        required: true,
+        type: {
+          name: 'DateTime',
+        },
+      },
+      startedAt: {
+        serializedName: 'startedAt',
+        nullable: true,
+        type: {
+          name: 'DateTime',
+        },
+      },
+      completedAt: {
+        serializedName: 'completedAt',
+        nullable: true,
+        type: {
+          name: 'DateTime',
+        },
+      },
+    },
+  },
+};
+
+export const SpecBoxWebApiModelTestRunTestResultModel: coreClient.CompositeMapper =
+  {
+    type: {
+      name: 'Composite',
+      className: 'SpecBoxWebApiModelTestRunTestResultModel',
+      modelProperties: {
+        id: {
+          serializedName: 'id',
+          required: true,
+          type: {
+            name: 'Uuid',
+          },
+        },
+        status: {
+          constraints: {
+            MinLength: 1,
+          },
+          serializedName: 'status',
+          required: true,
+          type: {
+            name: 'String',
+          },
+        },
+        report: {
+          serializedName: 'report',
+          nullable: true,
+          type: {
+            name: 'String',
+          },
+        },
+        completedAt: {
+          serializedName: 'completedAt',
+          nullable: true,
+          type: {
+            name: 'DateTime',
+          },
+        },
+        assertionTitle: {
+          constraints: {
+            MinLength: 1,
+          },
+          serializedName: 'assertionTitle',
+          required: true,
+          type: {
+            name: 'String',
+          },
+        },
+        assertionGroupTitle: {
+          constraints: {
+            MinLength: 1,
+          },
+          serializedName: 'assertionGroupTitle',
+          required: true,
+          type: {
+            name: 'String',
+          },
+        },
+        featureCode: {
+          constraints: {
+            MinLength: 1,
+          },
+          serializedName: 'featureCode',
+          required: true,
+          type: {
+            name: 'String',
+          },
+        },
+        featureTitle: {
+          constraints: {
+            MinLength: 1,
+          },
+          serializedName: 'featureTitle',
+          required: true,
+          type: {
+            name: 'String',
+          },
+        },
+      },
+    },
+  };
+
+export const SpecBoxWebApiModelTestRunUpdateTestResult: coreClient.CompositeMapper =
+  {
+    type: {
+      name: 'Composite',
+      className: 'SpecBoxWebApiModelTestRunUpdateTestResult',
+      modelProperties: {
+        status: {
+          constraints: {
+            MinLength: 1,
+          },
+          serializedName: 'status',
+          required: true,
+          type: {
+            name: 'String',
+          },
+        },
+        report: {
+          serializedName: 'report',
+          nullable: true,
+          type: {
+            name: 'String',
+          },
+        },
+      },
+    },
+  };

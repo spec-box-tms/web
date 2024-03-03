@@ -10,6 +10,7 @@ import { cn } from '@bem-react/classname';
 import './Project.css';
 import { ProjectLayout } from '@/components/ProjectLayout/ProjectLayout';
 import { ProjectTree } from '@/components/ProjectTree/ProejctTree';
+import { InfiniteLoader } from '@/components/InfiniteLoader/InfiniteLoader';
 
 const bem = cn('Project');
 
@@ -21,7 +22,7 @@ interface DetailsProps {
 
 const Details: FC<DetailsProps> = ({ isPending, feature, repositoryUrl }) => {
   if (isPending) {
-    return <div>загрузка</div>;
+    return <InfiniteLoader />;
   } else if (!feature) {
     return <div>ничего не выбрано</div>;
   } else {
@@ -42,6 +43,7 @@ export const Project: FC = () => {
   } = useStore(model.$structure);
 
   const loadFeature = useEvent(model.loadFeature);
+  const loadTree = useEvent(model.loadTree);
   const feature = useStore(model.$feature);
   const featureCode = useStore(model.$featureCode);
   const featureIsPending = useStore(model.$featureIsPending);
@@ -49,6 +51,11 @@ export const Project: FC = () => {
   const onFeatureSelected = useCallback(
     (feature: string) => loadFeature({ feature }),
     [loadFeature]
+  );
+
+  const onTreeSelected = useCallback(
+    (tree: string) => loadTree({ tree }),
+    [loadTree]
   );
 
   const navigate = useCallback(
@@ -62,6 +69,7 @@ export const Project: FC = () => {
     <ProjectLayout
       contentClassName={bem()}
       project={projectCode}
+      projectTitle={projectTitle}
       version={version}
       navigate={navigate}
     >
@@ -70,6 +78,7 @@ export const Project: FC = () => {
           isPending={structureIsPending}
           tree={tree}
           onFeatureSelected={onFeatureSelected}
+          onTreeSelected={onTreeSelected}
           selectedFeatureCode={featureCode}
         />
       </div>

@@ -3,22 +3,32 @@ import * as Parameters from './models/parameters';
 import * as Mappers from './models/mappers';
 import {
   SpecBoxWebApiOptionalParams,
-  ConfigOptionalParams,
-  ConfigResponse,
-  ExportUploadProjectOptionalParams,
-  ProjectsOptionalParams,
-  ProjectsResponse,
-  ProjectsProjectFeaturesFeatureOptionalParams,
-  ProjectsProjectFeaturesFeatureResponse,
-  ProjectsProjectStructuresPlainOptionalParams,
-  ProjectsProjectStructuresPlainResponse,
-  ProjectsProjectStructuresOptionalParams,
-  ProjectsProjectStructuresResponse,
-  ProjectsProjectStructuresTreeCodeOptionalParams,
-  ProjectsProjectStructuresTreeCodeResponse,
-  StatUploadAutotestsOptionalParams,
-  StatOptionalParams,
-  StatResponse,
+  DefaultOptionalParams,
+  DefaultResponse,
+  ExportOptionalParams,
+  ListProjectsOptionalParams,
+  ListProjectsResponse,
+  GetFeatureOptionalParams,
+  GetFeatureResponse,
+  GetStructurePlainOptionalParams,
+  GetStructurePlainResponse,
+  ListStructuresOptionalParams,
+  ListStructuresResponse,
+  GetStructureOptionalParams,
+  GetStructureResponse,
+  AutotestsStatUploadOptionalParams,
+  GetAutotestsStatOptionalParams,
+  GetAutotestsStatResponse,
+  CreateTestRunOptionalParams,
+  CreateTestRunResponse,
+  ListTestRunsOptionalParams,
+  ListTestRunsResponse,
+  ListTestResultsOptionalParams,
+  ListTestResultsResponse,
+  GetTestResultOptionalParams,
+  GetTestResultResponse,
+  UpdateTestResultOptionalParams,
+  UpdateTestResultResponse,
 } from './models';
 
 export class SpecBoxWebApi extends coreClient.ServiceClient {
@@ -61,109 +71,200 @@ export class SpecBoxWebApi extends coreClient.ServiceClient {
     this.$host = $host;
   }
 
-  /** @param options The options parameters. */
-  config(options?: ConfigOptionalParams): Promise<ConfigResponse> {
-    return this.sendOperationRequest({ options }, configOperationSpec);
+  /**
+   * Получение конфигурации приложения
+   * @param options The options parameters.
+   */
+  default(options?: DefaultOptionalParams): Promise<DefaultResponse> {
+    return this.sendOperationRequest({ options }, defaultOperationSpec);
   }
 
   /**
    * @param project
    * @param options The options parameters.
    */
-  exportUploadProject(
-    project: string,
-    options?: ExportUploadProjectOptionalParams,
-  ): Promise<void> {
-    return this.sendOperationRequest(
-      { project, options },
-      exportUploadProjectOperationSpec,
-    );
-  }
-
-  /** @param options The options parameters. */
-  projects(options?: ProjectsOptionalParams): Promise<ProjectsResponse> {
-    return this.sendOperationRequest({ options }, projectsOperationSpec);
+  export(project: string, options?: ExportOptionalParams): Promise<void> {
+    return this.sendOperationRequest({ project, options }, exportOperationSpec);
   }
 
   /**
-   * @param project
-   * @param feature
+   * Returns the list of projects.
    * @param options The options parameters.
    */
-  projectsProjectFeaturesFeature(
+  listProjects(
+    options?: ListProjectsOptionalParams,
+  ): Promise<ListProjectsResponse> {
+    return this.sendOperationRequest({ options }, listProjectsOperationSpec);
+  }
+
+  /**
+   * Returns the feature details.
+   * @param project The project code.
+   * @param feature The feature code.
+   * @param options The options parameters.
+   */
+  getFeature(
     project: string,
     feature: string,
-    options?: ProjectsProjectFeaturesFeatureOptionalParams,
-  ): Promise<ProjectsProjectFeaturesFeatureResponse> {
+    options?: GetFeatureOptionalParams,
+  ): Promise<GetFeatureResponse> {
     return this.sendOperationRequest(
       { project, feature, options },
-      projectsProjectFeaturesFeatureOperationSpec,
+      getFeatureOperationSpec,
     );
   }
 
   /**
-   * @param project
+   * Returns the list of features for a specific project.
+   * @param project The project code.
    * @param options The options parameters.
    */
-  projectsProjectStructuresPlain(
+  getStructurePlain(
     project: string,
-    options?: ProjectsProjectStructuresPlainOptionalParams,
-  ): Promise<ProjectsProjectStructuresPlainResponse> {
+    options?: GetStructurePlainOptionalParams,
+  ): Promise<GetStructurePlainResponse> {
     return this.sendOperationRequest(
       { project, options },
-      projectsProjectStructuresPlainOperationSpec,
+      getStructurePlainOperationSpec,
     );
   }
 
   /**
-   * @param project
+   * Returns the list of structures for a specific project.
+   * @param project The project code.
    * @param options The options parameters.
    */
-  projectsProjectStructures(
+  listStructures(
     project: string,
-    options?: ProjectsProjectStructuresOptionalParams,
-  ): Promise<ProjectsProjectStructuresResponse> {
+    options?: ListStructuresOptionalParams,
+  ): Promise<ListStructuresResponse> {
     return this.sendOperationRequest(
       { project, options },
-      projectsProjectStructuresOperationSpec,
+      listStructuresOperationSpec,
     );
   }
 
   /**
-   * @param project
-   * @param treeCode
+   * Returns the structure details.
+   * @param project The project code.
+   * @param treeCode The tree code.
    * @param options The options parameters.
    */
-  projectsProjectStructuresTreeCode(
+  getStructure(
     project: string,
     treeCode: string,
-    options?: ProjectsProjectStructuresTreeCodeOptionalParams,
-  ): Promise<ProjectsProjectStructuresTreeCodeResponse> {
+    options?: GetStructureOptionalParams,
+  ): Promise<GetStructureResponse> {
     return this.sendOperationRequest(
       { project, treeCode, options },
-      projectsProjectStructuresTreeCodeOperationSpec,
+      getStructureOperationSpec,
     );
   }
 
   /** @param options The options parameters. */
-  statUploadAutotests(
-    options?: StatUploadAutotestsOptionalParams,
+  autotestsStatUpload(
+    options?: AutotestsStatUploadOptionalParams,
   ): Promise<void> {
     return this.sendOperationRequest(
       { options },
-      statUploadAutotestsOperationSpec,
+      autotestsStatUploadOperationSpec,
     );
   }
 
   /** @param options The options parameters. */
-  stat(options?: StatOptionalParams): Promise<StatResponse> {
-    return this.sendOperationRequest({ options }, statOperationSpec);
+  getAutotestsStat(
+    options?: GetAutotestsStatOptionalParams,
+  ): Promise<GetAutotestsStatResponse> {
+    return this.sendOperationRequest(
+      { options },
+      getAutotestsStatOperationSpec,
+    );
+  }
+
+  /**
+   * Creates a new test run for the specified project.
+   * @param project The project code.
+   * @param options The options parameters.
+   */
+  createTestRun(
+    project: string,
+    options?: CreateTestRunOptionalParams,
+  ): Promise<CreateTestRunResponse> {
+    return this.sendOperationRequest(
+      { project, options },
+      createTestRunOperationSpec,
+    );
+  }
+
+  /**
+   * Retrieves a list of test runs for a specific project from the database.
+   * @param project The project code for which to retrieve the test runs.
+   * @param options The options parameters.
+   */
+  listTestRuns(
+    project: string,
+    options?: ListTestRunsOptionalParams,
+  ): Promise<ListTestRunsResponse> {
+    return this.sendOperationRequest(
+      { project, options },
+      listTestRunsOperationSpec,
+    );
+  }
+
+  /**
+   * Retrieves test results for a specific test run.
+   * @param testRunId The ID of the test run.
+   * @param options The options parameters.
+   */
+  listTestResults(
+    testRunId: string,
+    options?: ListTestResultsOptionalParams,
+  ): Promise<ListTestResultsResponse> {
+    return this.sendOperationRequest(
+      { testRunId, options },
+      listTestResultsOperationSpec,
+    );
+  }
+
+  /**
+   * Retrieves a specific test result for a given project, test run, and test result ID from the
+   * database.
+   * @param testRunId The ID of the test run.
+   * @param testResultId The ID of the test result.
+   * @param options The options parameters.
+   */
+  getTestResult(
+    testRunId: string,
+    testResultId: string,
+    options?: GetTestResultOptionalParams,
+  ): Promise<GetTestResultResponse> {
+    return this.sendOperationRequest(
+      { testRunId, testResultId, options },
+      getTestResultOperationSpec,
+    );
+  }
+
+  /**
+   * Updates test result with provided Status and Report.
+   * @param testRunId The ID of the test run.
+   * @param testResultId The ID of the test result.
+   * @param options The options parameters.
+   */
+  updateTestResult(
+    testRunId: string,
+    testResultId: string,
+    options?: UpdateTestResultOptionalParams,
+  ): Promise<UpdateTestResultResponse> {
+    return this.sendOperationRequest(
+      { testRunId, testResultId, options },
+      updateTestResultOperationSpec,
+    );
   }
 }
 // Operation Specifications
 const serializer = coreClient.createSerializer(Mappers, /* isXml */ false);
 
-const configOperationSpec: coreClient.OperationSpec = {
+const defaultOperationSpec: coreClient.OperationSpec = {
   path: '/config',
   httpMethod: 'GET',
   responses: {
@@ -175,7 +276,7 @@ const configOperationSpec: coreClient.OperationSpec = {
   headerParameters: [Parameters.accept],
   serializer,
 };
-const exportUploadProjectOperationSpec: coreClient.OperationSpec = {
+const exportOperationSpec: coreClient.OperationSpec = {
   path: '/export/upload/{project}',
   httpMethod: 'POST',
   responses: { 200: {} },
@@ -186,7 +287,7 @@ const exportUploadProjectOperationSpec: coreClient.OperationSpec = {
   mediaType: 'json',
   serializer,
 };
-const projectsOperationSpec: coreClient.OperationSpec = {
+const listProjectsOperationSpec: coreClient.OperationSpec = {
   path: '/projects',
   httpMethod: 'GET',
   responses: {
@@ -208,7 +309,7 @@ const projectsOperationSpec: coreClient.OperationSpec = {
   headerParameters: [Parameters.accept],
   serializer,
 };
-const projectsProjectFeaturesFeatureOperationSpec: coreClient.OperationSpec = {
+const getFeatureOperationSpec: coreClient.OperationSpec = {
   path: '/projects/{project}/features/{feature}',
   httpMethod: 'GET',
   responses: {
@@ -224,7 +325,7 @@ const projectsProjectFeaturesFeatureOperationSpec: coreClient.OperationSpec = {
   headerParameters: [Parameters.accept],
   serializer,
 };
-const projectsProjectStructuresPlainOperationSpec: coreClient.OperationSpec = {
+const getStructurePlainOperationSpec: coreClient.OperationSpec = {
   path: '/projects/{project}/structures:plain',
   httpMethod: 'GET',
   responses: {
@@ -240,7 +341,7 @@ const projectsProjectStructuresPlainOperationSpec: coreClient.OperationSpec = {
   headerParameters: [Parameters.accept],
   serializer,
 };
-const projectsProjectStructuresOperationSpec: coreClient.OperationSpec = {
+const listStructuresOperationSpec: coreClient.OperationSpec = {
   path: '/projects/{project}/structures',
   httpMethod: 'GET',
   responses: {
@@ -266,24 +367,23 @@ const projectsProjectStructuresOperationSpec: coreClient.OperationSpec = {
   headerParameters: [Parameters.accept],
   serializer,
 };
-const projectsProjectStructuresTreeCodeOperationSpec: coreClient.OperationSpec =
-  {
-    path: '/projects/{project}/structures/{treeCode}',
-    httpMethod: 'GET',
-    responses: {
-      200: {
-        bodyMapper: Mappers.SpecBoxWebApiModelProjectStructureModel,
-      },
-      404: {
-        bodyMapper: Mappers.MicrosoftAspNetCoreMvcProblemDetails,
-      },
+const getStructureOperationSpec: coreClient.OperationSpec = {
+  path: '/projects/{project}/structures/{treeCode}',
+  httpMethod: 'GET',
+  responses: {
+    200: {
+      bodyMapper: Mappers.SpecBoxWebApiModelProjectStructureModel,
     },
-    queryParameters: [Parameters.version],
-    urlParameters: [Parameters.$host, Parameters.project, Parameters.treeCode],
-    headerParameters: [Parameters.accept],
-    serializer,
-  };
-const statUploadAutotestsOperationSpec: coreClient.OperationSpec = {
+    404: {
+      bodyMapper: Mappers.MicrosoftAspNetCoreMvcProblemDetails,
+    },
+  },
+  queryParameters: [Parameters.version],
+  urlParameters: [Parameters.$host, Parameters.project, Parameters.treeCode],
+  headerParameters: [Parameters.accept],
+  serializer,
+};
+const autotestsStatUploadOperationSpec: coreClient.OperationSpec = {
   path: '/stat/upload-autotests',
   httpMethod: 'POST',
   responses: { 200: {} },
@@ -294,7 +394,7 @@ const statUploadAutotestsOperationSpec: coreClient.OperationSpec = {
   mediaType: 'json',
   serializer,
 };
-const statOperationSpec: coreClient.OperationSpec = {
+const getAutotestsStatOperationSpec: coreClient.OperationSpec = {
   path: '/stat',
   httpMethod: 'GET',
   responses: {
@@ -305,10 +405,110 @@ const statOperationSpec: coreClient.OperationSpec = {
   queryParameters: [
     Parameters.version,
     Parameters.project1,
-    Parameters.from,
+    Parameters.fromParam,
     Parameters.to,
   ],
   urlParameters: [Parameters.$host],
   headerParameters: [Parameters.accept],
+  serializer,
+};
+const createTestRunOperationSpec: coreClient.OperationSpec = {
+  path: '/tests/projects/{project}/testruns',
+  httpMethod: 'POST',
+  responses: {
+    200: {},
+    404: {
+      bodyMapper: Mappers.MicrosoftAspNetCoreMvcProblemDetails,
+    },
+  },
+  requestBody: Parameters.body2,
+  queryParameters: [Parameters.version],
+  urlParameters: [Parameters.$host, Parameters.project],
+  headerParameters: [Parameters.accept, Parameters.contentType],
+  mediaType: 'json',
+  serializer,
+};
+const listTestRunsOperationSpec: coreClient.OperationSpec = {
+  path: '/tests/projects/{project}/testruns',
+  httpMethod: 'GET',
+  responses: {
+    200: {
+      bodyMapper: Mappers.SpecBoxWebApiModelTestRunProjectTestRunsModel,
+    },
+    404: {
+      bodyMapper: Mappers.MicrosoftAspNetCoreMvcProblemDetails,
+    },
+  },
+  queryParameters: [Parameters.version],
+  urlParameters: [Parameters.$host, Parameters.project],
+  headerParameters: [Parameters.accept],
+  serializer,
+};
+const listTestResultsOperationSpec: coreClient.OperationSpec = {
+  path: '/tests/testruns/{testRunId}/testresults',
+  httpMethod: 'GET',
+  responses: {
+    200: {
+      bodyMapper: {
+        type: {
+          name: 'Sequence',
+          element: {
+            type: {
+              name: 'Composite',
+              className: 'SpecBoxWebApiModelTestRunTestResultModel',
+            },
+          },
+        },
+      },
+    },
+    404: {
+      bodyMapper: Mappers.MicrosoftAspNetCoreMvcProblemDetails,
+    },
+  },
+  urlParameters: [Parameters.$host, Parameters.testRunId],
+  headerParameters: [Parameters.accept],
+  serializer,
+};
+const getTestResultOperationSpec: coreClient.OperationSpec = {
+  path: '/tests/testruns/{testRunId}/testresults/{testResultId}',
+  httpMethod: 'GET',
+  responses: {
+    200: {
+      bodyMapper: Mappers.SpecBoxWebApiModelTestRunTestResultModel,
+    },
+    404: {
+      bodyMapper: Mappers.MicrosoftAspNetCoreMvcProblemDetails,
+    },
+  },
+  urlParameters: [
+    Parameters.$host,
+    Parameters.testRunId,
+    Parameters.testResultId,
+  ],
+  headerParameters: [Parameters.accept],
+  serializer,
+};
+const updateTestResultOperationSpec: coreClient.OperationSpec = {
+  path: '/tests/testruns/{testRunId}/testresults/{testResultId}',
+  httpMethod: 'PUT',
+  responses: {
+    200: {
+      bodyMapper: Mappers.SpecBoxWebApiModelTestRunTestResultModel,
+    },
+    400: {
+      bodyMapper: Mappers.MicrosoftAspNetCoreMvcProblemDetails,
+    },
+    404: {
+      bodyMapper: Mappers.MicrosoftAspNetCoreMvcProblemDetails,
+    },
+  },
+  requestBody: Parameters.body3,
+  urlParameters: [
+    Parameters.$host,
+    Parameters.testRunId,
+    Parameters.testResultId,
+  ],
+  headerParameters: [Parameters.accept, Parameters.contentType],
+  mediaType: 'json',
   serializer,
 };
