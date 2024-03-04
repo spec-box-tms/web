@@ -12,6 +12,7 @@ import { cn } from '@bem-react/classname';
 import { useEvent, useStore } from 'effector-react/scope';
 import { FC, useCallback } from 'react';
 import './TestRunExecution.css';
+import { useTitle } from '@/hooks/useTitle';
 
 const bem = cn('TestRunExecution');
 
@@ -65,6 +66,8 @@ export const TestRunExecution: FC = () => {
     loadTree({ tree });
     console.log('onTreeSelecetd', tree);
   }, [loadTree]);
+
+  useTitle(isLoading ? 'Тестирование' : `${project.title} - ${testRun.title} - Тестирование`);
 
   return <ProjectLayout project={project.code}
     contentClassName={bem()}

@@ -11,6 +11,7 @@ import { Button, Modal } from '@gravity-ui/uikit';
 import { CreateTestRun, TestRun } from '@/types';
 import { CreateTestRunForm } from '@/components/CreateTestRunForm/CreateTestRunForm';
 import { TestRunDetails } from '@/components/TestRunDetails/TestRunDetails';
+import { useTitle } from '@/hooks/useTitle';
 
 const bem = cn('TestRuns');
 
@@ -54,6 +55,8 @@ export const TestRuns: FC = () => {
   const { project, testRuns } = useStore(model.$testRuns);
   const isLoading = useStore(model.$testRunsIsLoading);
   const selectedTestRun = useStore(model.$selectedTestRun);
+
+  useTitle(isLoading ? 'Тестовые прогоны' : `${project.title} - Тестовые прогоны`);
 
   const testRunDetails = selectedTestRun ?
     <TestRunDetails/> :

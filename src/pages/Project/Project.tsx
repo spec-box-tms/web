@@ -64,7 +64,7 @@ export const Project: FC = () => {
     [loadFeature]
   );
 
-  useTitle(isStructurePending ? 'Структура проекта' : projectTitle);
+  useTitle(isStructurePending ? 'Структура проекта' : `${projectTitle} - Структура проекта`);
 
   return (
     <ProjectLayout
