@@ -36,6 +36,7 @@ export const mapFeature = (
   const { code, title, description, filePath } = input;
 
   const assertionGroups = input.assertionGroups.map(mapAssertionGroup);
+  assertionGroups.sort((a, b) => a.order - b.order);
   const allAssertions = new Array<Assertion>().concat(
     ...assertionGroups.map((gr) => gr.assertions)
   );
@@ -59,10 +60,12 @@ export const mapFeature = (
 export const mapAssertionGroup = (
   input: SpecBoxWebApiModelProjectAssertionGroupModel
 ): AssertionGroup => {
-  const { title, assertions } = input;
-
+  const { title, order, assertions } = input;
+  assertions.sort((a, b) => a.order - b.order);
+  
   return {
     title,
+    order,
     assertions: assertions.map(mapAssertion),
   };
 };
@@ -70,9 +73,9 @@ export const mapAssertionGroup = (
 export const mapAssertion = (
   input: SpecBoxWebApiModelProjectAssertionModel
 ): Assertion => {
-  const { title, description, isAutomated } = input;
+  const { title, description, isAutomated, order } = input;
 
-  return { title, description, isAutomated };
+  return { title, description, isAutomated, order };
 };
 
 export const mapProject = (

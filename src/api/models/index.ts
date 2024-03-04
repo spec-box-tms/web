@@ -79,6 +79,7 @@ export interface SpecBoxWebApiModelProjectFeatureModel {
 
 export interface SpecBoxWebApiModelProjectAssertionGroupModel {
   title: string;
+  order: number;
   /** NOTE: This property will not be serialized. It can only be populated by the server. */
   readonly assertions: SpecBoxWebApiModelProjectAssertionModel[];
 }
@@ -86,6 +87,7 @@ export interface SpecBoxWebApiModelProjectAssertionGroupModel {
 export interface SpecBoxWebApiModelProjectAssertionModel {
   title: string;
   description?: string;
+  order: number;
   isAutomated: boolean;
 }
 

@@ -13,12 +13,14 @@ export interface Feature {
 export interface AssertionGroup {
   title: string;
   assertions: Assertion[];
+  order: number;
 }
 
 export interface Assertion {
   title: string;
   description?: string;
   isAutomated: boolean;
+  order: number;
 }
 
 export interface BaseTreeNode {

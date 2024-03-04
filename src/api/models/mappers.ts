@@ -506,6 +506,13 @@ export const SpecBoxWebApiModelProjectAssertionGroupModel: coreClient.CompositeM
             name: 'String',
           },
         },
+        order: {
+          serializedName: 'order',
+          required: true,
+          type: {
+            name: 'Number',
+          },
+        },
         assertions: {
           serializedName: 'assertions',
           required: true,
@@ -545,6 +552,13 @@ export const SpecBoxWebApiModelProjectAssertionModel: coreClient.CompositeMapper
           nullable: true,
           type: {
             name: 'String',
+          },
+        },
+        order: {
+          serializedName: 'order',
+          required: true,
+          type: {
+            name: 'Number',
           },
         },
         isAutomated: {
