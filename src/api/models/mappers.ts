@@ -1104,6 +1104,20 @@ export const SpecBoxWebApiModelTestRunTestResultModel: coreClient.CompositeMappe
             name: 'String',
           },
         },
+        updatedAt: {
+          serializedName: 'updatedAt',
+          required: true,
+          type: {
+            name: 'DateTime',
+          },
+        },
+        startedAt: {
+          serializedName: 'startedAt',
+          nullable: true,
+          type: {
+            name: 'DateTime',
+          },
+        },
         completedAt: {
           serializedName: 'completedAt',
           nullable: true,
@@ -1176,6 +1190,12 @@ export const SpecBoxWebApiModelTestRunUpdateTestResult: coreClient.CompositeMapp
           nullable: true,
           type: {
             name: 'String',
+          },
+        },
+        updatedAt: {
+          serializedName: 'updatedAt',
+          type: {
+            name: 'DateTime',
           },
         },
       },

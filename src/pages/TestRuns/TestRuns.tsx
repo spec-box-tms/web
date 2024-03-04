@@ -39,6 +39,7 @@ export const TestRunsPanel: FC<TestRunsPanelProps> = (props) => {
   return <>
     <Button
       size="m"
+      view="action"
       className={bem('Button')}
       onClick={() => setOpen(true)}
     >

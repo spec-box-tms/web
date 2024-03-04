@@ -1,3 +1,12 @@
+.TestRunsList-ItemContent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.TestRunsList-ItemText {
+  flex-grow: 1;
+}
+
 .TestRunsList-Title {
   display: flex;
   justify-content: space-between;

@@ -12,6 +12,7 @@ import { useStore, useUnit } from 'effector-react/scope';
 import { FC, useContext } from 'react';
 import { bem } from '../TestRunsList.cn';
 import './Item.css';
+import { formatInterval } from '@/helpers/formatInterval';
 
 interface ItemProps {
   testRun: TestRun;
@@ -24,6 +25,10 @@ export const Item: FC<ItemProps> = (props) => {
 
   const handleSelectTestRun = useUnit(model.selectTestRun);
 
+  const duration = testRun.completedAt ?
+    formatInterval(testRun.completedAt.getTime() - testRun.createdAt.getTime()) :
+    null;
+
   return (
     <ListItem
       className={bem('Item')}
@@ -31,19 +36,23 @@ export const Item: FC<ItemProps> = (props) => {
       isActive={selectedTestRun?.id === testRun.id}
       onPress={() => handleSelectTestRun(testRun)}
     >
-      <div className={bem('Title')}>
-        <div className={bem('TitleText')}>
-          <TestRunStateIcon testRun={testRun} />
-          {testRun.title}
-          <RouteLink to={testRunExecutionRoute} params={{ project: context?.project || '', testrun: testRun.id }}>
-            <Icon data={ArrowRightToSquare} />
-          </RouteLink>
+      <div className={bem('ItemContent')}>
+        <div className={bem('ItemText')}>
+          <div className={bem('Title')}>
+            <div className={bem('TitleText')}>
+              <TestRunStateIcon testRun={testRun} />
+              {testRun.title}
+            </div>
+            <Label>v: {testRun.version ?? 'по-умолчанию'}</Label>
+          </div>
+          <div className={bem('Description')}>
+            {formatDate(testRun.createdAt)}
+            {duration && ` - Длительность: ${duration}`}
+          </div>
         </div>
-        <Label>v: {testRun.version ?? 'по-умолчанию'}</Label>
-      </div>
-      <div className={bem('Description')}>
-        {formatDate(testRun.createdAt)}
-        {testRun.completedAt && ' - ' + formatDate(testRun.completedAt)}
+        <RouteLink to={testRunExecutionRoute} params={{ project: context?.project || '', testrun: testRun.id }}>
+          <Icon size={32} data={ArrowRightToSquare} />
+        </RouteLink>
       </div>
     </ListItem>
   );

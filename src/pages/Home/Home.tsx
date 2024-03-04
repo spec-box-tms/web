@@ -43,8 +43,7 @@ export const Home: FC = () => {
           <div className={bem('Header')}>Проекты</div>
           {projectsContent}
           <div className={bem('Hint')}>
-            Spec Box — это база функциональных требований, данные для которой
-            хранятся в yml файлах в коде проектов.
+            Проекты в системе.
           </div>
         </div>
         <div className={bem('Versions')}>

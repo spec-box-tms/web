@@ -183,6 +183,8 @@ export interface SpecBoxWebApiModelTestRunTestResultModel {
   id: string;
   status: string;
   report?: string;
+  updatedAt: Date;
+  startedAt?: Date;
   completedAt?: Date;
   assertionTitle: string;
   assertionGroupTitle: string;
@@ -193,6 +195,7 @@ export interface SpecBoxWebApiModelTestRunTestResultModel {
 export interface SpecBoxWebApiModelTestRunUpdateTestResult {
   status: string;
   report?: string;
+  updatedAt?: Date;
 }
 
 /** Optional parameters. */

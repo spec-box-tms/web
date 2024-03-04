@@ -204,6 +204,8 @@ export function mapTestResult(
     id,
     status,
     report,
+    updatedAt,
+    startedAt,
     completedAt,
     assertionTitle,
     assertionGroupTitle,
@@ -211,11 +213,16 @@ export function mapTestResult(
     featureTitle,
   } = testResult;
 
+  const duration = completedAt && startedAt ? completedAt.getTime() - startedAt.getTime() : undefined;
+
   return {
     id,
     status: status as TestResultStatus,
     report,
+    updatedAt,
+    startedAt,    
     completedAt,
+    duration,
     assertionTitle,
     assertionGroupTitle,
     featureCode,

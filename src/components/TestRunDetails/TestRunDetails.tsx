@@ -1,14 +1,14 @@
 import * as model from '@/model/pages/testRuns';
 import { TestResultStatus } from '@/types';
+import { CircleCheckFill, CircleChevronsRight, CircleDashed, CircleExclamation, CircleMinusFill, CircleXmarkFill } from '@gravity-ui/icons';
 import { Button, Icon } from '@gravity-ui/uikit';
 import { useStore } from 'effector-react/scope';
 import { FC, useCallback, useState } from 'react';
 import { InfiniteLoader } from '../InfiniteLoader/InfiniteLoader';
-import './TestRunDetails.css';
 import { TestRunProgress } from '../TestRunProgress/TestRunProgress';
-import { TestResultsByFeature } from './components/TestResultsByFeature';
 import { bem } from './TestRunDetail.cn';
-import { CircleCheckFill, CircleChevronRight, CircleDashed, CircleExclamation, CircleMinusFill, CircleXmarkFill } from '@gravity-ui/icons';
+import './TestRunDetails.css';
+import { TestResultsByFeature } from './components/TestResultsByFeature';
 
 export const TestRunDetails: FC = () => {
   const testResults = useStore(model.$testResults);
@@ -36,7 +36,7 @@ export const TestRunDetails: FC = () => {
       <TestRunProgress testResults={testResults} />
     </div>
     <div className={bem('Statuses')}>
-    <Button
+      <Button
         width="max"
         view="outlined"
         pin="circle-brick"
@@ -108,7 +108,7 @@ export const TestRunDetails: FC = () => {
         onClick={() => handleStatusClick('SKIPPED')}
         selected={activeStatus === 'SKIPPED'}
       >
-        <Icon data={CircleChevronRight} />
+        <Icon data={CircleChevronsRight} />
         Пропущено: {skipped}
       </Button>
     </div>

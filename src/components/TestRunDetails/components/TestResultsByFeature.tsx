@@ -15,6 +15,13 @@ interface FeatureTestResults {
   testResults: TestResult[];
 }
 
+const report = (report?: string) => {
+  if(!report) {
+    return null;
+  }
+  return <div className={bem('Report')}>{report}</div>;
+};
+
 interface TestResultFeatureBlockProps {
   feature: FeatureTestResults,
   onExpanderClick: (featureCode: string) => void,
@@ -38,8 +45,13 @@ const TestResultFeatureBlock: FC<TestResultFeatureBlockProps> = (props) => {
       <div className={bem('AssertList')}>
         {testResults.map((testResult) => {
           return <div key={testResult.id} className={bem('Assertion')}>
-            <TestResultIcon status={testResult.status} />
-            <FormattedText text={testResult.assertionTitle} />
+            <div>
+              <TestResultIcon status={testResult.status} />
+            </div>
+            <div>
+              <FormattedText text={testResult.assertionTitle} />
+              {report(testResult.report)}
+            </div>
           </div>;
         })}
       </div>

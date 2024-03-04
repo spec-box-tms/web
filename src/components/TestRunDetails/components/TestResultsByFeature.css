@@ -11,6 +11,7 @@
 .TestRunDetails-FeatureTitle {
   display: flex;
   flex-flow: row;
+  font-size: 1.1rem;
   font-weight: bold;
   align-items: center;
 }
@@ -45,4 +46,10 @@
 
 .TestRunDetails-Assertion {
   display: flex;
+  gap: var(--g-spacing-1);
+}
+
+.TestRunDetails-Report {
+  color: var(--g-color-text-secondary);
+  font-style: italic;
 }

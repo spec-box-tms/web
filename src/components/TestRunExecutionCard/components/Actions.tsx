@@ -1,10 +1,10 @@
 import { TestResult, TestResultStatus, UpdateTestResult } from '@/types';
-import { CircleCheckFill, CircleChevronRight, CircleExclamation, CircleMinusFill, CircleXmarkFill } from '@gravity-ui/icons';
+import { CircleCheckFill, CircleChevronsRight, CircleExclamation, CircleMinusFill, CircleXmarkFill } from '@gravity-ui/icons';
 import { Button, ButtonView, Icon, TextArea } from '@gravity-ui/uikit';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { bem } from '../TestRunExecutionCard.cn';
 import './Actions.css';
-import { formatDate } from '@/helpers/formatDate';
+import { formatInterval } from '@/helpers/formatInterval';
 
 const getButtonView = (status: TestResultStatus, activeStatus: TestResultStatus, activeView: ButtonView) => {
   return status === activeStatus ? activeView : 'outlined';
@@ -58,8 +58,7 @@ export const Actions: FC<ActionsProps> = (props) => {
     <div className={bem('Report')}>
       <TextArea minRows={1} maxRows={20} value={activeTestResult.report} onChange={handleReportChange} />
     </div> : null;
-  const info = testResult.completedAt ? <div className={bem('ActionInfo')}>Завершен: {formatDate(testResult.completedAt)}</div> : null;
-
+  const duration = testResult.duration ? <span>Длительность: {formatInterval(testResult.duration)}</span> : null;
   return <div className={bem('ActionsContainer')}>
     <div className={bem('Actions')}>
       <Button
@@ -113,11 +112,13 @@ export const Actions: FC<ActionsProps> = (props) => {
         onClick={() => handleStatusClick('SKIPPED')}
         selected={activeStatus === 'SKIPPED'}
       >
-        <Icon data={CircleChevronRight} />
+        <Icon data={CircleChevronsRight} />
         Пропущен
       </Button>
     </div>
     {report}
-    {info}
+    <div className={bem('ActionInfo')}>
+    {duration}
+    </div>
   </div>;
 };

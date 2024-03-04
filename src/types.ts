@@ -118,7 +118,10 @@ export interface TestResult {
   id: string;
   status: TestResultStatus;
   report?: string;
+  updatedAt: Date;
+  startedAt?: Date;
   completedAt?: Date;
+  duration?: number;
   assertionTitle: string;
   assertionGroupTitle: string;
   featureCode: string;
