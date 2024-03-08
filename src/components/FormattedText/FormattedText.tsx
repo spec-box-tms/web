@@ -13,6 +13,7 @@ import { bem } from './FormattedText.cn';
 import { useEvent } from 'effector-react/scope';
 import * as model from '@/model/pages/project';
 import { Copy } from '@gravity-ui/icons';
+import gfm from 'remark-gfm';
 
 function featureLinks(project?: string, version?: string, treeCode?: string) {
   const transform = (tree: Node) => {
@@ -121,7 +122,7 @@ export const FormattedText: FC<FormattedTextProps> = (props) => {
 
   return <Markdown
     className={bem(null, className)}
-    remarkPlugins={[featureLinks(project, version, tree)]}
+    remarkPlugins={[featureLinks(project, version, tree), gfm]}
     components={components}>
     {text}
   </Markdown>;

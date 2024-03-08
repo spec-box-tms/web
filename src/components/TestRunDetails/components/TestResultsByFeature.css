@@ -50,6 +50,6 @@
 }
 
 .TestRunDetails-Report {
+  margin-left: var(--g-spacing-4);
   color: var(--g-color-text-secondary);
-  font-style: italic;
 }

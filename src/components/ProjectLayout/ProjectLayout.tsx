@@ -1,10 +1,10 @@
 import * as model from '@/model/pages/project';
 import { cn } from '@bem-react/classname';
 import { Box } from '@gravity-ui/icons';
-import { Icon, Label, Skeleton } from '@gravity-ui/uikit';
+import { Icon, PortalProvider, Skeleton } from '@gravity-ui/uikit';
 import { RouteInstance } from 'atomic-router';
 import { useStore } from 'effector-react/scope';
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useRef } from 'react';
 
 import {
   OpenFeatureLinkEventHandler,
@@ -14,8 +14,9 @@ import { RouteLinkButton } from '@/components/RouteLinkButton/RouteLinkButton';
 
 import { homeRoute, projectRoute, statRoute, testRunsRoute } from '@/model';
 
-import './ProjectLayout.css';
 import { InfiniteLoader } from '../InfiniteLoader/InfiniteLoader';
+import { VersionLabel } from '../VersionLabel/VersionLabel';
+import './ProjectLayout.css';
 
 const bem = cn('ProjectLayout');
 
@@ -72,37 +73,40 @@ const NavItem: FC<NavItemProps> = ({ to, text, project, version }) => {
 
 export const ProjectLayout: FC<ProjectLayoutProps> = (props) => {
   const { children, contentClassName, navigate, project, version, projectTitle, isLoading } = props;
+  const projectRootRef = useRef(null);
   const tree = useStore(model.$tree);
-  if(isLoading) {
+  if (isLoading) {
     return <InfiniteLoader />;
   }
 
   return (
     <ProjectContext.Provider value={{ project, version, tree: tree || undefined, navigate }}>
-      <div className={bem()}>
-        <div className={bem('Header')}>
-          <div className={bem('Logo')}>
-            <RouteLinkButton
-              to={homeRoute}
-              params={{}}
-              view="flat-info"
-              size="l"
-              pin="circle-circle"
-            >
-              <Icon size={24} data={Box} />
-            </RouteLinkButton>
+      <div className={bem()} ref={projectRootRef}>
+        <PortalProvider container={projectRootRef}>
+          <div className={bem('Header')}>
+            <div className={bem('Logo')}>
+              <RouteLinkButton
+                to={homeRoute}
+                params={{}}
+                view="flat-info"
+                size="l"
+                pin="circle-circle"
+              >
+                <Icon size={24} data={Box} />
+              </RouteLinkButton>
+            </div>
+            <div className={bem('Title')}>
+              <h2>{projectTitle}</h2>
+              <VersionLabel version={version} />
+            </div>
+            <div className={bem('Navigation')}>
+              <NavItem to={projectRoute} project={project} version={version} text="Проект" />
+              <NavItem to={testRunsRoute} project={project} version={version} text="Тестовые прогоны" />
+              <NavItem to={statRoute} project={project} version={version} text="Статистика" />
+            </div>
           </div>
-          <div className={bem('Title')}>
-            <h2>{projectTitle}</h2>
-            <Label>v: {version ?? 'по-умолчанию'}</Label>
-          </div>
-          <div className={bem('Navigation')}>
-            <NavItem to={projectRoute} project={project} version={version} text="Проект" />
-            <NavItem to={testRunsRoute} project={project} version={version} text="Тестовые прогоны" />
-            <NavItem to={statRoute} project={project} version={version} text="Статистика" />
-          </div>
-        </div>
-        <div className={bem('Content', [contentClassName])}>{children}</div>
+          <div className={bem('Content', [contentClassName])}>{children}</div>
+        </PortalProvider>
       </div>
     </ProjectContext.Provider>
   );

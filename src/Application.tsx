@@ -14,11 +14,11 @@ import { TestRunExecution } from './pages/TestRunExecution/TestRunExecution';
 export const Application: FC = () => {
   return (
     <ApplicationLayout>
-      <Route route={homeRoute} view={Home} />
-      <Route route={projectRoute} view={Project} />
-      <Route route={testRunsRoute} view={TestRuns} />
-      <Route route={testRunExecutionRoute} view={TestRunExecution} />
-      <Route route={statRoute} view={Stat} />
+        <Route route={homeRoute} view={Home} />
+        <Route route={projectRoute} view={Project} />
+        <Route route={testRunsRoute} view={TestRuns} />
+        <Route route={testRunExecutionRoute} view={TestRunExecution} />
+        <Route route={statRoute} view={Stat} />
       <ToastContainer />
     </ApplicationLayout>
   );

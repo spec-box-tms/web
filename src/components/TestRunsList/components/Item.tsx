@@ -2,17 +2,20 @@ import { ListItem } from '@/components/ListItem/ListItem';
 import { ProjectContext } from '@/components/ProjectContext/ProjectContext';
 import { RouteLink } from '@/components/RouteLink/RouteLink';
 import { TestRunStateIcon } from '@/components/TestRunStateIcon/TestRunStateIcon';
+import { VersionLabel } from '@/components/VersionLabel/VersionLabel';
 import { formatDate } from '@/helpers/formatDate';
+import { formatInterval } from '@/helpers/formatInterval';
 import { testRunExecutionRoute } from '@/model/pages/testRunExecution';
-import * as model from '@/model/pages/testRuns';
 import { TestRun } from '@/types';
 import { ArrowRightToSquare } from '@gravity-ui/icons';
-import { Icon, Label } from '@gravity-ui/uikit';
+import { Icon } from '@gravity-ui/uikit';
 import { useStore, useUnit } from 'effector-react/scope';
 import { FC, useContext } from 'react';
+
 import { bem } from '../TestRunsList.cn';
 import './Item.css';
-import { formatInterval } from '@/helpers/formatInterval';
+
+import * as model from '@/model/pages/testRuns';
 
 interface ItemProps {
   testRun: TestRun;
@@ -43,7 +46,7 @@ export const Item: FC<ItemProps> = (props) => {
               <TestRunStateIcon testRun={testRun} />
               {testRun.title}
             </div>
-            <Label>v: {testRun.version ?? 'по-умолчанию'}</Label>
+            <VersionLabel version={testRun.version} />
           </div>
           <div className={bem('Description')}>
             {formatDate(testRun.createdAt)}

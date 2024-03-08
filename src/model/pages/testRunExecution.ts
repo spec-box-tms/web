@@ -4,6 +4,7 @@ import { combine, createEvent, createStore, restore, sample } from 'effector';
 import { controls } from '../common';
 import {
   loadFeatureQuery,
+  loadTestResultHistoryQuery,
   loadTestResultsQuery,
   loadTestRunQuery,
   updateTestResultQuery,
@@ -35,6 +36,8 @@ export const $featureIsLoading = loadFeatureFx.pending;
 
 export const updateTestResult = createEvent<UpdateTestResult>();
 const updateTestResultFx = createSpecBoxEffect(updateTestResultQuery);
+
+export const loadTestResultHistoryFx = createSpecBoxEffect(loadTestResultHistoryQuery);
 
 export const $tree = createStore<string | null>(null).on(
   [testRunExecutionRoute.opened, testRunExecutionRoute.updated],

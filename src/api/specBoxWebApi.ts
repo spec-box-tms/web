@@ -31,6 +31,8 @@ import {
   GetTestResultResponse,
   UpdateTestResultOptionalParams,
   UpdateTestResultResponse,
+  GetTestResultHistoryOptionalParams,
+  GetTestResultHistoryResponse,
 } from './models';
 
 export class SpecBoxWebApi extends coreClient.ServiceClient {
@@ -276,6 +278,23 @@ export class SpecBoxWebApi extends coreClient.ServiceClient {
     return this.sendOperationRequest(
       { testRunId, testResultId, options },
       updateTestResultOperationSpec,
+    );
+  }
+
+  /**
+   * Retrieves test result history.
+   * @param testRunId The ID of the test run.
+   * @param testResultId The ID of the test result.
+   * @param options The options parameters.
+   */
+  getTestResultHistory(
+    testRunId: string,
+    testResultId: string,
+    options?: GetTestResultHistoryOptionalParams,
+  ): Promise<GetTestResultHistoryResponse> {
+    return this.sendOperationRequest(
+      { testRunId, testResultId, options },
+      getTestResultHistoryOperationSpec,
     );
   }
 }
@@ -543,5 +562,34 @@ const updateTestResultOperationSpec: coreClient.OperationSpec = {
   ],
   headerParameters: [Parameters.accept, Parameters.contentType],
   mediaType: 'json',
+  serializer,
+};
+const getTestResultHistoryOperationSpec: coreClient.OperationSpec = {
+  path: '/tests/testruns/{testRunId}/testresults/{testResultId}/history',
+  httpMethod: 'GET',
+  responses: {
+    200: {
+      bodyMapper: {
+        type: {
+          name: 'Sequence',
+          element: {
+            type: {
+              name: 'Composite',
+              className: 'SpecBoxWebApiModelTestRunTestResultHistoryModel',
+            },
+          },
+        },
+      },
+    },
+    404: {
+      bodyMapper: Mappers.MicrosoftAspNetCoreMvcProblemDetails,
+    },
+  },
+  urlParameters: [
+    Parameters.$host,
+    Parameters.testRunId,
+    Parameters.testResultId,
+  ],
+  headerParameters: [Parameters.accept],
   serializer,
 };

@@ -16,10 +16,12 @@ interface FeatureTestResults {
 }
 
 const report = (report?: string) => {
-  if(!report) {
+  if (!report) {
     return null;
   }
-  return <div className={bem('Report')}>{report}</div>;
+  return <div className={bem('Report')}>
+    <FormattedText text={report} />
+  </div>;
 };
 
 interface TestResultFeatureBlockProps {

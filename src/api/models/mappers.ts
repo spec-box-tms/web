@@ -1101,6 +1101,13 @@ export const SpecBoxWebApiModelTestRunTestResultModel: coreClient.CompositeMappe
             name: 'Uuid',
           },
         },
+        testRunId: {
+          serializedName: 'testRunId',
+          required: true,
+          type: {
+            name: 'Uuid',
+          },
+        },
         status: {
           constraints: {
             MinLength: 1,
@@ -1208,6 +1215,71 @@ export const SpecBoxWebApiModelTestRunUpdateTestResult: coreClient.CompositeMapp
         },
         updatedAt: {
           serializedName: 'updatedAt',
+          type: {
+            name: 'DateTime',
+          },
+        },
+      },
+    },
+  };
+
+export const SpecBoxWebApiModelTestRunTestResultHistoryModel: coreClient.CompositeMapper =
+  {
+    type: {
+      name: 'Composite',
+      className: 'SpecBoxWebApiModelTestRunTestResultHistoryModel',
+      modelProperties: {
+        id: {
+          serializedName: 'id',
+          required: true,
+          type: {
+            name: 'Uuid',
+          },
+        },
+        testRunId: {
+          serializedName: 'testRunId',
+          required: true,
+          type: {
+            name: 'Uuid',
+          },
+        },
+        testRunTitle: {
+          constraints: {
+            MinLength: 1,
+          },
+          serializedName: 'testRunTitle',
+          required: true,
+          type: {
+            name: 'String',
+          },
+        },
+        version: {
+          serializedName: 'version',
+          nullable: true,
+          type: {
+            name: 'String',
+          },
+        },
+        status: {
+          constraints: {
+            MinLength: 1,
+          },
+          serializedName: 'status',
+          required: true,
+          type: {
+            name: 'String',
+          },
+        },
+        report: {
+          serializedName: 'report',
+          nullable: true,
+          type: {
+            name: 'String',
+          },
+        },
+        completedAt: {
+          serializedName: 'completedAt',
+          required: true,
           type: {
             name: 'DateTime',
           },

@@ -4,6 +4,7 @@ import {
   ProjectStructure,
   ProjectTestRuns,
   TestResult,
+  TestResultHistory,
   TestRunDetails,
   Tree,
 } from '@/types';
@@ -13,6 +14,7 @@ import {
   mapProjectTestRuns,
   mapStructure,
   mapTestResult,
+  mapTestResultHistory,
   mapTree,
 } from '@/mappers';
 
@@ -163,6 +165,23 @@ export async function updateTestResultQuery(
   try {
     const response = await deps.api.updateTestResult(testRunId, id, { body: { status, report }});
     return mapTestResult(response);
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+}
+
+interface LoadTestResultHistoryParams {
+  testRunId: string;
+  testResultId: string;
+}
+export async function loadTestResultHistoryQuery(
+  { testRunId, testResultId }: LoadTestResultHistoryParams,
+  deps: StoreDependencies
+): Promise<TestResultHistory[]> {
+  try {
+    const response = await deps.api.getTestResultHistory(testRunId, testResultId);
+    return response.map(mapTestResultHistory);
   } catch (e) {
     console.error(e);
     throw e;

@@ -98,7 +98,7 @@ export const TestRunDetails: FC = () => {
         selected={activeStatus === 'INVALID'}
       >
         <Icon data={CircleExclamation} />
-        Неисправно: {invalid}
+        Некорректно: {invalid}
       </Button>
       <Button
         width="max"

@@ -3,3 +3,8 @@
   word-break: break-word;
   margin-top: var(--g-spacing-4);
 }
+.TestRunExecutionCard-Actions {
+  display: flex;
+  flex-direction: row;
+  gap: var(--g-spacing-2);
+}

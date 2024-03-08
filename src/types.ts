@@ -118,6 +118,7 @@ export type TestResultStatus =
 
 export interface TestResult {
   id: string;
+  testRunId: string;
   status: TestResultStatus;
   report?: string;
   updatedAt: Date;
@@ -139,4 +140,14 @@ export interface UpdateTestResult {
 export interface TestRunDetails {
   project: ProjectDetails;
   testRun: TestRun;
+}
+
+export interface TestResultHistory {
+  id: string;
+  testRunId: string;
+  testRunTitle: string;
+  version?: string;
+  status: TestResultStatus;
+  report?: string;
+  completedAt: Date;
 }

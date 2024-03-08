@@ -1,0 +1,19 @@
+.TestResultHistory-Content {
+  display: flex;
+  flex-direction: column;
+}
+
+.TestResultHistory-Title {
+  display: flex;
+  flex-direction: row;
+  gap: var(--g-spacing-2);
+}
+
+.TestResultHistory-Description {
+  font: var(--sb-font-body-s);
+  color: var(--g-color-text-secondary);
+}
+
+.TestResultHistory-PopupContainer {
+  padding: var(--g-spacing-4);
+}

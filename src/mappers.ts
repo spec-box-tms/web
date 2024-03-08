@@ -11,6 +11,7 @@ import {
   SpecBoxWebApiModelProjectTreeNodeModel,
   SpecBoxWebApiModelTestRunModel,
   SpecBoxWebApiModelTestRunProjectTestRunsModel,
+  SpecBoxWebApiModelTestRunTestResultHistoryModel,
   SpecBoxWebApiModelTestRunTestResultModel,
 } from './api';
 import {
@@ -23,6 +24,7 @@ import {
   ProjectStructure,
   ProjectTestRuns,
   TestResult,
+  TestResultHistory,
   TestResultStatus,
   TestRun,
   TestRunDetails,
@@ -62,7 +64,7 @@ export const mapAssertionGroup = (
 ): AssertionGroup => {
   const { title, order, assertions } = input;
   assertions.sort((a, b) => a.order - b.order);
-  
+
   return {
     title,
     order,
@@ -205,6 +207,7 @@ export function mapTestResult(
 ): TestResult {
   const {
     id,
+    testRunId,
     status,
     report,
     updatedAt,
@@ -216,14 +219,18 @@ export function mapTestResult(
     featureTitle,
   } = testResult;
 
-  const duration = completedAt && startedAt ? completedAt.getTime() - startedAt.getTime() : undefined;
+  const duration =
+    completedAt && startedAt
+      ? completedAt.getTime() - startedAt.getTime()
+      : undefined;
 
   return {
     id,
+    testRunId,
     status: status as TestResultStatus,
     report,
     updatedAt,
-    startedAt,    
+    startedAt,
     completedAt,
     duration,
     assertionTitle,
@@ -237,5 +244,22 @@ export function mapTestRunDetails(testRun: GetTestRunResponse): TestRunDetails {
   return {
     project: mapProjectDetails(testRun.project),
     testRun: mapTestRun(testRun.testRun),
+  };
+}
+
+export function mapTestResultHistory(
+  testResultHistory: SpecBoxWebApiModelTestRunTestResultHistoryModel
+): TestResultHistory {
+  const { id, testRunId, testRunTitle, version, status, report, completedAt } =
+    testResultHistory;
+
+  return {
+    id,
+    testRunId,
+    testRunTitle,
+    version,
+    status: status as TestResultStatus,
+    report,
+    completedAt,
   };
 }

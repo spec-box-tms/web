@@ -1,10 +1,14 @@
 import { TestResult, TestResultStatus, UpdateTestResult } from '@/types';
 import { CircleCheckFill, CircleChevronsRight, CircleExclamation, CircleMinusFill, CircleXmarkFill } from '@gravity-ui/icons';
-import { Button, ButtonView, Icon, TextArea } from '@gravity-ui/uikit';
+import { Button, ButtonView, Icon, Modal, TextArea } from '@gravity-ui/uikit';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { bem } from '../TestRunExecutionCard.cn';
 import './Actions.css';
 import { formatInterval } from '@/helpers/formatInterval';
+import { ReportDialog, ReportDialogResult } from './ReportDialog';
+import { STATUS_ACTIONS } from '@/helpers/testStatusTexts';
+
+const STRICT_REPORT_STATUS = new Set<TestResultStatus>(['FAILED', 'BLOCKED', 'INVALID']);
 
 const getButtonView = (status: TestResultStatus, activeStatus: TestResultStatus, activeView: ButtonView) => {
   return status === activeStatus ? activeView : 'outlined';
@@ -22,103 +26,128 @@ interface ActionsProps {
 export const Actions: FC<ActionsProps> = (props) => {
   const { testResult, onTestResultChange } = props;
 
-  const [activeTestResult, setActiveTestResult] = useState<UpdateTestResult>({ id: testResult.id, status: testResult.status, report: testResult.report });
+  const [editTestResult, setEditTestResult] = useState<UpdateTestResult>({ id: testResult.id, status: testResult.status, report: testResult.report });
+  const editStatus = editTestResult.status;
+
+  const [selectedStatus, setSelectedStatus] = useState<TestResultStatus>(testResult.status);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    if (activeTestResult.status === testResult.status && activeTestResult.report === testResult.report) {
+    if (editTestResult.status === testResult.status && editTestResult.report === testResult.report) {
       return;
     }
 
     const timer = setTimeout(() => {
-      onTestResultChange(activeTestResult);
+      onTestResultChange(editTestResult);
     }, 500);
 
     return () => {
       clearTimeout(timer);
     };
-  }, [activeTestResult, testResult, onTestResultChange]);
+  }, [editTestResult, testResult, onTestResultChange]);
 
-  const activeStatus = activeTestResult.status;
 
   const handleStatusClick = useCallback((status: TestResultStatus) => {
-    setActiveTestResult((prevTestResult) => ({
+    if (status === editStatus) {
+      return;
+    }
+    setSelectedStatus(status);
+
+    if (STRICT_REPORT_STATUS.has(status) && !editTestResult.report) {
+      setIsModalOpen(true);
+      return;
+    }
+
+    setEditTestResult((prevTestResult) => ({
       ...prevTestResult,
       status,
     }));
-  }, [setActiveTestResult]);
+  }, [setEditTestResult, setIsModalOpen, editStatus, editTestResult, setSelectedStatus]);
 
   const handleReportChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setActiveTestResult((prevTestResult) => ({
+    setEditTestResult((prevTestResult) => ({
       ...prevTestResult,
       report: e.target.value,
     }));
-  }, [setActiveTestResult]);
+  }, [setEditTestResult]);
 
-  const report = activeStatus !== 'NEW' ?
+  const handleReportModalAccept = useCallback(({ report }: ReportDialogResult) => {
+    setEditTestResult((prevTestResult) => ({
+      ...prevTestResult,
+      status: selectedStatus,
+      report,
+    }));
+    setIsModalOpen(false);
+  }, [setEditTestResult, selectedStatus]);
+
+  const report = editStatus !== 'NEW' ?
     <div className={bem('Report')}>
-      <TextArea minRows={1} maxRows={20} value={activeTestResult.report} onChange={handleReportChange} />
+      <TextArea minRows={1} maxRows={20} value={editTestResult.report} onChange={handleReportChange} />
     </div> : null;
   const duration = testResult.duration ? <span>Длительность: {formatInterval(testResult.duration)}</span> : null;
   return <div className={bem('ActionsContainer')}>
     <div className={bem('Actions')}>
       <Button
-        className={bem('ActionButton', getActiveClass('PASSED', activeStatus))}
-        view={getButtonView('PASSED', activeStatus, 'outlined-success')}
+        className={bem('ActionButton', getActiveClass('PASSED', editStatus))}
+        view={getButtonView('PASSED', editStatus, 'outlined-success')}
         pin="circle-brick"
         size="m"
         onClick={() => handleStatusClick('PASSED')}
-        selected={activeStatus === 'PASSED'}
+        selected={editStatus === 'PASSED'}
       >
         <Icon data={CircleCheckFill} />
-        Пройден
+        {STATUS_ACTIONS['PASSED']}
       </Button>
       <Button
-        className={bem('ActionButton', getActiveClass('FAILED', activeStatus))}
-        view={getButtonView('FAILED', activeStatus, 'outlined-danger')}
+        className={bem('ActionButton', getActiveClass('FAILED', editStatus))}
+        view={getButtonView('FAILED', editStatus, 'outlined-danger')}
         pin="brick-brick"
         size="m" onClick={() => handleStatusClick('FAILED')}
-        selected={activeStatus === 'FAILED'}
+        selected={editStatus === 'FAILED'}
       >
         <Icon data={CircleXmarkFill} />
-        Провален
+        {STATUS_ACTIONS['FAILED']}
       </Button>
       <Button
-        className={bem('ActionButton', getActiveClass('BLOCKED', activeStatus))}
-        view={getButtonView('BLOCKED', activeStatus, 'outlined-warning')}
+        className={bem('ActionButton', getActiveClass('BLOCKED', editStatus))}
+        view={getButtonView('BLOCKED', editStatus, 'outlined-warning')}
         pin="brick-brick"
         size="m"
         onClick={() => handleStatusClick('BLOCKED')}
-        selected={activeStatus === 'BLOCKED'}
-      >
+        selected={editStatus === 'BLOCKED'}
+        >
         <Icon data={CircleMinusFill} />
-        Заблокирован
+        {STATUS_ACTIONS['BLOCKED']}
       </Button>
       <Button
-        className={bem('ActionButton', getActiveClass('INVALID', activeStatus))}
-        view={getButtonView('INVALID', activeStatus, 'outlined-utility')}
+        className={bem('ActionButton', getActiveClass('INVALID', editStatus))}
+        view={getButtonView('INVALID', editStatus, 'outlined-utility')}
         pin="brick-brick"
         size="m"
         onClick={() => handleStatusClick('INVALID')}
-        selected={activeStatus === 'INVALID'}
-      >
+        selected={editStatus === 'INVALID'}
+        >
         <Icon data={CircleExclamation} />
-        Неисправен
+        {STATUS_ACTIONS['INVALID']}
       </Button>
       <Button
-        className={bem('ActionButton', getActiveClass('SKIPPED', activeStatus))}
-        view={getButtonView('SKIPPED', activeStatus, 'outlined')}
+        className={bem('ActionButton', getActiveClass('SKIPPED', editStatus))}
+        view={getButtonView('SKIPPED', editStatus, 'outlined')}
         pin="brick-circle"
         size="m"
         onClick={() => handleStatusClick('SKIPPED')}
-        selected={activeStatus === 'SKIPPED'}
-      >
+        selected={editStatus === 'SKIPPED'}
+        >
         <Icon data={CircleChevronsRight} />
-        Пропущен
+        {STATUS_ACTIONS['SKIPPED']}
       </Button>
     </div>
     {report}
     <div className={bem('ActionInfo')}>
-    {duration}
+      {duration}
     </div>
+    <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
+      <ReportDialog newStatus={selectedStatus} testResult={testResult} onAccept={handleReportModalAccept} />
+    </Modal>
   </div>;
 };

@@ -1,0 +1,60 @@
+.TestRunExecutionCard-ReportDialog {
+  display: flex;
+  flex-direction: column;
+  min-width: 800px;
+  padding: var(--g-spacing-6);
+}
+
+.TestRunExecutionCard-ReportDialog-Header {
+  display: flex;
+  flex-direction: column;
+}
+
+.TestRunExecutionCard-ReportDialog-Title {
+  display: flex;
+  flex-direction: row;
+  font-size: 1.2rem;
+  font-weight: bold;
+  gap: var(--g-spacing-2)
+}
+
+.TestRunExecutionCard-ReportDialog-Description {
+  font: var(--sb-font-body-s);
+  color: var(--g-color-text-secondary);
+}
+
+.TestRunExecutionCard-ReportDialog-Content {
+  display: flex;
+  flex-direction: row;
+  gap: var(--g-spacing-3);
+  max-height: 300px;
+  overflow: hidden;
+}
+
+.TestRunExecutionCard-ReportDialog-Form {
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-direction: column;
+  gap: var(--g-spacing-3);
+}
+
+.TestRunExecutionCard-ReportDialog-History {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.TestRunExecutionCard-ReportDialog-List {
+  flex-grow: 1;
+  overflow-y: scroll;
+}
+
+
+.TestRunExecutionCard-ReportDialog label {
+  line-height: 26px;
+  padding: 0 4px 0 8px;
+  font-weight: var(--g-text-accent-font-weight);
+}

@@ -183,6 +183,7 @@ export interface SpecBoxWebApiModelTestRunDetailsModel {
 
 export interface SpecBoxWebApiModelTestRunTestResultModel {
   id: string;
+  testRunId: string;
   status: string;
   report?: string;
   updatedAt: Date;
@@ -198,6 +199,16 @@ export interface SpecBoxWebApiModelTestRunUpdateTestResult {
   status: string;
   report?: string;
   updatedAt?: Date;
+}
+
+export interface SpecBoxWebApiModelTestRunTestResultHistoryModel {
+  id: string;
+  testRunId: string;
+  testRunTitle: string;
+  version?: string;
+  status: string;
+  report?: string;
+  completedAt: Date;
 }
 
 /** Optional parameters. */
@@ -331,6 +342,14 @@ export interface UpdateTestResultOptionalParams
 
 /** Contains response data for the updateTestResult operation. */
 export type UpdateTestResultResponse = SpecBoxWebApiModelTestRunTestResultModel;
+
+/** Optional parameters. */
+export interface GetTestResultHistoryOptionalParams
+  extends coreClient.OperationOptions {}
+
+/** Contains response data for the getTestResultHistory operation. */
+export type GetTestResultHistoryResponse =
+  SpecBoxWebApiModelTestRunTestResultHistoryModel[];
 
 /** Optional parameters. */
 export interface SpecBoxWebApiOptionalParams
