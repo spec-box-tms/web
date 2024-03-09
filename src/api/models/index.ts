@@ -131,6 +131,21 @@ export interface SpecBoxWebApiModelProjectTreeModel {
   title: string;
 }
 
+export interface SpecBoxWebApiModelProjectFeatureRelationsModel {
+  nodes: SpecBoxWebApiModelProjectGraphNodeModel[];
+  edges: SpecBoxWebApiModelProjectGraphEdgeModel[];
+}
+
+export interface SpecBoxWebApiModelProjectGraphNodeModel {
+  id: string;
+  title: string;
+}
+
+export interface SpecBoxWebApiModelProjectGraphEdgeModel {
+  source: string;
+  target: string;
+}
+
 export interface SpecBoxWebApiModelStatAutotestsStatUploadData {
   timestamp: Date;
   duration: number;
@@ -268,6 +283,17 @@ export interface GetStructureOptionalParams
 
 /** Contains response data for the getStructure operation. */
 export type GetStructureResponse = SpecBoxWebApiModelProjectStructureModel;
+
+/** Optional parameters. */
+export interface GetFeatureRelationsOptionalParams
+  extends coreClient.OperationOptions {
+  /** The project version. Default version if not provided. */
+  version?: string;
+}
+
+/** Contains response data for the getFeatureRelations operation. */
+export type GetFeatureRelationsResponse =
+  SpecBoxWebApiModelProjectFeatureRelationsModel;
 
 /** Optional parameters. */
 export interface AutotestsStatUploadOptionalParams

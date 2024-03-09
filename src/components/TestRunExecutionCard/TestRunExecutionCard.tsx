@@ -12,7 +12,7 @@ interface TestRunExecutionDetailProps {
   repositoyUrl?: string;
 }
 
-export const TestRunExecutionDetail: FC<TestRunExecutionDetailProps> = (props) => {
+export const TestRunExecutionCard: FC<TestRunExecutionDetailProps> = (props) => {
   const { feature, testResults, repositoyUrl } = props;
 
   const filtredTestResults = testResults.filter((testResult) => testResult.featureCode === feature.code);

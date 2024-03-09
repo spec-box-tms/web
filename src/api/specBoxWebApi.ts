@@ -16,6 +16,8 @@ import {
   ListStructuresResponse,
   GetStructureOptionalParams,
   GetStructureResponse,
+  GetFeatureRelationsOptionalParams,
+  GetFeatureRelationsResponse,
   AutotestsStatUploadOptionalParams,
   GetAutotestsStatOptionalParams,
   GetAutotestsStatResponse,
@@ -162,6 +164,21 @@ export class SpecBoxWebApi extends coreClient.ServiceClient {
     return this.sendOperationRequest(
       { project, treeCode, options },
       getStructureOperationSpec,
+    );
+  }
+
+  /**
+   * Returns the graph of feature and attribute rlations.
+   * @param project The project code.
+   * @param options The options parameters.
+   */
+  getFeatureRelations(
+    project: string,
+    options?: GetFeatureRelationsOptionalParams,
+  ): Promise<GetFeatureRelationsResponse> {
+    return this.sendOperationRequest(
+      { project, options },
+      getFeatureRelationsOperationSpec,
     );
   }
 
@@ -417,6 +434,22 @@ const getStructureOperationSpec: coreClient.OperationSpec = {
   },
   queryParameters: [Parameters.version],
   urlParameters: [Parameters.$host, Parameters.project, Parameters.treeCode],
+  headerParameters: [Parameters.accept],
+  serializer,
+};
+const getFeatureRelationsOperationSpec: coreClient.OperationSpec = {
+  path: '/projects/{project}/features:relations',
+  httpMethod: 'GET',
+  responses: {
+    200: {
+      bodyMapper: Mappers.SpecBoxWebApiModelProjectFeatureRelationsModel,
+    },
+    404: {
+      bodyMapper: Mappers.MicrosoftAspNetCoreMvcProblemDetails,
+    },
+  },
+  queryParameters: [Parameters.version],
+  urlParameters: [Parameters.$host, Parameters.project],
   headerParameters: [Parameters.accept],
   serializer,
 };

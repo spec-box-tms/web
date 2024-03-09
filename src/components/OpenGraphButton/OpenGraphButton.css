@@ -1,0 +1,5 @@
+.OpenGraphButton-ModalContainer {
+  width: 90vw;
+  height: 90vh;
+  padding: var(--g-spacing-4);
+}

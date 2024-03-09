@@ -113,7 +113,8 @@ export const ProjectTree: FC<ProjectTreeProps> = (props) => {
           size="m"
           placeholder="Структура"
           options={treesSelectOptions}
-          onUpdate={handleTreeSelected} value={[selectedTree || '']}
+          onUpdate={handleTreeSelected}
+          value={[selectedTree || '']}
           label="Структура:"
         />
         <TextInput

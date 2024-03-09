@@ -6,6 +6,9 @@ import {
   SpecBoxWebApiModelProjectAssertionGroupModel,
   SpecBoxWebApiModelProjectAssertionModel,
   SpecBoxWebApiModelProjectFeatureModel,
+  SpecBoxWebApiModelProjectFeatureRelationsModel,
+  SpecBoxWebApiModelProjectGraphEdgeModel,
+  SpecBoxWebApiModelProjectGraphNodeModel,
   SpecBoxWebApiModelProjectStructureModel,
   SpecBoxWebApiModelProjectTreeModel,
   SpecBoxWebApiModelProjectTreeNodeModel,
@@ -18,6 +21,10 @@ import {
   Assertion,
   AssertionGroup,
   Feature,
+  FeatureRelationEdge,
+  FeatureRelationNode,
+  FeatureRelationNodeTypes,
+  FeatureRelations,
   Project,
   ProjectDetails,
   ProjectStat,
@@ -261,5 +268,85 @@ export function mapTestResultHistory(
     status: status as TestResultStatus,
     report,
     completedAt,
+  };
+}
+
+const FEATURE_COLOR = 'rgb(52, 139, 220)';
+const ATTRIBUTE_COLOR = 'rgb(255, 190, 92)';
+
+function mapGraphNode(
+  node: SpecBoxWebApiModelProjectGraphNodeModel,
+  nodeRate: number
+): FeatureRelationNode {
+  const { id, title } = node;
+  const [type, code] = id.split(':');
+  const color = type === 'feature' ? FEATURE_COLOR : ATTRIBUTE_COLOR;
+  const typeRate = type === 'feature' ? 1 : 0.5;
+  const size = 5 + 5 * nodeRate * typeRate;
+  return {
+    id,
+    code,
+    title,
+    nodeType: type as FeatureRelationNodeTypes,
+    style: {
+      label: {
+        value: `${code}\r\n${title} `,
+      },
+      keyshape: {
+        fill: color,
+        stroke: color,
+        fillOpacity: 0.1,
+        size
+      }
+    },
+  };
+}
+
+function mapGraphEdge(
+  edge: SpecBoxWebApiModelProjectGraphEdgeModel,
+): FeatureRelationEdge {
+  const { source, target } = edge;
+  const [ targetType ] = target.split(':');
+  const color = targetType === 'feature' ? FEATURE_COLOR : ATTRIBUTE_COLOR;
+  const shapeType = targetType === 'attribute-value' ? 'poly' : undefined;
+  return {
+    source,
+    target,
+    style: {
+      keyshape: {
+        type: shapeType,
+        loop: {
+          distance: 10,
+        },
+        fill: color,
+        stroke: color,
+        fillOpacity: 0.1,
+        strokeOpacity: 0.2,
+      }
+    },
+  };
+}
+
+
+export function mapFeatureRelations(
+  relations: SpecBoxWebApiModelProjectFeatureRelationsModel
+): FeatureRelations {
+  relations.nodes;
+  const countEdges = relations.edges.reduce((acc, edge) => {
+    acc[edge.target] = (acc[edge.target] || 0) + 1;
+    acc[edge.source] = (acc[edge.source] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+  const maxEdgesCount = Math.max(...Object.values(countEdges)); 
+
+  const nodes = relations.nodes.map(node => {
+    const nodeRate = countEdges[node.id] || 0 / maxEdgesCount;
+    return mapGraphNode(node, nodeRate);
+  });
+  const edges = relations.edges.map(mapGraphEdge);
+
+  return {
+    nodes,
+    edges,
   };
 }

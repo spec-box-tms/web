@@ -1,8 +1,9 @@
-import { TestRunDetails, UpdateTestResult } from '@/types';
+import { FeatureRelations, TestRunDetails, UpdateTestResult } from '@/types';
 import { createRoute, querySync } from 'atomic-router';
 import { combine, createEvent, createStore, restore, sample } from 'effector';
 import { controls } from '../common';
 import {
+  LoadFeatureRelationsQuery,
   loadFeatureQuery,
   loadTestResultHistoryQuery,
   loadTestResultsQuery,
@@ -33,6 +34,10 @@ export const $testResultsIsLoading = loadTestRunResultsFx.pending;
 export const loadFeatureFx = createSpecBoxEffect(loadFeatureQuery);
 export const $feature = restore(loadFeatureFx.doneData, null);
 export const $featureIsLoading = loadFeatureFx.pending;
+
+export const loadFeatureRelationsFx = createSpecBoxEffect(LoadFeatureRelationsQuery);
+export const $featureRelations = restore<FeatureRelations>(loadFeatureRelationsFx.doneData, { nodes: [], edges: [] });
+export const $featureRelationsIsPending = loadFeatureRelationsFx.pending;
 
 export const updateTestResult = createEvent<UpdateTestResult>();
 const updateTestResultFx = createSpecBoxEffect(updateTestResultQuery);
@@ -70,7 +75,7 @@ sample({
     project: code,
     version: version || null,
   }),
-  target: loadTreesFx,
+  target: [loadTreesFx, loadFeatureRelationsFx],
 });
 
 sample({

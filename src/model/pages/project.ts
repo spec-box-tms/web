@@ -3,10 +3,10 @@ import copy from 'copy-to-clipboard';
 import { combine, createEvent, createStore, restore, sample } from 'effector';
 import { toast } from 'react-toastify';
 
-import { Feature, ProjectStructure, TreeNode } from '@/types';
+import { Feature, FeatureRelations, ProjectStructure, TreeNode } from '@/types';
 
 import { controls } from '../common';
-import { loadFeatureQuery, loadStructureQuery, loadTreesQuery } from '../queries';
+import { LoadFeatureRelationsQuery, loadFeatureQuery, loadStructureQuery, loadTreesQuery } from '../queries';
 import { createSpecBoxEffect } from '../scope';
 
 const STRUCTURE_STUB: ProjectStructure = {
@@ -40,6 +40,10 @@ export const $treesIsPending = loadTreesFx.pending;
 export const loadStructureFx = createSpecBoxEffect(loadStructureQuery);
 export const $structure = restore(loadStructureFx.doneData, STRUCTURE_STUB);
 export const $structureIsPending = loadStructureFx.pending;
+
+export const loadFeatureRelationsFx = createSpecBoxEffect(LoadFeatureRelationsQuery);
+export const $featureRelations = restore<FeatureRelations>(loadFeatureRelationsFx.doneData, { nodes: [], edges: [] });
+export const $featureRelationsIsPending = loadFeatureRelationsFx.pending;
 
 export interface LoadTreeParams {
   tree: string;
@@ -159,7 +163,7 @@ sample({
     project,
     version,
   }),
-  target: loadTreesFx,
+  target: [loadTreesFx, loadFeatureRelationsFx],
 });
 
 sample({

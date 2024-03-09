@@ -1,6 +1,7 @@
 import {
   CreateTestRun,
   Feature,
+  FeatureRelations,
   ProjectStructure,
   ProjectTestRuns,
   TestResult,
@@ -11,6 +12,7 @@ import {
 import { StoreDependencies } from './scope';
 import {
   mapFeature,
+  mapFeatureRelations,
   mapProjectTestRuns,
   mapStructure,
   mapTestResult,
@@ -182,6 +184,23 @@ export async function loadTestResultHistoryQuery(
   try {
     const response = await deps.api.getTestResultHistory(testRunId, testResultId);
     return response.map(mapTestResultHistory);
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+}
+
+interface LoadFeatureRelationsParams {
+  project: string;
+  version?: string;
+}
+export async function LoadFeatureRelationsQuery(
+  { project, version }: LoadFeatureRelationsParams,
+  deps: StoreDependencies
+): Promise<FeatureRelations> {
+  try {
+    const response = await deps.api.getFeatureRelations(project, { version });
+    return mapFeatureRelations(response);
   } catch (e) {
     console.error(e);
     throw e;

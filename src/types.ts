@@ -1,3 +1,5 @@
+import { EdgeStyle, NodeStyle } from '@antv/graphin';
+
 export interface Feature {
   code: string;
   title: string;
@@ -150,4 +152,24 @@ export interface TestResultHistory {
   status: TestResultStatus;
   report?: string;
   completedAt: Date;
+}
+
+export type FeatureRelationNodeTypes = 'feature' | 'attribute-value';
+export interface FeatureRelationNode {
+  id: string;
+  title: string;
+  code: string;
+  nodeType: FeatureRelationNodeTypes;
+  style?: Partial<NodeStyle>;
+}
+
+export interface FeatureRelationEdge {
+  source: string;
+  target: string;
+  style?: Partial<EdgeStyle>;
+}
+
+export interface FeatureRelations {
+  nodes: FeatureRelationNode[];
+  edges: FeatureRelationEdge[];
 }

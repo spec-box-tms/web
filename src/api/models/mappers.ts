@@ -801,6 +801,102 @@ export const SpecBoxWebApiModelProjectTreeModel: coreClient.CompositeMapper = {
   },
 };
 
+export const SpecBoxWebApiModelProjectFeatureRelationsModel: coreClient.CompositeMapper =
+  {
+    type: {
+      name: 'Composite',
+      className: 'SpecBoxWebApiModelProjectFeatureRelationsModel',
+      modelProperties: {
+        nodes: {
+          serializedName: 'nodes',
+          required: true,
+          type: {
+            name: 'Sequence',
+            element: {
+              type: {
+                name: 'Composite',
+                className: 'SpecBoxWebApiModelProjectGraphNodeModel',
+              },
+            },
+          },
+        },
+        edges: {
+          serializedName: 'edges',
+          required: true,
+          type: {
+            name: 'Sequence',
+            element: {
+              type: {
+                name: 'Composite',
+                className: 'SpecBoxWebApiModelProjectGraphEdgeModel',
+              },
+            },
+          },
+        },
+      },
+    },
+  };
+
+export const SpecBoxWebApiModelProjectGraphNodeModel: coreClient.CompositeMapper =
+  {
+    type: {
+      name: 'Composite',
+      className: 'SpecBoxWebApiModelProjectGraphNodeModel',
+      modelProperties: {
+        id: {
+          constraints: {
+            MinLength: 1,
+          },
+          serializedName: 'id',
+          required: true,
+          type: {
+            name: 'String',
+          },
+        },
+        title: {
+          constraints: {
+            MinLength: 1,
+          },
+          serializedName: 'title',
+          required: true,
+          type: {
+            name: 'String',
+          },
+        },
+      },
+    },
+  };
+
+export const SpecBoxWebApiModelProjectGraphEdgeModel: coreClient.CompositeMapper =
+  {
+    type: {
+      name: 'Composite',
+      className: 'SpecBoxWebApiModelProjectGraphEdgeModel',
+      modelProperties: {
+        source: {
+          constraints: {
+            MinLength: 1,
+          },
+          serializedName: 'source',
+          required: true,
+          type: {
+            name: 'String',
+          },
+        },
+        target: {
+          constraints: {
+            MinLength: 1,
+          },
+          serializedName: 'target',
+          required: true,
+          type: {
+            name: 'String',
+          },
+        },
+      },
+    },
+  };
+
 export const SpecBoxWebApiModelStatAutotestsStatUploadData: coreClient.CompositeMapper =
   {
     type: {

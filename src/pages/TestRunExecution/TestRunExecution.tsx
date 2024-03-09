@@ -1,7 +1,7 @@
 import { InfiniteLoader } from '@/components/InfiniteLoader/InfiniteLoader';
 import { ProjectLayout } from '@/components/ProjectLayout/ProjectLayout';
 import { ProjectTree } from '@/components/ProjectTree/ProejctTree';
-import { TestRunExecutionDetail } from '@/components/TestRunExecutionCard/TestRunExecutionCard';
+import { TestRunExecutionCard } from '@/components/TestRunExecutionCard/TestRunExecutionCard';
 import { TestRunProgress } from '@/components/TestRunProgress/TestRunProgress';
 import { TestRunStateIcon } from '@/components/TestRunStateIcon/TestRunStateIcon';
 import { formatDate } from '@/helpers/formatDate';
@@ -31,7 +31,7 @@ const Details: FC<DetailsProps> = (props) => {
   if (isPending) {
     return <InfiniteLoader />;
   }
-  return <TestRunExecutionDetail
+  return <TestRunExecutionCard
     feature={feature}
     testResults={testResults}
     repositoyUrl={repositoryUrl}
