@@ -1,12 +1,12 @@
+import { formatInterval } from '@/helpers/formatInterval';
+import { STATUS_ACTIONS } from '@/helpers/testStatusTexts';
 import { TestResult, TestResultStatus, UpdateTestResult } from '@/types';
 import { CircleCheckFill, CircleChevronsRight, CircleExclamation, CircleMinusFill, CircleXmarkFill } from '@gravity-ui/icons';
 import { Button, ButtonView, Icon, Modal, TextArea } from '@gravity-ui/uikit';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { bem } from '../TestRunExecutionCard.cn';
 import './Actions.css';
-import { formatInterval } from '@/helpers/formatInterval';
 import { ReportDialog, ReportDialogResult } from './ReportDialog';
-import { STATUS_ACTIONS } from '@/helpers/testStatusTexts';
 
 const STRICT_REPORT_STATUS = new Set<TestResultStatus>(['FAILED', 'BLOCKED', 'INVALID']);
 
@@ -115,7 +115,7 @@ export const Actions: FC<ActionsProps> = (props) => {
         size="m"
         onClick={() => handleStatusClick('BLOCKED')}
         selected={editStatus === 'BLOCKED'}
-        >
+      >
         <Icon data={CircleMinusFill} />
         {STATUS_ACTIONS['BLOCKED']}
       </Button>
@@ -126,7 +126,7 @@ export const Actions: FC<ActionsProps> = (props) => {
         size="m"
         onClick={() => handleStatusClick('INVALID')}
         selected={editStatus === 'INVALID'}
-        >
+      >
         <Icon data={CircleExclamation} />
         {STATUS_ACTIONS['INVALID']}
       </Button>
@@ -137,7 +137,7 @@ export const Actions: FC<ActionsProps> = (props) => {
         size="m"
         onClick={() => handleStatusClick('SKIPPED')}
         selected={editStatus === 'SKIPPED'}
-        >
+      >
         <Icon data={CircleChevronsRight} />
         {STATUS_ACTIONS['SKIPPED']}
       </Button>

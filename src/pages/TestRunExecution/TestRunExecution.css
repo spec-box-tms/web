@@ -25,6 +25,12 @@
   color: var(--g-color-text-secondary);
 }
 
+.TestRunExecution-Actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+}
+
 .TestRunExecution-ListPanel,
 .TestRunExecution-DetailsPanel {
   display: flex;

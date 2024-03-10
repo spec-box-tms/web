@@ -368,6 +368,13 @@ export interface GetTestRunOptionalParams extends coreClient.OperationOptions {}
 export type GetTestRunResponse = SpecBoxWebApiModelTestRunDetailsModel;
 
 /** Optional parameters. */
+export interface CompleteTestRunOptionalParams
+  extends coreClient.OperationOptions {}
+
+/** Contains response data for the completeTestRun operation. */
+export type CompleteTestRunResponse = SpecBoxWebApiModelTestRunDetailsModel;
+
+/** Optional parameters. */
 export interface ListTestResultsOptionalParams
   extends coreClient.OperationOptions {}
 

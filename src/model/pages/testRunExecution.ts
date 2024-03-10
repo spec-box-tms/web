@@ -4,6 +4,7 @@ import { combine, createEvent, createStore, restore, sample } from 'effector';
 import { controls } from '../common';
 import {
   LoadFeatureRelationsQuery,
+  completeTestRunQuery,
   loadFeatureQuery,
   loadTestResultHistoryQuery,
   loadTestResultsQuery,
@@ -64,6 +65,8 @@ export const $featureRelationsIsPending = loadFeatureRelationsFx.pending;
 export const updateTestResult = createEvent<UpdateTestResult>();
 const updateTestResultFx = createSpecBoxEffect(updateTestResultQuery);
 
+export const completeTestRunFx = createSpecBoxEffect(completeTestRunQuery);
+ 
 export const loadTestResultHistoryFx = createSpecBoxEffect(
   loadTestResultHistoryQuery
 );
@@ -186,4 +189,17 @@ sample({
 sample({
   clock: loadFeatureFx.doneData,
   target: $projectFeature,
+});
+
+sample({
+  clock: completeTestRunFx.doneData,
+  target: $testRun,
+});
+
+sample({
+  clock: completeTestRunFx.doneData,
+  fn: ({testRun: { id }}) => ({
+    testRunId: id,
+  }),
+  target: loadTestRunResultsFx,
 });

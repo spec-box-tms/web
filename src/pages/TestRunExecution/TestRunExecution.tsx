@@ -1,18 +1,22 @@
 import { InfiniteLoader } from '@/components/InfiniteLoader/InfiniteLoader';
 import { ProjectLayout } from '@/components/ProjectLayout/ProjectLayout';
 import { ProjectTree } from '@/components/ProjectTree/ProejctTree';
+import { QuestionDialog } from '@/components/QuestionDialog/QuestionDialog';
 import { TestRunExecutionCard } from '@/components/TestRunExecutionCard/TestRunExecutionCard';
 import { TestRunProgress } from '@/components/TestRunProgress/TestRunProgress';
 import { TestRunStateIcon } from '@/components/TestRunStateIcon/TestRunStateIcon';
 import { formatDate } from '@/helpers/formatDate';
+import { useTitle } from '@/hooks/useTitle';
 import * as projectModel from '@/model/pages/project';
 import * as model from '@/model/pages/testRunExecution';
 import { Feature, TestResult } from '@/types';
 import { cn } from '@bem-react/classname';
+import { Check } from '@gravity-ui/icons';
+import { Button, Icon } from '@gravity-ui/uikit';
 import { useEvent, useStore } from 'effector-react/scope';
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useState } from 'react';
 import './TestRunExecution.css';
-import { useTitle } from '@/hooks/useTitle';
+import { TestRunExecutionContext } from '@/components/TestRunExecutionContext/TestRunExecutionContext';
 
 const bem = cn('TestRunExecution');
 
@@ -57,17 +61,38 @@ export const TestRunExecution: FC = () => {
   const feature = useStore(model.$feature);
   const isFeatureLoading = useStore(model.$featureIsLoading);
 
+  const [confirmCompleteOpen, setConfirmCompleteOpen] = useState(false);
+  const completeTestRun = useEvent(model.completeTestRunFx);
+
+  const handleCompleteOpenDialog = useCallback(() => {
+    setConfirmCompleteOpen(true);
+  }, [setConfirmCompleteOpen]);
+
+  const handleAcceptComplete = useCallback(() => {
+    setConfirmCompleteOpen(false);
+    completeTestRun({ testRunId: testRun.id });
+  }, [setConfirmCompleteOpen, completeTestRun, testRun]);
+
   const onFeatureSelected = useCallback((feature: string) => {
     loadFeature({ feature });
-    console.log('onFeatureSelected', feature);
   }, [loadFeature]);
 
   const onTreeSelecetd = useCallback((tree: string) => {
     loadTree({ tree });
-    console.log('onTreeSelecetd', tree);
   }, [loadTree]);
 
   useTitle(isLoading ? 'Тестирование' : `${project.title} - ${testRun.title} - Тестирование`);
+
+  const actions = testRun.completedAt === undefined ?
+    <div className={bem('Actions')}>
+      <Button
+        view="action"
+        onClick={handleCompleteOpenDialog}
+      >
+        <Icon size={24} data={Check} />
+        Завершить
+      </Button>
+    </div> : null;
 
   return <ProjectLayout project={project.code}
     contentClassName={bem()}
@@ -75,37 +100,47 @@ export const TestRunExecution: FC = () => {
     projectTitle={project.title}
     isLoading={isLoading}
   >
-    <div className={bem('ListPanel')}>
-      <div className={bem('Header')}>
-        <TestRunStateIcon size={24} testRun={testRun} />
-        <div className={bem('Title')}>
-          <div>
-            {testRun.title}
-          </div>
-          <div className={bem('Subtitle')}>
-            {formatDate(testRun.createdAt)}
-            {testRun.completedAt && ' - ' + formatDate(testRun.completedAt)}
+    <TestRunExecutionContext.Provider value={{ testRun, testResults }}>
+      <div className={bem('ListPanel')}>
+        <div className={bem('Header')}>
+          <TestRunStateIcon size={24} testRun={testRun} />
+          <div className={bem('Title')}>
+            <div>
+              {testRun.title}
+            </div>
+            <div className={bem('Subtitle')}>
+              {formatDate(testRun.createdAt)}
+              {testRun.completedAt && ' - ' + formatDate(testRun.completedAt)}
+            </div>
           </div>
         </div>
+        {actions}
+        <TestRunProgress testResults={testResults || []} isPending={isTestResultsLoading} />
+        <ProjectTree
+          isPending={isTreesLoading}
+          isPendingStructure={isStructureLoading}
+          onFeatureSelected={onFeatureSelected}
+          onTreeSelected={onTreeSelecetd}
+          selectedTree={selectedTree}
+          selectedFeatureCode={selectedFeatureCode}
+          tree={tree}
+        />
       </div>
-      <TestRunProgress testResults={testResults || []} isPending={isTestResultsLoading} />
-      <ProjectTree
-        isPending={isTreesLoading}
-        isPendingStructure={isStructureLoading}
-        onFeatureSelected={onFeatureSelected}
-        onTreeSelected={onTreeSelecetd}
-        selectedTree={selectedTree}
-        selectedFeatureCode={selectedFeatureCode}
-        tree={tree}
+      <div className={bem('DetailsPanel')}>
+        <Details
+          feature={feature}
+          isPending={isTestResultsLoading || isFeatureLoading}
+          testResults={testResults || []}
+          repositoryUrl={project.repositoryUrl}
+        />
+      </div>
+      <QuestionDialog
+        onAccept={handleAcceptComplete}
+        onCancel={() => setConfirmCompleteOpen(false)}
+        open={confirmCompleteOpen}
+        title="Завершение тестового запуска"
+        content="Вы уверены, что хотите завершить тестовый запуск?"
       />
-    </div>
-    <div className={bem('DetailsPanel')}>
-      <Details
-        feature={feature}
-        isPending={isTestResultsLoading || isFeatureLoading}
-        testResults={testResults || []}
-        repositoryUrl={project.repositoryUrl}
-      />
-    </div>
+    </TestRunExecutionContext.Provider>
   </ProjectLayout>;
 };

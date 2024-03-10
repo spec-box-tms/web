@@ -28,6 +28,8 @@ import {
   ListTestRunsResponse,
   GetTestRunOptionalParams,
   GetTestRunResponse,
+  CompleteTestRunOptionalParams,
+  CompleteTestRunResponse,
   ListTestResultsOptionalParams,
   ListTestResultsResponse,
   GetTestResultOptionalParams,
@@ -250,6 +252,21 @@ export class SpecBoxWebApi extends coreClient.ServiceClient {
     return this.sendOperationRequest(
       { testRunId, options },
       getTestRunOperationSpec,
+    );
+  }
+
+  /**
+   * Completes a specific test run by ID. All test result in NEW status will be marked as SKIPPED.
+   * @param testRunId Test run ID
+   * @param options The options parameters.
+   */
+  completeTestRun(
+    testRunId: string,
+    options?: CompleteTestRunOptionalParams,
+  ): Promise<CompleteTestRunResponse> {
+    return this.sendOperationRequest(
+      { testRunId, options },
+      completeTestRunOperationSpec,
     );
   }
 
@@ -528,6 +545,21 @@ const listTestRunsOperationSpec: coreClient.OperationSpec = {
 const getTestRunOperationSpec: coreClient.OperationSpec = {
   path: '/tests/testruns/{testRunId}',
   httpMethod: 'GET',
+  responses: {
+    200: {
+      bodyMapper: Mappers.SpecBoxWebApiModelTestRunDetailsModel,
+    },
+    404: {
+      bodyMapper: Mappers.MicrosoftAspNetCoreMvcProblemDetails,
+    },
+  },
+  urlParameters: [Parameters.$host, Parameters.testRunId],
+  headerParameters: [Parameters.accept],
+  serializer,
+};
+const completeTestRunOperationSpec: coreClient.OperationSpec = {
+  path: '/tests/testruns/{testRunId}/complete',
+  httpMethod: 'POST',
   responses: {
     200: {
       bodyMapper: Mappers.SpecBoxWebApiModelTestRunDetailsModel,

@@ -17,6 +17,7 @@ import {
   mapStructure,
   mapTestResult,
   mapTestResultHistory,
+  mapTestRunDetails,
   mapTree,
 } from '@/mappers';
 
@@ -201,6 +202,22 @@ export async function LoadFeatureRelationsQuery(
   try {
     const response = await deps.api.getFeatureRelations(project, { version });
     return mapFeatureRelations(response);
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+}
+
+interface CompleteTestRunParams {
+  testRunId: string;
+}
+export async function completeTestRunQuery(
+  { testRunId }: CompleteTestRunParams,
+  deps: StoreDependencies
+): Promise<TestRunDetails> {
+  try {
+    const response = await deps.api.completeTestRun(testRunId);
+    return mapTestRunDetails(response);
   } catch (e) {
     console.error(e);
     throw e;

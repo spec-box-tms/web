@@ -5,10 +5,11 @@ import { Assertion as AssertionData, TestResult, UpdateTestResult } from '@/type
 import { FaceRobot, Hand } from '@gravity-ui/icons';
 import { Icon, Tooltip } from '@gravity-ui/uikit';
 import { useEvent } from 'effector-react/scope';
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useContext } from 'react';
 import { bem } from '../TestRunExecutionCard.cn';
 import { Actions } from './Actions';
 import './Assertion.css';
+import { TestRunExecutionContext } from '@/components/TestRunExecutionContext/TestRunExecutionContext';
 
 interface AssertionProps {
   assertion: AssertionData;
@@ -16,6 +17,9 @@ interface AssertionProps {
 }
 export const Assertion: FC<AssertionProps> = (props) => {
   const { assertion, testResult } = props;
+  const testRunExecutionContext = useContext(TestRunExecutionContext);
+
+  const readonly = !testRunExecutionContext || testRunExecutionContext.testRun.completedAt !== undefined;
 
   const updateTestResult = useEvent(model.updateTestResult);
 
@@ -37,7 +41,16 @@ export const Assertion: FC<AssertionProps> = (props) => {
       <Icon data={Hand} />
     </Tooltip>;
 
-  const actions = testResult ? <Actions testResult={testResult} onTestResultChange={handleTestResultChange} /> : null;
+  const readonlyReport = readonly && testResult && testResult.report ?
+    <div className={bem('Report')}>
+      <div className={bem('ReportTitle')}>
+        Отчет о тестировании:
+      </div>
+      <FormattedText text={testResult.report} />
+    </div>
+    : null;
+
+  const actions = testResult && !readonly ? <Actions testResult={testResult} onTestResultChange={handleTestResultChange} /> : null;
 
   return (
     <div className={bem('Assertion')}>
@@ -49,6 +62,7 @@ export const Assertion: FC<AssertionProps> = (props) => {
         <FormattedText text={assertion.title} />
         {descrition}
         {actions}
+        {readonlyReport}
       </div>
     </div>
   );

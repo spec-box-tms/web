@@ -1,0 +1,14 @@
+.QuestionDialog {
+  margin: var(--g-spacing-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--g-spacing-2);
+}
+
+.QuestionDialog-Actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: var(--g-spacing-4);
+  gap: var(--g-spacing-2);
+}
