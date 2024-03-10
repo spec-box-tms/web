@@ -6,6 +6,7 @@ import {
   DefaultOptionalParams,
   DefaultResponse,
   ExportOptionalParams,
+  ExportResponse,
   ListProjectsOptionalParams,
   ListProjectsResponse,
   GetFeatureOptionalParams,
@@ -86,10 +87,15 @@ export class SpecBoxWebApi extends coreClient.ServiceClient {
   }
 
   /**
-   * @param project
+   * Uploads project data. If project with the same code and version exists, it will be updated.
+   * If project has test runs, it can't be updated.
+   * @param project The project code
    * @param options The options parameters.
    */
-  export(project: string, options?: ExportOptionalParams): Promise<void> {
+  export(
+    project: string,
+    options?: ExportOptionalParams,
+  ): Promise<ExportResponse> {
     return this.sendOperationRequest({ project, options }, exportOperationSpec);
   }
 
@@ -333,11 +339,16 @@ const defaultOperationSpec: coreClient.OperationSpec = {
 const exportOperationSpec: coreClient.OperationSpec = {
   path: '/export/upload/{project}',
   httpMethod: 'POST',
-  responses: { 200: {} },
+  responses: {
+    200: {},
+    400: {
+      bodyMapper: Mappers.MicrosoftAspNetCoreMvcProblemDetails,
+    },
+  },
   requestBody: Parameters.body,
   queryParameters: [Parameters.version],
   urlParameters: [Parameters.$host, Parameters.project],
-  headerParameters: [Parameters.contentType],
+  headerParameters: [Parameters.accept, Parameters.contentType],
   mediaType: 'json',
   serializer,
 };

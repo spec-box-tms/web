@@ -6,8 +6,8 @@ import {
 import {
   SpecBoxWebApiModelUploadData as SpecBoxWebApiModelUploadDataMapper,
   SpecBoxWebApiModelStatAutotestsStatUploadData as SpecBoxWebApiModelStatAutotestsStatUploadDataMapper,
-  SpecBoxWebApiModelTestRunCreateTestRun as SpecBoxWebApiModelTestRunCreateTestRunMapper,
-  SpecBoxWebApiModelTestRunUpdateTestResult as SpecBoxWebApiModelTestRunUpdateTestResultMapper,
+  SpecBoxWebApiModelTestRunCreateTestRunModel as SpecBoxWebApiModelTestRunCreateTestRunModelMapper,
+  SpecBoxWebApiModelTestRunUpdateTestResultModel as SpecBoxWebApiModelTestRunUpdateTestResultModelMapper,
 } from '../models/mappers';
 
 export const accept: OperationParameter = {
@@ -131,7 +131,7 @@ export const to: OperationQueryParameter = {
 
 export const body2: OperationParameter = {
   parameterPath: ['options', 'body'],
-  mapper: SpecBoxWebApiModelTestRunCreateTestRunMapper,
+  mapper: SpecBoxWebApiModelTestRunCreateTestRunModelMapper,
 };
 
 export const testRunId: OperationURLParameter = {
@@ -158,5 +158,5 @@ export const testResultId: OperationURLParameter = {
 
 export const body3: OperationParameter = {
   parameterPath: ['options', 'body'],
-  mapper: SpecBoxWebApiModelTestRunUpdateTestResultMapper,
+  mapper: SpecBoxWebApiModelTestRunUpdateTestResultModelMapper,
 };

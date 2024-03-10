@@ -55,6 +55,16 @@ export interface SpecBoxWebApiModelUploadProjectModel {
   repositoryUrl?: string;
 }
 
+export interface MicrosoftAspNetCoreMvcProblemDetails {
+  /** Describes unknown properties. The value of an unknown property can be of "any" type. */
+  [property: string]: any;
+  type?: string;
+  title?: string;
+  status?: number;
+  detail?: string;
+  instance?: string;
+}
+
 export interface SpecBoxWebApiModelCommonProjectModel {
   code: string;
   title: string;
@@ -89,16 +99,6 @@ export interface SpecBoxWebApiModelProjectAssertionModel {
   description?: string;
   order: number;
   isAutomated: boolean;
-}
-
-export interface MicrosoftAspNetCoreMvcProblemDetails {
-  /** Describes unknown properties. The value of an unknown property can be of "any" type. */
-  [property: string]: any;
-  type?: string;
-  title?: string;
-  status?: number;
-  detail?: string;
-  instance?: string;
 }
 
 export interface SpecBoxWebApiModelProjectStructureModel {
@@ -170,14 +170,17 @@ export interface SpecBoxWebApiModelStatAutotestsStatModel {
   assertionsCount: number;
 }
 
-export interface SpecBoxWebApiModelTestRunCreateTestRun {
+export interface SpecBoxWebApiModelTestRunCreateTestRunModel {
   title: string;
   description?: string;
+  environment?: string;
+  configuration?: string;
 }
 
 export interface SpecBoxWebApiModelTestRunProjectTestRunsModel {
   project: SpecBoxWebApiModelCommonProjectVersionModel;
   testRuns: SpecBoxWebApiModelTestRunModel[];
+  configurations: SpecBoxWebApiModelTestRunConfigurationsModel;
 }
 
 export interface SpecBoxWebApiModelTestRunModel {
@@ -189,6 +192,19 @@ export interface SpecBoxWebApiModelTestRunModel {
   createdAt: Date;
   startedAt?: Date;
   completedAt?: Date;
+  totalCount: number;
+  passedCount: number;
+  failedCount: number;
+  blockedCount: number;
+  invalidCount: number;
+  skippedCount: number;
+  environment?: string;
+  configuration?: string;
+}
+
+export interface SpecBoxWebApiModelTestRunConfigurationsModel {
+  configurations: string[];
+  environments: string[];
 }
 
 export interface SpecBoxWebApiModelTestRunDetailsModel {
@@ -210,7 +226,7 @@ export interface SpecBoxWebApiModelTestRunTestResultModel {
   featureTitle: string;
 }
 
-export interface SpecBoxWebApiModelTestRunUpdateTestResult {
+export interface SpecBoxWebApiModelTestRunUpdateTestResultModel {
   status: string;
   report?: string;
   updatedAt?: Date;
@@ -234,9 +250,14 @@ export type DefaultResponse = SpecBoxWebApiModelDefaultConfigurationModel;
 
 /** Optional parameters. */
 export interface ExportOptionalParams extends coreClient.OperationOptions {
+  /** Data to be upladed */
   body?: SpecBoxWebApiModelUploadData;
+  /** Optional project version */
   version?: string;
 }
+
+/** Contains response data for the export operation. */
+export type ExportResponse = MicrosoftAspNetCoreMvcProblemDetails;
 
 /** Optional parameters. */
 export interface ListProjectsOptionalParams
@@ -298,6 +319,7 @@ export type GetFeatureRelationsResponse =
 /** Optional parameters. */
 export interface AutotestsStatUploadOptionalParams
   extends coreClient.OperationOptions {
+  /** Optional project version */
   version?: string;
   body?: SpecBoxWebApiModelStatAutotestsStatUploadData;
   project?: string;
@@ -306,6 +328,7 @@ export interface AutotestsStatUploadOptionalParams
 /** Optional parameters. */
 export interface GetAutotestsStatOptionalParams
   extends coreClient.OperationOptions {
+  /** Optional project version */
   version?: string;
   project?: string;
   from?: Date;
@@ -321,7 +344,7 @@ export interface CreateTestRunOptionalParams
   /** The project version. Default version if not provided. */
   version?: string;
   /** The object containing the test run data. */
-  body?: SpecBoxWebApiModelTestRunCreateTestRun;
+  body?: SpecBoxWebApiModelTestRunCreateTestRunModel;
 }
 
 /** Contains response data for the createTestRun operation. */
@@ -363,7 +386,7 @@ export type GetTestResultResponse = SpecBoxWebApiModelTestRunTestResultModel;
 export interface UpdateTestResultOptionalParams
   extends coreClient.OperationOptions {
   /** The data to update the test result with. */
-  body?: SpecBoxWebApiModelTestRunUpdateTestResult;
+  body?: SpecBoxWebApiModelTestRunUpdateTestResultModel;
 }
 
 /** Contains response data for the updateTestResult operation. */

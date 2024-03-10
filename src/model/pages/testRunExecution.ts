@@ -11,11 +11,28 @@ import {
   updateTestResultQuery,
 } from '../queries';
 import { createSpecBoxEffect } from '../scope';
-import { loadFeature, loadStructureFx, loadTree, loadTreesFx, $feature as $projectFeature } from './project';
+import {
+  loadFeature,
+  loadStructureFx,
+  loadTree,
+  loadTreesFx,
+  $feature as $projectFeature,
+} from './project';
 
 const STUB: TestRunDetails = {
   project: { code: '', title: '', version: '' },
-  testRun: { id: '', title: '', projectCode: '', createdAt: new Date() },
+  testRun: {
+    id: '',
+    title: '',
+    projectCode: '',
+    createdAt: new Date(),
+    totalCount: 0,
+    passedCount: 0,
+    failedCount: 0,
+    blockedCount: 0,
+    invalidCount: 0,
+    skippedCount: 0,
+  },
 };
 
 export const testRunExecutionRoute = createRoute<{
@@ -35,14 +52,21 @@ export const loadFeatureFx = createSpecBoxEffect(loadFeatureQuery);
 export const $feature = restore(loadFeatureFx.doneData, null);
 export const $featureIsLoading = loadFeatureFx.pending;
 
-export const loadFeatureRelationsFx = createSpecBoxEffect(LoadFeatureRelationsQuery);
-export const $featureRelations = restore<FeatureRelations>(loadFeatureRelationsFx.doneData, { nodes: [], edges: [] });
+export const loadFeatureRelationsFx = createSpecBoxEffect(
+  LoadFeatureRelationsQuery
+);
+export const $featureRelations = restore<FeatureRelations>(
+  loadFeatureRelationsFx.doneData,
+  { nodes: [], edges: [] }
+);
 export const $featureRelationsIsPending = loadFeatureRelationsFx.pending;
 
 export const updateTestResult = createEvent<UpdateTestResult>();
 const updateTestResultFx = createSpecBoxEffect(updateTestResultQuery);
 
-export const loadTestResultHistoryFx = createSpecBoxEffect(loadTestResultHistoryQuery);
+export const loadTestResultHistoryFx = createSpecBoxEffect(
+  loadTestResultHistoryQuery
+);
 
 export const $tree = createStore<string | null>(null).on(
   [testRunExecutionRoute.opened, testRunExecutionRoute.updated],
@@ -84,7 +108,8 @@ sample({
     feature: $featureCode,
     testRun: $testRun,
   }),
-  filter: ({ testRun, feature }) => Boolean(testRun.project.code) && Boolean(feature),
+  filter: ({ testRun, feature }) =>
+    Boolean(testRun.project.code) && Boolean(feature),
   fn: ({
     feature,
     testRun: {
@@ -138,7 +163,7 @@ sample({
   fn: (testRun, updateTestResult) => ({
     testRunId: testRun.testRun.id,
     ...updateTestResult,
-  }), 
+  }),
   target: updateTestResultFx,
 });
 

@@ -351,6 +351,52 @@ export const SpecBoxWebApiModelUploadProjectModel: coreClient.CompositeMapper =
     },
   };
 
+export const MicrosoftAspNetCoreMvcProblemDetails: coreClient.CompositeMapper =
+  {
+    type: {
+      name: 'Composite',
+      className: 'MicrosoftAspNetCoreMvcProblemDetails',
+      additionalProperties: { type: { name: 'Object' } },
+      modelProperties: {
+        type: {
+          serializedName: 'type',
+          nullable: true,
+          type: {
+            name: 'String',
+          },
+        },
+        title: {
+          serializedName: 'title',
+          nullable: true,
+          type: {
+            name: 'String',
+          },
+        },
+        status: {
+          serializedName: 'status',
+          nullable: true,
+          type: {
+            name: 'Number',
+          },
+        },
+        detail: {
+          serializedName: 'detail',
+          nullable: true,
+          type: {
+            name: 'String',
+          },
+        },
+        instance: {
+          serializedName: 'instance',
+          nullable: true,
+          type: {
+            name: 'String',
+          },
+        },
+      },
+    },
+  };
+
 export const SpecBoxWebApiModelCommonProjectModel: coreClient.CompositeMapper =
   {
     type: {
@@ -566,52 +612,6 @@ export const SpecBoxWebApiModelProjectAssertionModel: coreClient.CompositeMapper
           required: true,
           type: {
             name: 'Boolean',
-          },
-        },
-      },
-    },
-  };
-
-export const MicrosoftAspNetCoreMvcProblemDetails: coreClient.CompositeMapper =
-  {
-    type: {
-      name: 'Composite',
-      className: 'MicrosoftAspNetCoreMvcProblemDetails',
-      additionalProperties: { type: { name: 'Object' } },
-      modelProperties: {
-        type: {
-          serializedName: 'type',
-          nullable: true,
-          type: {
-            name: 'String',
-          },
-        },
-        title: {
-          serializedName: 'title',
-          nullable: true,
-          type: {
-            name: 'String',
-          },
-        },
-        status: {
-          serializedName: 'status',
-          nullable: true,
-          type: {
-            name: 'Number',
-          },
-        },
-        detail: {
-          serializedName: 'detail',
-          nullable: true,
-          type: {
-            name: 'String',
-          },
-        },
-        instance: {
-          serializedName: 'instance',
-          nullable: true,
-          type: {
-            name: 'String',
           },
         },
       },
@@ -1032,11 +1032,11 @@ export const SpecBoxWebApiModelStatAutotestsStatModel: coreClient.CompositeMappe
     },
   };
 
-export const SpecBoxWebApiModelTestRunCreateTestRun: coreClient.CompositeMapper =
+export const SpecBoxWebApiModelTestRunCreateTestRunModel: coreClient.CompositeMapper =
   {
     type: {
       name: 'Composite',
-      className: 'SpecBoxWebApiModelTestRunCreateTestRun',
+      className: 'SpecBoxWebApiModelTestRunCreateTestRunModel',
       modelProperties: {
         title: {
           constraints: {
@@ -1050,6 +1050,20 @@ export const SpecBoxWebApiModelTestRunCreateTestRun: coreClient.CompositeMapper 
         },
         description: {
           serializedName: 'description',
+          nullable: true,
+          type: {
+            name: 'String',
+          },
+        },
+        environment: {
+          serializedName: 'environment',
+          nullable: true,
+          type: {
+            name: 'String',
+          },
+        },
+        configuration: {
+          serializedName: 'configuration',
           nullable: true,
           type: {
             name: 'String',
@@ -1083,6 +1097,13 @@ export const SpecBoxWebApiModelTestRunProjectTestRunsModel: coreClient.Composite
                 className: 'SpecBoxWebApiModelTestRunModel',
               },
             },
+          },
+        },
+        configurations: {
+          serializedName: 'configurations',
+          type: {
+            name: 'Composite',
+            className: 'SpecBoxWebApiModelTestRunConfigurationsModel',
           },
         },
       },
@@ -1156,9 +1177,99 @@ export const SpecBoxWebApiModelTestRunModel: coreClient.CompositeMapper = {
           name: 'DateTime',
         },
       },
+      totalCount: {
+        serializedName: 'totalCount',
+        required: true,
+        type: {
+          name: 'Number',
+        },
+      },
+      passedCount: {
+        serializedName: 'passedCount',
+        required: true,
+        type: {
+          name: 'Number',
+        },
+      },
+      failedCount: {
+        serializedName: 'failedCount',
+        required: true,
+        type: {
+          name: 'Number',
+        },
+      },
+      blockedCount: {
+        serializedName: 'blockedCount',
+        required: true,
+        type: {
+          name: 'Number',
+        },
+      },
+      invalidCount: {
+        serializedName: 'invalidCount',
+        required: true,
+        type: {
+          name: 'Number',
+        },
+      },
+      skippedCount: {
+        serializedName: 'skippedCount',
+        required: true,
+        type: {
+          name: 'Number',
+        },
+      },
+      environment: {
+        serializedName: 'environment',
+        nullable: true,
+        type: {
+          name: 'String',
+        },
+      },
+      configuration: {
+        serializedName: 'configuration',
+        nullable: true,
+        type: {
+          name: 'String',
+        },
+      },
     },
   },
 };
+
+export const SpecBoxWebApiModelTestRunConfigurationsModel: coreClient.CompositeMapper =
+  {
+    type: {
+      name: 'Composite',
+      className: 'SpecBoxWebApiModelTestRunConfigurationsModel',
+      modelProperties: {
+        configurations: {
+          serializedName: 'configurations',
+          required: true,
+          type: {
+            name: 'Sequence',
+            element: {
+              type: {
+                name: 'String',
+              },
+            },
+          },
+        },
+        environments: {
+          serializedName: 'environments',
+          required: true,
+          type: {
+            name: 'Sequence',
+            element: {
+              type: {
+                name: 'String',
+              },
+            },
+          },
+        },
+      },
+    },
+  };
 
 export const SpecBoxWebApiModelTestRunDetailsModel: coreClient.CompositeMapper =
   {
@@ -1286,11 +1397,11 @@ export const SpecBoxWebApiModelTestRunTestResultModel: coreClient.CompositeMappe
     },
   };
 
-export const SpecBoxWebApiModelTestRunUpdateTestResult: coreClient.CompositeMapper =
+export const SpecBoxWebApiModelTestRunUpdateTestResultModel: coreClient.CompositeMapper =
   {
     type: {
       name: 'Composite',
-      className: 'SpecBoxWebApiModelTestRunUpdateTestResult',
+      className: 'SpecBoxWebApiModelTestRunUpdateTestResultModel',
       modelProperties: {
         status: {
           constraints: {

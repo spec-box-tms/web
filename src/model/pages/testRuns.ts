@@ -12,6 +12,7 @@ import { createSpecBoxEffect } from '../scope';
 const STUB: ProjectTestRuns = {
   project: { code: '', title: '', version: '' },
   testRuns: [],
+  configurations: { configurations: [], environments: [] },
 };
 
 export const testRunsRoute = createRoute<{

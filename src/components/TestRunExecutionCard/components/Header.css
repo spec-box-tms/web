@@ -1,9 +1,9 @@
-.TestRunExecutionCard-Title {
+.TestRunExecutionCard-Header-Title {
   font: var(--sb-font-header-m);
   word-break: break-word;
   margin-top: var(--g-spacing-4);
 }
-.TestRunExecutionCard-Actions {
+.TestRunExecutionCard-Header-Actions {
   display: flex;
   flex-direction: row;
   gap: var(--g-spacing-2);

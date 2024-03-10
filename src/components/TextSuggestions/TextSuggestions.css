@@ -1,0 +1,11 @@
+.TextSuggestions {
+  padding: var(--g-spacing-2);
+}
+.TextSuggestions-Item {
+  padding: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.TextSuggestions-Item:hover {
+  background: var(--g-color-base-simple-hover);
+}

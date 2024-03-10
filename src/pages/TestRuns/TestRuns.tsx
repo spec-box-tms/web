@@ -20,10 +20,12 @@ interface TestRunsPanelProps {
   version?: string;
   testRuns: TestRun[];
   isLoading: boolean;
+  configurations: string[];
+  environments: string[];
 }
 
 export const TestRunsPanel: FC<TestRunsPanelProps> = (props) => {
-  const { testRuns, isLoading, project, version } = props;
+  const { testRuns, isLoading, project, version, configurations, environments } = props;
   const [open, setOpen] = useState(false);
   const createTestRun = useEvent(model.createTestRun);
 
@@ -47,20 +49,24 @@ export const TestRunsPanel: FC<TestRunsPanelProps> = (props) => {
     </Button>
     <TestRunsList testRuns={testRuns} />
     <Modal open={open} onClose={() => setOpen(false)}>
-      <CreateTestRunForm onCreateTestRun={handleCreateTestRun} />
+      <CreateTestRunForm
+        onCreateTestRun={handleCreateTestRun}
+        configurations={configurations}
+        environments={environments}
+      />
     </Modal>
   </>;
 };
 
 export const TestRuns: FC = () => {
-  const { project, testRuns } = useStore(model.$testRuns);
+  const { project, testRuns, configurations } = useStore(model.$testRuns);
   const isLoading = useStore(model.$testRunsIsLoading);
   const selectedTestRun = useStore(model.$selectedTestRun);
 
   useTitle(isLoading ? 'Тестовые прогоны' : `${project.title} - Тестовые прогоны`);
 
   const testRunDetails = selectedTestRun ?
-    <TestRunDetails/> :
+    <TestRunDetails /> :
     <div>ничего не выбрано</div>;
 
   return <ProjectLayout
@@ -70,7 +76,14 @@ export const TestRuns: FC = () => {
     projectTitle={project.title}
   >
     <div className={bem('ListPanel')}>
-      <TestRunsPanel testRuns={testRuns} isLoading={isLoading} project={project.code} version={project.version} />
+      <TestRunsPanel
+        testRuns={testRuns}
+        isLoading={isLoading}
+        project={project.code}
+        version={project.version}
+        configurations={configurations.configurations}
+        environments={configurations.environments}
+      />
     </div>
     <div className={bem('DetailsPanel')}>
       {testRunDetails}

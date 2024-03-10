@@ -32,14 +32,18 @@ export const Item: FC<ItemProps> = (props) => {
     formatInterval(testRun.completedAt.getTime() - testRun.createdAt.getTime()) :
     null;
 
+  const openTestRun = <RouteLink to={testRunExecutionRoute} params={{ project: context?.project || '', testrun: testRun.id }}>
+    <Icon size={32} data={ArrowRightToSquare} />
+  </RouteLink>;
+
   return (
     <ListItem
       className={bem('Item')}
       view="flat"
       isActive={selectedTestRun?.id === testRun.id}
       onPress={() => handleSelectTestRun(testRun)}
+      after={openTestRun}
     >
-      <div className={bem('ItemContent')}>
         <div className={bem('ItemText')}>
           <div className={bem('Title')}>
             <div className={bem('TitleText')}>
@@ -53,10 +57,6 @@ export const Item: FC<ItemProps> = (props) => {
             {duration && ` - Длительность: ${duration}`}
           </div>
         </div>
-        <RouteLink to={testRunExecutionRoute} params={{ project: context?.project || '', testrun: testRun.id }}>
-          <Icon size={32} data={ArrowRightToSquare} />
-        </RouteLink>
-      </div>
     </ListItem>
   );
 };

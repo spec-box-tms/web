@@ -95,19 +95,37 @@ export interface TestRun {
   description?: string;
   projectCode: string;
   version?: string;
+
   createdAt: Date;
   startedAt?: Date;
   completedAt?: Date;
+
+  totalCount: number;
+  passedCount: number;
+  failedCount: number;
+  blockedCount: number;
+  invalidCount: number;
+  skippedCount: number;
+
+  environment?: string;
+  configuration?: string;
 }
 
 export interface ProjectTestRuns {
   project: ProjectDetails;
   testRuns: TestRun[];
+  configurations: {
+    configurations: string[];
+    environments: string[];
+  }
 }
 
 export interface CreateTestRun {
   title: string;
   description?: string;
+
+  environment?: string;
+  configuration?: string;
 }
 
 export type TestResultStatus =
