@@ -178,6 +178,7 @@ export interface FeatureRelationNode {
   title: string;
   code: string;
   nodeType: FeatureRelationNodeTypes;
+  nodeRate: number;
   style?: Partial<NodeStyle>;
 }
 

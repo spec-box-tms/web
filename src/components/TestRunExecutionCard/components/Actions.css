@@ -22,6 +22,12 @@
   opacity: 1;
 }
 
+.TestRunExecutionCard-ReportTextArea {
+  display: flex;
+  flex-direction: column;
+  font: var(--sb-font-body-s);
+}
+
 .TestRunExecutionCard-ActionInfo {
   font: var(--sb-font-body-s);
   color: var(--g-color-text-secondary);

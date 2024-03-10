@@ -2,9 +2,10 @@ import { FeatureRelations } from '@/types';
 import { cn } from '@bem-react/classname';
 import { CodeFork } from '@gravity-ui/icons';
 import { Button, Icon, Modal } from '@gravity-ui/uikit';
-import { FC, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 import { FeatureGraph } from '../FeatureGraph/FeatureGraph';
 import './OpenGraphButton.css';
+import { TestRunExecutionContext } from '../TestRunExecutionContext/TestRunExecutionContext';
 
 const bem = cn('OpenGraphButton');
 
@@ -16,6 +17,8 @@ interface OpenGraphButtonProps {
 export const OpenGraphButton: FC<OpenGraphButtonProps> = (props) => {
   const { data, onFeatureSeleted } = props;
   const [isGraphOpen, setIsGraphOpen] = useState(false);
+  const testRunExecutionContext = useContext(TestRunExecutionContext);
+  const testResults = testRunExecutionContext?.testResults || undefined;
 
   const handleFeatureSelected = (feature: string) => {
     if (onFeatureSeleted) {
@@ -41,6 +44,7 @@ export const OpenGraphButton: FC<OpenGraphButtonProps> = (props) => {
         data={data}
         onClose={() => setIsGraphOpen(false)}
         onFeatureSelected={handleFeatureSelected}
+        testResults={testResults}
       />
     </Modal>
   </>;

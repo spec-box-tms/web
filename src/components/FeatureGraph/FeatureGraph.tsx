@@ -1,10 +1,11 @@
-import { FeatureRelations } from '@/types';
+import { FeatureRelations, TestResult } from '@/types';
 import Graphin, { Behaviors } from '@antv/graphin';
 import { cn } from '@bem-react/classname';
 import { Button, Select, Switch } from '@gravity-ui/uikit';
 import { FC, useEffect, useRef, useState } from 'react';
 import './FeatureGraph.css';
 import { SelectNodeBehaviour } from './SelectNodeBehaviour';
+import { testResultsToStyle } from '@/helpers/testResultToGraphinStyle';
 
 const bem = cn('FeatureGraph');
 
@@ -28,10 +29,11 @@ interface FeatureGraphProps {
   onClose?: () => void;
   onFeatureSelected?: (featureCode: string) => void;
   data: FeatureRelations;
+  testResults?: TestResult[];
 }
 
 export const FeatureGraph: FC<FeatureGraphProps> = (props) => {
-  const { onClose, onFeatureSelected, data } = props;
+  const { onClose, onFeatureSelected, data, testResults } = props;
   const [isLoaded, setIsLoaded] = useState(false);
 
   const [layout, setLayout] = useState('graphin-force');
@@ -39,14 +41,19 @@ export const FeatureGraph: FC<FeatureGraphProps> = (props) => {
 
   const graphContainerRef = useRef<HTMLDivElement>(null);
 
+  let nodes = data.nodes;
+  if (testResults) {
+    nodes = nodes.map(node => testResultsToStyle(node, testResults));
+  }
+
   const displayData = {
-    nodes: data.nodes,
+    nodes,
     edges: data.edges,
   };
 
   if (!showAttributes) {
-    displayData.nodes = data.nodes.filter(node => node.id.startsWith('feature:'));
-    displayData.edges = data.edges.filter(edge => edge.source.startsWith('feature:') && edge.target.startsWith('feature:'));
+    displayData.nodes = displayData.nodes.filter(node => node.id.startsWith('feature:'));
+    displayData.edges = displayData.edges.filter(edge => edge.source.startsWith('feature:') && edge.target.startsWith('feature:'));
   }
 
   useEffect(() => {
@@ -67,7 +74,7 @@ export const FeatureGraph: FC<FeatureGraphProps> = (props) => {
     <div className={bem('GraphContainer')} ref={graphContainerRef}>
       <Graphin data={displayData} layout={{ type: layout }}>
         {defaultBehaviours}
-        <SelectNodeBehaviour onNodeClick={onFeatureSelected}/>
+        <SelectNodeBehaviour onNodeClick={onFeatureSelected} />
       </Graphin>
     </div>
     <div className={bem('Controls')}>

@@ -81,7 +81,7 @@ export const Actions: FC<ActionsProps> = (props) => {
   }, [setEditTestResult, selectedStatus]);
 
   const report = editStatus !== 'NEW' ?
-    <div className={bem('Report')}>
+    <div className={bem('ReportTextArea')}>
       <TextArea minRows={1} maxRows={20} value={editTestResult.report} onChange={handleReportChange} />
     </div> : null;
   const duration = testResult.duration ? <span>Длительность: {formatInterval(testResult.duration)}</span> : null;

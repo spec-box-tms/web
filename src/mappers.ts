@@ -309,8 +309,10 @@ function mapGraphNode(
     code,
     title,
     nodeType: type as FeatureRelationNodeTypes,
+    nodeRate,
     style: {
       label: {
+        offset: [0, 12],
         value: `${code}\r\n${title} `,
       },
       keyshape: {
