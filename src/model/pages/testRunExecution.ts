@@ -5,6 +5,7 @@ import { controls } from '../common';
 import {
   LoadFeatureRelationsQuery,
   completeTestRunQuery,
+  deleteTestRunQuery,
   loadFeatureQuery,
   loadTestResultHistoryQuery,
   loadTestResultsQuery,
@@ -67,6 +68,9 @@ const updateTestResultFx = createSpecBoxEffect(updateTestResultQuery);
 
 export const completeTestRunFx = createSpecBoxEffect(completeTestRunQuery);
  
+export const deleteTestRunFx = createSpecBoxEffect(deleteTestRunQuery);
+export const $testRunDeleted = restore(deleteTestRunFx.done, null);
+
 export const loadTestResultHistoryFx = createSpecBoxEffect(
   loadTestResultHistoryQuery
 );

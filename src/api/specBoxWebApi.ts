@@ -28,6 +28,8 @@ import {
   ListTestRunsResponse,
   GetTestRunOptionalParams,
   GetTestRunResponse,
+  DeleteTestRunOptionalParams,
+  DeleteTestRunResponse,
   CompleteTestRunOptionalParams,
   CompleteTestRunResponse,
   ListTestResultsOptionalParams,
@@ -252,6 +254,21 @@ export class SpecBoxWebApi extends coreClient.ServiceClient {
     return this.sendOperationRequest(
       { testRunId, options },
       getTestRunOperationSpec,
+    );
+  }
+
+  /**
+   * Deletes a specific test run by ID.
+   * @param testRunId Test run ID
+   * @param options The options parameters.
+   */
+  deleteTestRun(
+    testRunId: string,
+    options?: DeleteTestRunOptionalParams,
+  ): Promise<DeleteTestRunResponse> {
+    return this.sendOperationRequest(
+      { testRunId, options },
+      deleteTestRunOperationSpec,
     );
   }
 
@@ -549,6 +566,19 @@ const getTestRunOperationSpec: coreClient.OperationSpec = {
     200: {
       bodyMapper: Mappers.SpecBoxWebApiModelTestRunDetailsModel,
     },
+    404: {
+      bodyMapper: Mappers.MicrosoftAspNetCoreMvcProblemDetails,
+    },
+  },
+  urlParameters: [Parameters.$host, Parameters.testRunId],
+  headerParameters: [Parameters.accept],
+  serializer,
+};
+const deleteTestRunOperationSpec: coreClient.OperationSpec = {
+  path: '/tests/testruns/{testRunId}',
+  httpMethod: 'DELETE',
+  responses: {
+    200: {},
     404: {
       bodyMapper: Mappers.MicrosoftAspNetCoreMvcProblemDetails,
     },

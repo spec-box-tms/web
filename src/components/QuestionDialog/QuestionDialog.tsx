@@ -7,19 +7,19 @@ const bem = cn('QuestionDialog');
 
 interface QuestionDialogProps {
   title: string;
-  content: ReactNode;
+  children?: ReactNode;
   onCancel: () => void;
   onAccept: () => void;
   open: boolean;
 }
 
 export const QuestionDialog: FC<QuestionDialogProps> = (props) => {
-  const { title, content, onCancel, onAccept, open } = props;
+  const { title, children, onCancel, onAccept, open } = props;
 
   return <Modal open={open}>
     <div className={bem()}>
       <h2>{title}</h2>
-      {content}
+      {children}
       <div className={bem('Actions')}>
         <Button view="normal" onClick={onCancel}>Отмена</Button>
         <Button view="action" onClick={onAccept}>Подтвердить</Button>

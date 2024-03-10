@@ -1,22 +1,18 @@
 import { InfiniteLoader } from '@/components/InfiniteLoader/InfiniteLoader';
 import { ProjectLayout } from '@/components/ProjectLayout/ProjectLayout';
 import { ProjectTree } from '@/components/ProjectTree/ProejctTree';
-import { QuestionDialog } from '@/components/QuestionDialog/QuestionDialog';
 import { TestRunExecutionCard } from '@/components/TestRunExecutionCard/TestRunExecutionCard';
+import { TestRunExecutionContext } from '@/components/TestRunExecutionContext/TestRunExecutionContext';
+import { TestRunExecutionHeader } from '@/components/TestRunExecutionHeader/TestRunExecutionHeader';
 import { TestRunProgress } from '@/components/TestRunProgress/TestRunProgress';
-import { TestRunStateIcon } from '@/components/TestRunStateIcon/TestRunStateIcon';
-import { formatDate } from '@/helpers/formatDate';
 import { useTitle } from '@/hooks/useTitle';
 import * as projectModel from '@/model/pages/project';
 import * as model from '@/model/pages/testRunExecution';
 import { Feature, TestResult } from '@/types';
 import { cn } from '@bem-react/classname';
-import { Check } from '@gravity-ui/icons';
-import { Button, Icon } from '@gravity-ui/uikit';
 import { useEvent, useStore } from 'effector-react/scope';
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback } from 'react';
 import './TestRunExecution.css';
-import { TestRunExecutionContext } from '@/components/TestRunExecutionContext/TestRunExecutionContext';
 
 const bem = cn('TestRunExecution');
 
@@ -61,18 +57,6 @@ export const TestRunExecution: FC = () => {
   const feature = useStore(model.$feature);
   const isFeatureLoading = useStore(model.$featureIsLoading);
 
-  const [confirmCompleteOpen, setConfirmCompleteOpen] = useState(false);
-  const completeTestRun = useEvent(model.completeTestRunFx);
-
-  const handleCompleteOpenDialog = useCallback(() => {
-    setConfirmCompleteOpen(true);
-  }, [setConfirmCompleteOpen]);
-
-  const handleAcceptComplete = useCallback(() => {
-    setConfirmCompleteOpen(false);
-    completeTestRun({ testRunId: testRun.id });
-  }, [setConfirmCompleteOpen, completeTestRun, testRun]);
-
   const onFeatureSelected = useCallback((feature: string) => {
     loadFeature({ feature });
   }, [loadFeature]);
@@ -83,17 +67,6 @@ export const TestRunExecution: FC = () => {
 
   useTitle(isLoading ? 'Тестирование' : `${project.title} - ${testRun.title} - Тестирование`);
 
-  const actions = testRun.completedAt === undefined ?
-    <div className={bem('Actions')}>
-      <Button
-        view="action"
-        onClick={handleCompleteOpenDialog}
-      >
-        <Icon size={24} data={Check} />
-        Завершить
-      </Button>
-    </div> : null;
-
   return <ProjectLayout project={project.code}
     contentClassName={bem()}
     version={project.version}
@@ -102,19 +75,7 @@ export const TestRunExecution: FC = () => {
   >
     <TestRunExecutionContext.Provider value={{ testRun, testResults }}>
       <div className={bem('ListPanel')}>
-        <div className={bem('Header')}>
-          <TestRunStateIcon size={24} testRun={testRun} />
-          <div className={bem('Title')}>
-            <div>
-              {testRun.title}
-            </div>
-            <div className={bem('Subtitle')}>
-              {formatDate(testRun.createdAt)}
-              {testRun.completedAt && ' - ' + formatDate(testRun.completedAt)}
-            </div>
-          </div>
-        </div>
-        {actions}
+        <TestRunExecutionHeader testRun={testRun} />
         <TestRunProgress testResults={testResults || []} isPending={isTestResultsLoading} />
         <ProjectTree
           isPending={isTreesLoading}
@@ -134,13 +95,6 @@ export const TestRunExecution: FC = () => {
           repositoryUrl={project.repositoryUrl}
         />
       </div>
-      <QuestionDialog
-        onAccept={handleAcceptComplete}
-        onCancel={() => setConfirmCompleteOpen(false)}
-        open={confirmCompleteOpen}
-        title="Завершение тестового запуска"
-        content="Вы уверены, что хотите завершить тестовый запуск?"
-      />
     </TestRunExecutionContext.Provider>
   </ProjectLayout>;
 };

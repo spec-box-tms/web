@@ -223,3 +223,18 @@ export async function completeTestRunQuery(
     throw e;
   }
 }
+
+interface DeleteTestRunParams {
+  testRunId: string;
+}
+export async function deleteTestRunQuery(
+  { testRunId }: DeleteTestRunParams,
+  deps: StoreDependencies
+): Promise<void> {
+  try {
+    await deps.api.deleteTestRun(testRunId);
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+}
