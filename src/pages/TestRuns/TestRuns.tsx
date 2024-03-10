@@ -47,7 +47,7 @@ export const TestRunsPanel: FC<TestRunsPanelProps> = (props) => {
     >
       Создать тестовый прогон
     </Button>
-    <TestRunsList testRuns={testRuns} />
+    <TestRunsList testRuns={testRuns}/>
     <Modal open={open} onClose={() => setOpen(false)}>
       <CreateTestRunForm
         onCreateTestRun={handleCreateTestRun}

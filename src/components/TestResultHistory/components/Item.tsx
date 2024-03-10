@@ -20,7 +20,6 @@ export const Item: FC<ItemProps> = (props) => {
   const infoButton = useRef<HTMLButtonElement>(null);
   const [isInfoOpen, setIsInfoOpen] = useState(false);
 
-
   const before = isActive ?
     <Tooltip content="Текущий тест">
       <Icon data={ArrowRightToLine} />

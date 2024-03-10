@@ -64,7 +64,7 @@ const TestResultFeatureBlock: FC<TestResultFeatureBlockProps> = (props) => {
     <div className={bem('FeatureHeader')}>
       <div className={bem('FeatureTitle')}>
         <div className={bem('Expander')} onClick={() => onExpanderClick(feature.featureCode)}>
-          <ArrowToggle direction={isExpanded ? 'bottom' : 'right'}></ArrowToggle>
+          <ArrowToggle direction={isExpanded ? 'bottom' : 'top'}></ArrowToggle>
         </div>
         {feature.featureTitle}
       </div>

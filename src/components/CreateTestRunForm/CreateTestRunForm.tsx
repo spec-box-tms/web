@@ -5,6 +5,7 @@ import { Button, Icon, TextArea, TextInput, Tooltip } from '@gravity-ui/uikit';
 import React, { FC, useCallback, useRef, useState } from 'react';
 import './CreateTestRunForm.css';
 import { TextSuggestions } from '../TextSuggestions/TextSuggestions';
+import { formatDate } from '@/helpers/formatDate';
 
 const bem = cn('CreateTestRunForm');
 
@@ -17,7 +18,7 @@ interface CreateTestRunFromProps {
 export const CreateTestRunForm: FC<CreateTestRunFromProps> = (props) => {
   const { onCreateTestRun, configurations, environments } = props;
   const [testRunData, setTestRunData] = useState<CreateTestRun>({
-    title: ''
+    title: formatDate(new Date()),
   });
 
   const environmentInputRef = useRef(null);

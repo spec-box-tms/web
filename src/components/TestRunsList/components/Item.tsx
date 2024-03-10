@@ -16,6 +16,7 @@ import { bem } from '../TestRunsList.cn';
 import './Item.css';
 
 import * as model from '@/model/pages/testRuns';
+import { TestRunProgress } from '@/components/TestRunProgress/TestRunProgress';
 
 interface ItemProps {
   testRun: TestRun;
@@ -36,6 +37,9 @@ export const Item: FC<ItemProps> = (props) => {
     <Icon size={32} data={ArrowRightToSquare} />
   </RouteLink>;
 
+  const environmentDescription = testRun.environment ? <div className={bem('Description')}>Окружение: - {testRun.environment}</div> : null;
+  const configurationDescription = testRun.configuration ? <div className={bem('Description')}>Конфигурация: - {testRun.configuration}</div> : null;
+
   return (
     <ListItem
       className={bem('Item')}
@@ -44,18 +48,21 @@ export const Item: FC<ItemProps> = (props) => {
       onPress={() => handleSelectTestRun(testRun)}
       after={openTestRun}
     >
-        <div className={bem('ItemText')}>
+        <div className={bem('ItemContent')}>
           <div className={bem('Title')}>
             <div className={bem('TitleText')}>
               <TestRunStateIcon testRun={testRun} />
               {testRun.title}
             </div>
-            <VersionLabel version={testRun.version} />
+            <VersionLabel version={testRun.version}/>
           </div>
+          <TestRunProgress size="s" testRun={testRun} />
           <div className={bem('Description')}>
             {formatDate(testRun.createdAt)}
             {duration && ` - Длительность: ${duration}`}
           </div>
+          {environmentDescription}
+          {configurationDescription}
         </div>
     </ListItem>
   );
