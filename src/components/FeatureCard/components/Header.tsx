@@ -9,6 +9,7 @@ import { Stat } from './Stat';
 
 import { OpenGraphButton } from '@/components/OpenGraphButton/OpenGraphButton';
 import * as model from '@/model/pages/project';
+import { CopyFeatureMarkdownButton } from '@/components/CopyFeatureMarkdownButton/CopyFeatureMarkdownButton';
 
 type HeaderProps = {
   feature: Feature;
@@ -35,7 +36,8 @@ export const Header: FC<HeaderProps> = (props) => {
         <div className={bem('Actions')}>
           <CopyFeatureCodeButton code={feature.code} />
           <GoToYamlButton filePath={feature.filePath} repositoryUrl={repositoryUrl} />
-          <OpenGraphButton data={featureRelations} onFeatureSeleted={handleGraphFeatureSelected} />
+          <CopyFeatureMarkdownButton feature={feature} />
+          <OpenGraphButton data={featureRelations} onFeatureSelected={handleGraphFeatureSelected} />
         </div>
       </div>
       <div className={bem('HeaderSidebar')}>

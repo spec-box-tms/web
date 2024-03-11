@@ -10,19 +10,19 @@ import { TestRunExecutionContext } from '../TestRunExecutionContext/TestRunExecu
 const bem = cn('OpenGraphButton');
 
 interface OpenGraphButtonProps {
-  onFeatureSeleted?: (feature: string) => void;
+  onFeatureSelected?: (feature: string) => void;
   data: FeatureRelations;
 }
 
 export const OpenGraphButton: FC<OpenGraphButtonProps> = (props) => {
-  const { data, onFeatureSeleted } = props;
+  const { data, onFeatureSelected } = props;
   const [isGraphOpen, setIsGraphOpen] = useState(false);
   const testRunExecutionContext = useContext(TestRunExecutionContext);
   const testResults = testRunExecutionContext?.testResults || undefined;
 
   const handleFeatureSelected = (feature: string) => {
-    if (onFeatureSeleted) {
-      onFeatureSeleted(feature);
+    if (onFeatureSelected) {
+      onFeatureSelected(feature);
       setIsGraphOpen(false);
     }
   };
