@@ -46,13 +46,13 @@ export const CreateTestRunForm: FC<CreateTestRunFromProps> = (props) => {
 
   return (
     <div className={bem()}>
-      <h2>Создание тестового прогона</h2>
+      <h2>Создание тестового запуска</h2>
       <form onSubmit={handleSubmit} className={bem('Form')}>
         <TextInput
           type="text"
           id="title"
           name="title"
-          placeholder="Название тестового прогона"
+          placeholder="Название тестового запуска"
           label="Название:"
           value={testRunData.title}
           onChange={({ target: { value } }) => handleChange({ title: value })}

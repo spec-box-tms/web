@@ -4,7 +4,7 @@ export const STATUS_ACTIONS: Record<TestResultStatus, string> = {
   NEW: 'Новый',
   PASSED: 'Пройден',
   FAILED: 'Провален',
-  BLOCKED: 'Залокирован',
+  BLOCKED: 'Заблокирован',
   INVALID: 'Некорректный',
   SKIPPED: 'Пропущен',
 };
@@ -14,7 +14,7 @@ export const STATUS_TITLE: Record<TestResultStatus, string> = {
   PASSED: 'Тест пройден успешно',
   FAILED: 'Тест провален',
   BLOCKED: 'Тест блокирован',
-  INVALID: 'Некоректный тест',
+  INVALID: 'Некорректный тест',
   SKIPPED: 'Тест пропущен',
 };
 

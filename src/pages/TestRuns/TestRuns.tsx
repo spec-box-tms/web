@@ -45,7 +45,7 @@ export const TestRunsPanel: FC<TestRunsPanelProps> = (props) => {
       className={bem('Button')}
       onClick={() => setOpen(true)}
     >
-      Создать тестовый прогон
+      Создать тестовый запуск
     </Button>
     <TestRunsList testRuns={testRuns}/>
     <Modal open={open} onClose={() => setOpen(false)}>
@@ -63,7 +63,7 @@ export const TestRuns: FC = () => {
   const isLoading = useStore(model.$testRunsIsLoading);
   const selectedTestRun = useStore(model.$selectedTestRun);
 
-  useTitle(isLoading ? 'Тестовые прогоны' : `${project.title} - Тестовые прогоны`);
+  useTitle(isLoading ? 'Тестовые запуски' : `${project.title} - Тестовые запуски`);
 
   const testRunDetails = selectedTestRun ?
     <TestRunDetails /> :

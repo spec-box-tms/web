@@ -12,7 +12,7 @@ export const TestRunsList: FC<TestRunsListProps> = (props) => {
   const { testRuns } = props;
 
   if (testRuns.length === 0) {
-    return <div>Нет тестовых прогонов</div>;
+    return <div>Нет тестовых запусков</div>;
   }
 
   const testRunsSorted = testRuns.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());

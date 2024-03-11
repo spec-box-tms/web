@@ -101,7 +101,7 @@ export const ProjectLayout: FC<ProjectLayoutProps> = (props) => {
             </div>
             <div className={bem('Navigation')}>
               <NavItem to={projectRoute} project={project} version={version} text="Проект" />
-              <NavItem to={testRunsRoute} project={project} version={version} text="Тестовые прогоны" />
+              <NavItem to={testRunsRoute} project={project} version={version} text="Тестовые запуски" />
               <NavItem to={statRoute} project={project} version={version} text="Статистика" />
             </div>
           </div>
