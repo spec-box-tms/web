@@ -38,3 +38,9 @@
 3. `npm start`
 
 Перед запуском нужно поправить [хост в конфиге](./vite.config.ts#L25) — укажите хост, на котором запущен [бэкенд](https://github.com/spec-box-tms/api).
+
+## Как запустить Docker
+
+```sh
+docker run -p 8080:80 snitkody/spec-box-tms-web:latest
+```
