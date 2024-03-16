@@ -24,3 +24,27 @@
     align-self: flex-end;
     margin-bottom: -30px;
 }
+
+.FormattedText table {
+    border-collapse: collapse;
+    margin: var(--g-spacing-1) 0;
+    background-color: var(--g-color-base-generic);
+}
+
+.FormattedText tbody {
+    border-collapse: collapse;
+    margin: var(--g-spacing-1) 0;
+    background-color: var(--g-color-base-background);
+}
+
+.FormattedText th, td {
+    padding: var(--g-spacing-2);
+    border: 1px solid var(--g-color-line-generic);
+}
+
+.FormattedText tr:hover {
+    transition: background-color 0.3s;
+}
+.FormattedText tr:hover {
+    background-color: var(--g-color-base-simple-hover);
+}
