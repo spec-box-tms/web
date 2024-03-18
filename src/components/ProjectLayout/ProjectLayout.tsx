@@ -1,6 +1,5 @@
 import * as model from '@/model/pages/project';
 import { cn } from '@bem-react/classname';
-import { Box } from '@gravity-ui/icons';
 import { Icon, PortalProvider, Skeleton } from '@gravity-ui/uikit';
 import { RouteInstance } from 'atomic-router';
 import { useStore } from 'effector-react/scope';
@@ -17,6 +16,7 @@ import { homeRoute, projectRoute, statRoute, testRunsRoute } from '@/model';
 import { InfiniteLoader } from '../InfiniteLoader/InfiniteLoader';
 import { VersionLabel } from '../VersionLabel/VersionLabel';
 import './ProjectLayout.css';
+import { Logo } from '../Logo/Logo';
 
 const bem = cn('ProjectLayout');
 
@@ -92,7 +92,7 @@ export const ProjectLayout: FC<ProjectLayoutProps> = (props) => {
                 size="l"
                 pin="circle-circle"
               >
-                <Icon size={24} data={Box} />
+                <Icon size={34} data={Logo} />
               </RouteLinkButton>
             </div>
             <div className={bem('Title')}>
