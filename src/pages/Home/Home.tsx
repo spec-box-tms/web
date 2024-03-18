@@ -33,7 +33,7 @@ export const Home: FC = () => {
   return (
     <div className={bem()}>
       <div className={bem('Banner')}>
-        <span>УФТ<span style={{opacity: 0.2}}>ы</span>!</span>
+        <span>Spec Box TMS</span>
         <div className={bem('Hint')}>
           Управление функциональными требованиями
         </div>
