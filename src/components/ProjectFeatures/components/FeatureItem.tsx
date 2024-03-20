@@ -1,5 +1,5 @@
 import { FC, ReactNode, useCallback } from 'react';
-import { ListUl } from '@gravity-ui/icons';
+import { FileText, ListUl } from '@gravity-ui/icons';
 import { ArrowToggle, Icon } from '@gravity-ui/uikit';
 import { useEvent, useStoreMap } from 'effector-react/scope';
 
@@ -72,9 +72,6 @@ interface FeatureItemProps {
   selectedCode?: string;
 }
 
-const featureIcon = (
-  <Icon className={bem('FeatureIcon')} size={16} data={ListUl} />
-);
 
 export const FeatureItem: FC<FeatureItemProps> = (props) => {
   const {
@@ -83,13 +80,19 @@ export const FeatureItem: FC<FeatureItemProps> = (props) => {
     selectedCode,
     level,
   } = props;
-
+  
   const onSelect = useCallback(
     () => onFeatureSelect(featureCode),
     [featureCode, onFeatureSelect]
-  );
+    );
+    
+    const icon = totalCount === 0 ? FileText : ListUl;
 
-  const stat = (
+    const featureIcon = (
+      <Icon className={bem('FeatureIcon')} size={16} data={icon} />
+    );
+
+    const stat = totalCount === 0 ? null : (
     <ItemStat totalCount={totalCount} automatedCount={automatedCount} />
   );
 
