@@ -48,3 +48,9 @@
 .FormattedText tr:hover {
     background-color: var(--g-color-base-simple-hover);
 }
+
+.FormattedText-CodeBlock.mermaid {
+    background-color: var(--g-color-base-background);
+    border-radius: var(--g-border-radius-m);
+    padding: var(--g-spacing-2);
+}
