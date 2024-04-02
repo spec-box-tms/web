@@ -11,6 +11,7 @@ import * as model from '@/model/pages/testRunExecution';
 import * as projectModel from '@/model/pages/project';
 import { cn } from '@bem-react/classname';
 import { CopyFeatureMarkdownButton } from '@/components/CopyFeatureMarkdownButton/CopyFeatureMarkdownButton';
+import { AttributeValue } from '@/components/AttributeValue/AttributeValue';
 
 const bem = cn(parentBem('Header'));
 
@@ -30,6 +31,9 @@ export const Header: FC<HeaderProps> = (props) => {
     selectFeature({ feature });
   };
 
+  const attributeValues = feature.attributes.map((attributeValue, index) => <AttributeValue key={index} attributeValue={attributeValue} />);
+
+
   return <div className={bem('Header')}>
     <TestRunProgress testResults={testResults} />
     <div className={bem('Title')}>
@@ -39,7 +43,10 @@ export const Header: FC<HeaderProps> = (props) => {
       <CopyFeatureCodeButton code={feature.code} />
       <GoToYamlButton filePath={feature.filePath} repositoryUrl={repositoryUrl} />
       <CopyFeatureMarkdownButton feature={feature} />
-      <OpenGraphButton data={featureRelations} onFeatureSelected={handleGraphFeatureSelected}/>
+      <OpenGraphButton data={featureRelations} onFeatureSelected={handleGraphFeatureSelected} />
+    </div>
+    <div className={bem('Actions')}>
+      {attributeValues}
     </div>
   </div>;
 };

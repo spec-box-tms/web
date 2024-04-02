@@ -532,6 +532,20 @@ export const SpecBoxWebApiModelProjectFeatureModel: coreClient.CompositeMapper =
             },
           },
         },
+        attributes: {
+          serializedName: 'attributes',
+          required: true,
+          readOnly: true,
+          type: {
+            name: 'Sequence',
+            element: {
+              type: {
+                name: 'Composite',
+                className: 'SpecBoxWebApiModelProjectAttributeValueModel',
+              },
+            },
+          },
+        },
       },
     },
   };
@@ -612,6 +626,67 @@ export const SpecBoxWebApiModelProjectAssertionModel: coreClient.CompositeMapper
           required: true,
           type: {
             name: 'Boolean',
+          },
+        },
+      },
+    },
+  };
+
+export const SpecBoxWebApiModelProjectAttributeValueModel: coreClient.CompositeMapper =
+  {
+    type: {
+      name: 'Composite',
+      className: 'SpecBoxWebApiModelProjectAttributeValueModel',
+      modelProperties: {
+        code: {
+          constraints: {
+            MinLength: 1,
+          },
+          serializedName: 'code',
+          required: true,
+          type: {
+            name: 'String',
+          },
+        },
+        title: {
+          serializedName: 'title',
+          nullable: true,
+          type: {
+            name: 'String',
+          },
+        },
+        attribute: {
+          serializedName: 'attribute',
+          type: {
+            name: 'Composite',
+            className: 'SpecBoxWebApiModelProjectAttributeModel',
+          },
+        },
+      },
+    },
+  };
+
+export const SpecBoxWebApiModelProjectAttributeModel: coreClient.CompositeMapper =
+  {
+    type: {
+      name: 'Composite',
+      className: 'SpecBoxWebApiModelProjectAttributeModel',
+      modelProperties: {
+        code: {
+          constraints: {
+            MinLength: 1,
+          },
+          serializedName: 'code',
+          required: true,
+          type: {
+            name: 'String',
+          },
+        },
+        title: {
+          serializedName: 'title',
+          nullable: true,
+          type: {
+            name: 'String',
           },
         },
       },

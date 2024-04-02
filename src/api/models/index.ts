@@ -85,6 +85,8 @@ export interface SpecBoxWebApiModelProjectFeatureModel {
   filePath?: string;
   /** NOTE: This property will not be serialized. It can only be populated by the server. */
   readonly assertionGroups: SpecBoxWebApiModelProjectAssertionGroupModel[];
+  /** NOTE: This property will not be serialized. It can only be populated by the server. */
+  readonly attributes: SpecBoxWebApiModelProjectAttributeValueModel[];
 }
 
 export interface SpecBoxWebApiModelProjectAssertionGroupModel {
@@ -99,6 +101,17 @@ export interface SpecBoxWebApiModelProjectAssertionModel {
   description?: string;
   order: number;
   isAutomated: boolean;
+}
+
+export interface SpecBoxWebApiModelProjectAttributeValueModel {
+  code: string;
+  title?: string;
+  attribute: SpecBoxWebApiModelProjectAttributeModel;
+}
+
+export interface SpecBoxWebApiModelProjectAttributeModel {
+  code: string;
+  title?: string;
 }
 
 export interface SpecBoxWebApiModelProjectStructureModel {

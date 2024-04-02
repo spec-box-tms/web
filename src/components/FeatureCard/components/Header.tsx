@@ -10,6 +10,7 @@ import { Stat } from './Stat';
 import { OpenGraphButton } from '@/components/OpenGraphButton/OpenGraphButton';
 import * as model from '@/model/pages/project';
 import { CopyFeatureMarkdownButton } from '@/components/CopyFeatureMarkdownButton/CopyFeatureMarkdownButton';
+import { AttributeValue } from '@/components/AttributeValue/AttributeValue';
 
 type HeaderProps = {
   feature: Feature;
@@ -19,13 +20,15 @@ type HeaderProps = {
 export const Header: FC<HeaderProps> = (props) => {
   const { feature, repositoryUrl } = props;
   const { total, automated } = feature.assertionsCount;
-  
+
   const featureRelations = useStore(model.$featureRelations);
   const selectFeature = useEvent(model.loadFeature);
 
   const handleGraphFeatureSelected = (feature: string) => {
     selectFeature({ feature });
   };
+
+  const attributeValues = feature.attributes.map((attributeValue, index) => <AttributeValue key={index} attributeValue={attributeValue} />);
 
   return (
     <div className={bem('Header')}>
@@ -38,6 +41,9 @@ export const Header: FC<HeaderProps> = (props) => {
           <GoToYamlButton filePath={feature.filePath} repositoryUrl={repositoryUrl} />
           <CopyFeatureMarkdownButton feature={feature} />
           <OpenGraphButton data={featureRelations} onFeatureSelected={handleGraphFeatureSelected} />
+        </div>
+        <div className={bem('Actions')}>
+          {attributeValues}
         </div>
       </div>
       <div className={bem('HeaderSidebar')}>

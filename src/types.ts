@@ -10,6 +10,18 @@ export interface Feature {
     total: number;
     automated: number;
   };
+  attributes: AttributeValue[];
+}
+
+export interface Attribute {
+  code: string;
+  title?: string;
+}
+
+export interface AttributeValue {
+  code: string;
+  title?: string;
+  attribute: Attribute;
 }
 
 export interface AssertionGroup {
@@ -117,7 +129,7 @@ export interface ProjectTestRuns {
   configurations: {
     configurations: string[];
     environments: string[];
-  }
+  };
 }
 
 export interface CreateTestRun {
