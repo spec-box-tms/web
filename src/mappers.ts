@@ -5,6 +5,8 @@ import {
   SpecBoxWebApiModelCommonProjectVersionModel,
   SpecBoxWebApiModelProjectAssertionGroupModel,
   SpecBoxWebApiModelProjectAssertionModel,
+  SpecBoxWebApiModelProjectAttributeModel,
+  SpecBoxWebApiModelProjectAttributeValueModel,
   SpecBoxWebApiModelProjectFeatureModel,
   SpecBoxWebApiModelProjectFeatureRelationsModel,
   SpecBoxWebApiModelProjectGraphEdgeModel,
@@ -20,6 +22,8 @@ import {
 import {
   Assertion,
   AssertionGroup,
+  Attribute,
+  AttributeValue,
   Feature,
   FeatureRelationEdge,
   FeatureRelationNode,
@@ -39,6 +43,20 @@ import {
   TreeNode,
 } from './types';
 
+const mapAttribute = (
+  input: SpecBoxWebApiModelProjectAttributeModel
+): Attribute => {
+  const { code, title } = input;
+  return { code, title };
+};
+
+const mapAttributeValue = (
+  input: SpecBoxWebApiModelProjectAttributeValueModel
+): AttributeValue => {
+  const { code, title, attribute } = input;
+  return { code, title, attribute: mapAttribute(attribute) };
+};
+
 export const mapFeature = (
   input: SpecBoxWebApiModelProjectFeatureModel
 ): Feature => {
@@ -48,6 +66,10 @@ export const mapFeature = (
   assertionGroups.sort((a, b) => a.order - b.order);
   const allAssertions = new Array<Assertion>().concat(
     ...assertionGroups.map((gr) => gr.assertions)
+  );
+  const attributes = input.attributes.map(mapAttributeValue);
+  attributes.sort(({ attribute: a }, { attribute: b }) =>
+    (a.title ?? a.code).localeCompare(b.title ?? b.code)
   );
 
   const total = allAssertions.length;
@@ -63,6 +85,7 @@ export const mapFeature = (
       total,
       automated,
     },
+    attributes,
   };
 };
 
