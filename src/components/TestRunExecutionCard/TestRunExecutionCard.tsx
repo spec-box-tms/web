@@ -15,20 +15,21 @@ interface TestRunExecutionDetailProps {
 export const TestRunExecutionCard: FC<TestRunExecutionDetailProps> = (props) => {
   const { feature, testResults, repositoyUrl } = props;
 
-  const filtredTestResults = testResults.filter((testResult) => testResult.featureCode === feature.code);
+  const featureTestResults = testResults.filter((testResult) => testResult.featureCode === feature.code);
 
   const description = feature.description ?
     <div>
       <FormattedText text={feature.description} />
     </div> : null;
 
-  const assertionGroups = feature.assertionGroups.map((group, index) =>
-    <AssertionGroup key={index} assertionGroup={group} testResults={filtredTestResults} />
-  );
+  const assertionGroups = feature.assertionGroups.map((group, index) => {
+    const groupTestResults = featureTestResults.filter(testResult => testResult.assertionGroupTitle === group.title);
+    return <AssertionGroup key={index} assertionGroup={group} testResults={groupTestResults} />;
+  });
 
 
   return <div className={bem()}>
-    <Header feature={feature} testResults={filtredTestResults} repositoryUrl={repositoyUrl} />
+    <Header feature={feature} testResults={featureTestResults} repositoryUrl={repositoyUrl} />
     {description}
     {assertionGroups}
   </div>;
