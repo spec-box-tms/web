@@ -11,3 +11,7 @@ body,
 .root {
   display: flex;
 }
+
+.FormattedText img {
+  max-width: 100%;
+}
