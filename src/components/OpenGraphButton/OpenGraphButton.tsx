@@ -12,10 +12,11 @@ const bem = cn('OpenGraphButton');
 interface OpenGraphButtonProps {
   onFeatureSelected?: (feature: string) => void;
   data: FeatureRelations;
+  featureCode: string;
 }
 
 export const OpenGraphButton: FC<OpenGraphButtonProps> = (props) => {
-  const { data, onFeatureSelected } = props;
+  const { data, onFeatureSelected, featureCode } = props;
   const [isGraphOpen, setIsGraphOpen] = useState(false);
   const testRunExecutionContext = useContext(TestRunExecutionContext);
   const testResults = testRunExecutionContext?.testResults || undefined;
@@ -42,6 +43,7 @@ export const OpenGraphButton: FC<OpenGraphButtonProps> = (props) => {
     >
       <FeatureGraph
         data={data}
+        rootFeatureCode={featureCode}
         onClose={() => setIsGraphOpen(false)}
         onFeatureSelected={handleFeatureSelected}
         testResults={testResults}

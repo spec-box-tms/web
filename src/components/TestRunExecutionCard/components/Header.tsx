@@ -43,7 +43,7 @@ export const Header: FC<HeaderProps> = (props) => {
       <CopyFeatureCodeButton code={feature.code} />
       <GoToYamlButton filePath={feature.filePath} repositoryUrl={repositoryUrl} />
       <CopyFeatureMarkdownButton feature={feature} />
-      <OpenGraphButton data={featureRelations} onFeatureSelected={handleGraphFeatureSelected} />
+      <OpenGraphButton data={featureRelations} onFeatureSelected={handleGraphFeatureSelected} featureCode={feature.code} />
     </div>
     <div className={bem('Actions')}>
       {attributeValues}

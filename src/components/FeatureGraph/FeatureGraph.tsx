@@ -1,7 +1,7 @@
-import { FeatureRelations, TestResult } from '@/types';
+import { FeatureRelationEdge, FeatureRelationNode, FeatureRelations, TestResult } from '@/types';
 import Graphin, { Behaviors } from '@antv/graphin';
 import { cn } from '@bem-react/classname';
-import { Button, Select, Switch } from '@gravity-ui/uikit';
+import { Button, Select, Switch, TextInput } from '@gravity-ui/uikit';
 import { FC, useEffect, useRef, useState } from 'react';
 import './FeatureGraph.css';
 import { SelectNodeBehaviour } from './SelectNodeBehaviour';
@@ -25,31 +25,93 @@ const LAYOUTS = [
   { value: 'comboForce', content: 'Силовая группировка' },
 ];
 
+const DEFAULT_DEPTH = 2;
+
+function filterNodes(rootCode: string, depth: number, { nodes, edges }: FeatureRelations): FeatureRelations {
+  if (depth <= 0) {
+    return { nodes, edges };
+  }
+  const resultNodes = new Set<FeatureRelationNode>();
+  const resultEdges = new Set<FeatureRelationEdge>();
+  const root = nodes.find(node => node.code === rootCode);
+  if (!root) {
+    return {
+      nodes: [], edges: []
+    };
+  }
+
+  resultNodes.add(root);
+
+  while (depth--) {
+    const nodesToFind = [...resultNodes.keys()];
+    for (const { code: sourceCode } of nodesToFind) {
+      const edgeCode = `feature:${sourceCode}`;
+      const codesToAttach = new Array<string>();
+
+      edges.forEach(edge => {
+        if (edge.source === edgeCode) {
+          codesToAttach.push(edge.target);
+          resultEdges.add(edge);
+        }
+        if (edge.target === edgeCode) {
+          codesToAttach.push(edge.source);
+          resultEdges.add(edge);
+        }
+      });
+
+
+      codesToAttach.forEach(edgeCode => {
+        if (edgeCode.startsWith('feature:')) {
+          const code = edgeCode.slice(8);
+          const found = nodes.find(node => node.nodeType === 'feature' && node.code === code);
+          if (found) {
+            resultNodes.add(found);
+          }
+          return;
+        }
+        if (edgeCode.startsWith('attribute-value:')) {
+          const code = edgeCode.slice(16);
+          const found = nodes.find(node => node.nodeType === 'attribute-value' && node.code === code);
+          if (found) {
+            resultNodes.add(found);
+          }
+          return;
+        }
+      });
+    }
+  }
+  return {
+    nodes: [...resultNodes.keys()],
+    edges: [...resultEdges.keys()]
+  };
+}
+
 interface FeatureGraphProps {
   onClose?: () => void;
   onFeatureSelected?: (featureCode: string) => void;
   data: FeatureRelations;
   testResults?: TestResult[];
+  rootFeatureCode?: string;
 }
 
 export const FeatureGraph: FC<FeatureGraphProps> = (props) => {
-  const { onClose, onFeatureSelected, data, testResults } = props;
+  const { onClose, onFeatureSelected, data, testResults, rootFeatureCode } = props;
   const [isLoaded, setIsLoaded] = useState(false);
+  const [depth, setDepth] = useState(DEFAULT_DEPTH);
 
   const [layout, setLayout] = useState('graphin-force');
   const [showAttributes, setShowAttributes] = useState(false);
 
   const graphContainerRef = useRef<HTMLDivElement>(null);
 
-  let nodes = data.nodes;
-  if (testResults) {
-    nodes = nodes.map(node => testResultsToStyle(node, testResults));
+  let displayData = data;
+  if (rootFeatureCode) {
+    displayData = filterNodes(rootFeatureCode, depth, data);
   }
 
-  const displayData = {
-    nodes,
-    edges: data.edges,
-  };
+  if (testResults) {
+    displayData.nodes = displayData.nodes.map(node => testResultsToStyle(node, testResults));
+  }
 
   if (!showAttributes) {
     displayData.nodes = displayData.nodes.filter(node => node.id.startsWith('feature:'));
@@ -79,6 +141,7 @@ export const FeatureGraph: FC<FeatureGraphProps> = (props) => {
     </div>
     <div className={bem('Controls')}>
       <Select options={LAYOUTS} onUpdate={([value]) => setLayout(value)} value={[layout]} />
+      <TextInput onUpdate={(value) => setDepth(Number(value))} value={depth.toString()} type="number" />
       <Switch onUpdate={(value) => setShowAttributes(value)}>Атрибуты</Switch>
       {onClose ?
         <Button view="outlined" onClick={props.onClose}>Закрыть</Button> :
