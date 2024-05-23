@@ -10,6 +10,7 @@ import { bem } from '../TestRunExecutionCard.cn';
 import { Actions } from './Actions';
 import './Assertion.css';
 import { TestRunExecutionContext } from '@/components/TestRunExecutionContext/TestRunExecutionContext';
+import { Expander } from '@/components/Expander/Expander';
 
 interface AssertionProps {
   assertion: AssertionData;
@@ -27,13 +28,15 @@ export const Assertion: FC<AssertionProps> = (props) => {
     updateTestResult(updatedTestResult);
   }, [updateTestResult]);
 
-  const descrition = assertion.description ?
-    <div className={bem('AssertionDescription')}>
-      <FormattedText text={assertion.description} />
-    </div> : null;
-
+  const description = assertion.description ?
+    <Expander title="Описание">
+      <div className={bem('AssertionDescription')}>
+        <FormattedText text={assertion.description} />
+      </div>
+    </Expander>
+    : null;
   const automationIcon = assertion.isAutomated ?
-    <Tooltip content="Тест автоматизаирован">
+    <Tooltip content="Тест автоматизирован">
       <Icon data={FaceRobot} />
     </Tooltip>
     :
@@ -60,7 +63,7 @@ export const Assertion: FC<AssertionProps> = (props) => {
       </div>
       <div className={bem('AssertionContent')}>
         <FormattedText text={assertion.title} />
-        {descrition}
+        {description}
         {actions}
         {readonlyReport}
       </div>

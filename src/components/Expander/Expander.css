@@ -1,0 +1,8 @@
+.Expander-Title {
+  display: flex;
+  flex-direction: row;
+  font: var(--sb-font-body-s);
+  align-items: center;
+  gap: .5em;
+  font-weight: 800;
+}
