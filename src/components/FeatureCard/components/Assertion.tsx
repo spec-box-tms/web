@@ -8,6 +8,7 @@ import { bem } from '../FeatureCard.cn';
 import { Badge } from './Badge';
 
 import './Assertion.css';
+import { Expander } from '@/components/Expander/Expander';
 
 type AssertionProps = {
   assertion: AssertionData;
@@ -17,9 +18,11 @@ export const Assertion: FC<AssertionProps> = (props) => {
   const { assertion } = props;
 
   const description = assertion.description ? (
-    <div className={bem('AssertionDescription')}>
-      <FormattedText text={assertion.description} />
-    </div>
+    <Expander title="Описание">
+      <div className={bem('AssertionDescription')}>
+        <FormattedText text={assertion.description} />
+      </div>
+    </Expander>
   ) : null;
 
   return (
