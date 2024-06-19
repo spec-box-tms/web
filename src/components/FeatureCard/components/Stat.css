@@ -9,6 +9,12 @@
     background-color: var(--g-color-base-background);
 }
 
+@media (width <= 1200px) {
+    .FeatureCard-Stat {
+        display: none;
+    }
+}
+
 .FeatureCard-StatLabel {
     font: var(--sb-font-body-s);
 
