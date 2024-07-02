@@ -11,19 +11,15 @@
 .Project-ListPanel,
 .Project-DetailsPanel {
     display: flex;
-    padding: var(--g-spacing-1);
     overflow-y: auto;
 }
 .Project-ListPanel {
     flex: 1;
+    padding: var(--g-spacing-1);
 }
 .Project-DetailsPanel {
     flex: 2;
-}
-
-.Project-DetailsPanel {
     border-radius: var(--sb-border-radius-3-xl);
     background-color: var(--g-color-base-generic);
-
     padding: var(--g-spacing-6);
 }
